@@ -1,0 +1,38 @@
+export const dictionary = [
+  {
+    id: 0,
+    en: "benchmark",
+    nb: "ytelsestest",
+    nn: "ytingstest",
+    definition: "Testing for å måle ytelsen til et programvareprodukt. Måling av systemets svartider eller testing av systemets kapasitet under gitte krav til svartider.",
+    field: "IT",
+    subfield: "Programvare",
+  },
+  {
+    id: 1,
+    en: "abrasive",
+    nb: "slipemiddel",
+    nn: "slipemiddel",
+    definition: "Hardt materiale som sand, sandstein korund (smergel) og karborundum brukt til sliping.",
+    field: "Materialteknologi",
+    subfield: "Materialer",
+  },
+  {
+    id: 2,
+    en: "cortex",
+    nb: "hjernebark",
+    nn: "hjernebork",
+    definition: "Ytre, grå substans av nerveceller som dekker overflata på hjernen",
+    field: "Materialteknologi",
+    subfield: "Materialer",
+  },
+  {
+    id: 3,
+    en: "archaea",
+    nb: "arkebakterier",
+    nn: "arkebakteriar",
+    definition: "Mikroskopiske, encellete, prokaryote organismer som utseendemessig likner bakterier, men har andre biokjemiske komponenter i cellevegg og ulik form og størrelse på ribosomene.",
+    field: "Biologi",
+    subfield: "Mikrobiologi",
+  },
+]
