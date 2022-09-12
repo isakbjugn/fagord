@@ -28,7 +28,7 @@ const TermList = ({dictionary = []}: PropsType) => {
             </thead>
             <tbody>
               {dictionary.map((term: Term) =>
-                <TermEntry term={term} key={term.id} />
+                <TermEntry term={term} key={term._id} />
               )}
             </tbody>
           </Table>

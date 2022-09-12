@@ -1,5 +1,5 @@
 export interface Term {
-  id: number,
+  _id: string,
   en: string,
   nb: string,
   nn: string,
