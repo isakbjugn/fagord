@@ -5,7 +5,7 @@ import Header from './header-component'
 import TermList from './termlist-page/term-list'
 import TermPage from './termlist-page/term-page'
 import { Term } from "../types/term"
-import { fetchTerms } from '../lib/api-helpers'
+import { fetchTerms } from '../lib/fetch'
 
 function Redirect({ to }: any) {
   let navigate = useNavigate();
