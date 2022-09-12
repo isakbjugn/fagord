@@ -38,7 +38,7 @@ const Main = () => {
       <Header/>
       <Routes>
         <Route path="/hjem" element={<Home/>} />
-        <Route path="/termliste" element={<TermList termList={dictionary} />}>
+        <Route path="/termliste" element={<TermList dictionary={dictionary} />}>
           <Route path=":term" element={<RenderTermPage />} />
         </Route>
         <Route path="" element={<Redirect to="/hjem" />} />

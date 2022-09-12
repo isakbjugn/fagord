@@ -13,24 +13,32 @@ import {
 const TermPage = ({term}: PropsType) => {
   return (
     <div className="container">
-      <div className="row" style={{color: "white"}}>
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to="/termliste">Termliste</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem active>{term.en}</BreadcrumbItem>
-        </Breadcrumb>
-        <div className="col-12">
-          <h1 className="display-5" style={{display: "inline"}}><em><strong>{term.en}</strong></em></h1>
-          <h2 className="display-5" style={{display: "inline"}}> ({term.subfield})</h2>
-          <hr />
+      <div className="col-12 col-lg-10 mx-auto">
+        <div className="row" style={{color: "white"}}>
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to="/termliste">Termliste</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem active>{term.en}</BreadcrumbItem>
+          </Breadcrumb>
+        <div/>
+        <div className="row row-cols-auto">
+          <div className="col">
+            <h1 className="display-5" aria-readonly><em><strong>{term.en}</strong></em></h1>
+          </div>
+          <div className="col">
+            <h2 className="display-5" style={{display: 'inline'}}> ({term.subfield})</h2>
+          </div>
+          <div className="col-12">
+            <hr />
+          </div>
         </div>
       </div>
       <div className="row">
-        <div className="col-12 col-md-5 m-1">
+        <div className="col-12 col-md-6 mt-1">
           {term.definition}
         </div>
-        <div className="col-12 col-md-5 m-1">
+        <div className="col-12 col-md-6 mt-1">
           <Card className="translation-card">
             <CardBody>
               <CardTitle tag="h5">Oversettelse</CardTitle>
@@ -42,6 +50,8 @@ const TermPage = ({term}: PropsType) => {
           </Card>
         </div>
       </div>
+      </div>
+      
     </div>
   );
 }
