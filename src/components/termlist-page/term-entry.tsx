@@ -7,15 +7,20 @@ const TermEntry = ({term}: PropsType) => {
     navigate("/termliste/" + term.en.replace(" ", "_"))
   }
 
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter')
+    navigate("/termliste/" + term.en.replace(" ", "_"))
+  }
+
   return (
     <tr onClick={handleClick}>
-      <th scope="row">
+      <th scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
         {term.en}
       </th>
-      <td>
+      <td tabIndex={0} onKeyDown={handleKeyDown}>
         {term.nb}
       </td>
-      <td>
+      <td tabIndex={0} onKeyDown={handleKeyDown}>
         {term.nn}
       </td>
     </tr>
