@@ -7,7 +7,7 @@ const Home = () => {
             nanoteknologi og molekylærbiologi løper utviklingen langt raskere enn
             norske oversettelser kommer.</p>
         <p>Her finner du nye termer, og kan foreslå egne!</p>
-        <a className="btn btn-primary btn-lg" href="#" role="button">Lær mer</a>
+        <a className="btn btn-primary btn-lg" href="/termliste" role="button">Til termliste!</a>
       </div>
     </div>
     
