@@ -1,7 +1,7 @@
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 import Home from './home-page';
-import Header from './header-component'
+import Header from './header/header'
 import TermList from './termlist-page/term-list'
 import TermPage from './termlist-page/term-page'
 import { Term } from "../types/term"

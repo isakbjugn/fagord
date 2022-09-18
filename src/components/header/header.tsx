@@ -10,7 +10,8 @@ import {
   Button,
   Input
 } from "reactstrap";
-import useToggle from "./utils/use-toggle"
+import useToggle from "../utils/use-toggle"
+import styles from "./header.module.css"
 
 const Header = () => {
   const [isNavOpen, toggleNav, setIsNavOpen] = useToggle(false);
@@ -18,7 +19,7 @@ const Header = () => {
 
   return (
     <>
-      <Navbar dark expand="md">
+      <Navbar dark expand="md" className={styles.navbar}>
         <NavbarToggler onClick={toggleNav} />
         <NavbarBrand className="mr-auto" href="/">
           <img
