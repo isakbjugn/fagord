@@ -1,11 +1,13 @@
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react'
-import Home from './home-page';
-import Header from './header/header'
-import TermList from './termlist-page/term-list'
-import TermPage from './termlist-page/term-page'
-import { Term } from "../types/term"
-import { fetchTerms } from '../lib/fetch'
+import Home from '../home-page';
+import Header from '../header/header'
+import TermList from '../termlist-page/term-list'
+import TermPage from '../termlist-page/term-page/term-page'
+import { Term } from "../../types/term"
+import { fetchTerms } from '../../lib/fetch'
+import Footer from '../footer/footer'
+import styles from "./main.module.css"
 
 function Redirect({ to }: any) {
   let navigate = useNavigate();
@@ -34,7 +36,7 @@ const Main = () => {
   }
     
   return (
-    <div style={{backgroundColor: "#2E9CCA", color: "white"}}>
+    <div className={styles.wrapper}>
       <Header/>
       <Routes>
         <Route path="/hjem" element={<Home/>} />
@@ -43,6 +45,7 @@ const Main = () => {
         </Route>
         <Route path="" element={<Redirect to="/hjem" />} />
       </Routes>
+      <Footer/>
     </div>
   )
 }
