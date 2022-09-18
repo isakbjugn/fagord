@@ -1,9 +1,9 @@
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react'
-import Home from '../home-page';
+import Home from '../home-page/home-page';
 import Header from '../header/header'
 import TermList from '../termlist-page/term-list'
-import TermPage from '../termlist-page/term-page/term-page'
+import TermPage from '../term-page/term-page'
 import { Term } from "../../types/term"
 import { fetchTerms } from '../../lib/fetch'
 import Footer from '../footer/footer'
@@ -40,9 +40,8 @@ const Main = () => {
       <Header/>
       <Routes>
         <Route path="/hjem" element={<Home/>} />
-        <Route path="/termliste" element={<TermList dictionary={dictionary} />}>
-          <Route path=":term" element={<RenderTermPage />} />
-        </Route>
+        <Route path="/termliste" element={<TermList dictionary={dictionary} />} />
+        <Route path="/termliste/:term" element={<RenderTermPage />} />
         <Route path="" element={<Redirect to="/hjem" />} />
       </Routes>
       <Footer/>

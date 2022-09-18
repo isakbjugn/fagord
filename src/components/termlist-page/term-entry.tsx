@@ -1,15 +1,18 @@
 import { Term } from "../../types/term"
-import { useNavigate } from "react-router-dom";
 
-const TermEntry = ({term}: PropsType) => {
-  let navigate = useNavigate();
+interface TermEntryProps {
+  term: Term;
+  onSelect: (id: string) => void;
+}
+
+const TermEntry = ({term, onSelect}: TermEntryProps) => {
+
   const handleClick = () => {
-    navigate("/termliste/" + term.en.replace(" ", "_"))
+    onSelect(term._id);
   }
 
   const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter')
-    navigate("/termliste/" + term.en.replace(" ", "_"))
+    if (e.key === 'Enter') onSelect(term._id);
   }
 
   return (
@@ -25,10 +28,6 @@ const TermEntry = ({term}: PropsType) => {
       </td>
     </tr>
   )
-}
-
-interface PropsType {
-  term: Term,
 }
 
 export default TermEntry;
