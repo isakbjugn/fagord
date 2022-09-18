@@ -5,10 +5,15 @@ import {
   BreadcrumbItem,
 } from "reactstrap";
 import TermComponent from "../term-component/term-component"
-import Loader from "../loader/loader"
+import InfoMessage from "../info-message/info-message"
 
 const TermPage = ({term}: PropsType) => {
-  if (!term) return <Loader/>
+  if (!term) return (
+    <InfoMessage>
+      <p>Termen finnes ikke enda!</p>
+    </InfoMessage>
+  )
+
   return (
     <div className="container my-3">
       <div className="col-12 col-lg-10 mx-auto ">
