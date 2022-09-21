@@ -13,22 +13,32 @@ const SearchBar = () => {
     ? dictionary.data
     : [];
 
-  const handleChange = (selected: any) => {
+  const openTermPage = (selected: any) => {
     navigate("/term/" + selected.en.replace(" ", "_"));
   }
 
   const SearchIcon = () => <div className="container mr-1"><span className="fa fa-search"></span></div>
+
+  const selectStyles = {
+    menuList: (styles: any) => {
+      return {
+        ...styles,
+        maxHeight: 250
+      };
+    }
+  };
 
   return (
     <div className={styles.search}>
       <Select
         placeholder='Søk'
         components={{ DropdownIndicator: SearchIcon, IndicatorSeparator: null }}
-        onChange={handleChange}
+        onChange={openTermPage}
         options={options}
         getOptionLabel={(option: Term) => option.en}
         getOptionValue={(option: Term) => option._id}
         noOptionsMessage={() => 'Ingen termer samsvarer'}
+        styles={selectStyles}
       />
     </div>
   )
