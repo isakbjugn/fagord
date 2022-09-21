@@ -6,10 +6,8 @@ import {
   NavItem,
   Collapse,
   NavbarToggler,
-  Form,
-  Button,
-  Input
 } from "reactstrap";
+import SearchBar from "../search-bar/search-bar"
 import useToggle from "../utils/use-toggle"
 import styles from "./header.module.css"
 
@@ -59,15 +57,7 @@ const Header = () => {
         <Collapse isOpen={isSearchOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <Form className="d-flex">
-              <Input
-                id="search"
-                name="search"
-                placeholder="Søk"
-                type="search"
-              />
-              <Button variant="outline-success" type="submit">Søk</Button>
-            </Form>
+              <SearchBar />
             </NavItem>
           </Nav>
         </Collapse>
