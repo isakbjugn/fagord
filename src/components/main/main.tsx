@@ -27,7 +27,7 @@ const Main = () => {
     if (dictionary.isLoading) return <Loader/>;
     if (dictionary.error) return <p>Kunne ikke laste side.</p>;
     return (
-      <TermPage term={dictionary.data.filter((someTerm: Term) => someTerm.en === term)[0]} />
+      <TermPage term={dictionary.data.filter((someTerm: Term) => someTerm.en.replace(' ', '_') === term)[0]} />
     )
   }
     
@@ -37,7 +37,7 @@ const Main = () => {
       <Routes>
         <Route path="/hjem" element={<Home/>} />
         <Route path="/termliste" element={<TermList dictionary={dictionary.data} />} />
-        <Route path="/termliste/:term" element={<RenderTermPage />} />
+        <Route path="/term/:term" element={<RenderTermPage />} />
         <Route path="" element={<Redirect to="/hjem" />} />
       </Routes>
       <Footer/>

@@ -14,7 +14,7 @@ const SearchBar = () => {
     : [];
 
   const handleChange = (selected: any) => {
-    navigate("/termliste/" + selected.en.replace(" ", "_"));
+    navigate("/term/" + selected.en.replace(" ", "_"));
   }
 
   const SearchIcon = () => <div className="container mr-1"><span className="fa fa-search"></span></div>
