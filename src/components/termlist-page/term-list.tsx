@@ -31,7 +31,7 @@ const TermList = ({dictionary = []}: TermListProps)  => {
   return (
     <div className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
-        <Table hover className={"table-light " + styles.table} striped>
+        <Table hover className={"table-light text-break " + styles.table} striped>
           <thead>
             <tr>
               <th>Engelsk</th>
