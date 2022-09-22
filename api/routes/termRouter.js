@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { termMapper, termArrayMapper } = require('../mappers/termMapper');
+const { termMapper, termArrayMapper, posMapper } = require('../mappers/termMapper');
 
 const termRouter = express.Router();
 
@@ -20,7 +20,7 @@ termRouter.route('/')
   .post((req, res, next) => {
     if (Object.keys(req.body) === 0) throw new Error("Ingen term i spørringen.")
     postRow(req.body)
-      .then((row) =>{
+      .then((row) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(termMapper(row));
@@ -100,7 +100,7 @@ const postRow = async (term) => {
   const sheet = doc.sheetsByIndex[0];
   const rows = await sheet.getRows();
   const newRow = await sheet.addRow(term);
-  newRow._id = getMaxId(rows) + 1;
+  newRow._id = term.en + posMapper(term.pos);
   newRow._active = true;
 
   const today = new Date();
@@ -110,9 +110,6 @@ const postRow = async (term) => {
 
   return newRow;
 };
-
-const getMaxId = (rows) =>
-  Math.max(...rows.map(row => row._id))
 
 const getRowByTerm = async (term) => {
   const SHEET_ID = process.env.SHEET_ID;
