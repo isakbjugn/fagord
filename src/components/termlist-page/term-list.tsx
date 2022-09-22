@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Link } from "react-router-dom"
 import { Table } from "reactstrap"
 import { Term } from "../../types/term"
 import Loader from "../loader/loader"
+import Paginator from "../paginator/paginator"
 import TermComponent from "../term-component/term-component"
 import TermEntry from "./term-entry"
 
@@ -11,8 +12,14 @@ interface TermListProps {
 }
 
 const TermList = ({dictionary = []}: TermListProps)  => {
-
   const [selectedTerm, setSelectedTerm] = useState<Term>();
+  const [dictionaryView, setDictionaryView] = useState<Term[]>([]);
+  const pageSize = 10;
+
+  const onPageChange = useCallback(
+    (page: number) => {
+    setDictionaryView(dictionary.slice(page*pageSize, (page+1)*pageSize)
+  )}, [dictionary]);
 
   if (dictionary.length === 0) return <Loader />;
 
@@ -39,22 +46,23 @@ const TermList = ({dictionary = []}: TermListProps)  => {
               </tr>
             </thead>
             <tbody>
-              {dictionary.map((term: Term) =>
+              {dictionaryView.map((term: Term) =>
                 <TermEntry term={term} key={term._id} onSelect={selectTerm} />
               )}
             </tbody>
           </Table>
+          <Paginator onPageChange={onPageChange} pageSize={pageSize} tableLength={dictionary.length} />
           {selectedTerm && (
             <div>
               <TermComponent term={selectedTerm} />
               <div className="col text-center my-2" >
-                <Link className="btn btn-outline-light btn-lg" to={"/term/" + selectedTerm.en} role="button">Til termside</Link>
+                <Link className="btn btn-outline-light btn-lg" to={"/term/" + selectedTerm.en.replace(' ', '_')} role="button">Til termside</Link>
               </div>
             </div>
           )}
         </div>
       </div>
-    </>
+       </>
   )
 }
 
