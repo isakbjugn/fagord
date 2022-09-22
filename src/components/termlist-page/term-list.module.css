@@ -1,0 +1,4 @@
+.table {
+  font-size: clamp(0.8rem, 0.6500rem + 0.6667vw, 1rem);
+  hyphens: auto;
+}

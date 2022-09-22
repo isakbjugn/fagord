@@ -6,6 +6,7 @@ import Loader from "../loader/loader"
 import Paginator from "../paginator/paginator"
 import TermComponent from "../term-component/term-component"
 import TermEntry from "./term-entry"
+import styles from "./term-list.module.css"
 
 interface TermListProps {
   dictionary: Term[];
@@ -28,41 +29,33 @@ const TermList = ({dictionary = []}: TermListProps)  => {
   }
   
   return (
-    <>
-      <div className="container-sm my-2">
-        <div className="col-12 col-lg-10 mx-auto">
-          <Table hover className="table-light" striped>
-            <thead>
-              <tr>
-                <th>
-                  Engelsk
-                </th>
-                <th>
-                  Bokmål
-                </th>
-                <th>
-                  Nynorsk
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {dictionaryView.map((term: Term) =>
-                <TermEntry term={term} key={term._id} onSelect={selectTerm} />
-              )}
-            </tbody>
-          </Table>
-          <Paginator onPageChange={onPageChange} pageSize={pageSize} tableLength={dictionary.length} />
-          {selectedTerm && (
-            <div>
-              <TermComponent term={selectedTerm} />
-              <div className="col text-center my-2" >
-                <Link className="btn btn-outline-light btn-lg" to={"/term/" + selectedTerm.en.replace(' ', '_')} role="button">Til termside</Link>
-              </div>
+    <div className="container-sm my-2">
+      <div className="col-12 col-lg-10 mx-auto">
+        <Table hover className={"table-light " + styles.table} striped>
+          <thead>
+            <tr>
+              <th>Engelsk</th>
+              <th>Bokmål</th>
+              <th>Nynorsk</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dictionaryView.map((term: Term) =>
+              <TermEntry term={term} key={term._id} onSelect={selectTerm} />
+            )}
+          </tbody>
+        </Table>
+        <Paginator onPageChange={onPageChange} pageSize={pageSize} tableLength={dictionary.length} />
+        {selectedTerm && (
+          <div>
+            <TermComponent term={selectedTerm} />
+            <div className="col text-center my-2" >
+              <Link className="btn btn-outline-light btn-lg" to={"/term/" + selectedTerm.en.replace(' ', '_')} role="button">Til termside</Link>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-       </>
+    </div>
   )
 }
 
