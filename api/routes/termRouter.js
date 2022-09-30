@@ -100,7 +100,7 @@ const postRow = async (term) => {
   const sheet = doc.sheetsByIndex[0];
   const rows = await sheet.getRows();
   const newRow = await sheet.addRow(term);
-  newRow._id = term.en + posMapper(term.pos);
+  newRow._id = term.en.toLowerCase().replace(" ", "_") + posMapper(term.pos);
   newRow._active = true;
 
   const today = new Date();

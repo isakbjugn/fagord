@@ -9,3 +9,19 @@ export const fetchTerms = async () => {
   }
   throw Error(res.statusText);
 }
+
+export const postTerm = async (term: any) => {
+  const res = await fetch(baseApiUri + '/api/termer', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(term)
+  })
+  const json = await res.json();
+  if (res.ok) {
+    return json;
+  }
+  throw Error(res.statusText);
+}

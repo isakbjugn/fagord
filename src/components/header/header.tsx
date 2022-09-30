@@ -43,6 +43,11 @@ const Header = () => {
               </NavLink>
             </NavItem>
             <NavItem>
+              <NavLink className="nav-link text-nowrap" to="/ny-term">
+                <span className="fa fa-lightbulb-o fa-lg" /> Ny term
+              </NavLink>
+            </NavItem>
+            <NavItem>
               <NavLink className="nav-link text-nowrap" to="/om">
                 <span className="fa fa-info fa-lg" /> Om oss
               </NavLink>

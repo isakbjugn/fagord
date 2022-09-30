@@ -50,7 +50,7 @@ const TermList = ({dictionary = []}: TermListProps)  => {
           <div>
             <TermComponent term={selectedTerm} />
             <div className="col text-center my-2" >
-              <Link className="btn btn-outline-light btn-lg" to={"/term/" + selectedTerm.en.replace(' ', '_')} role="button">Til termside</Link>
+              <Link className="btn btn-outline-light btn-lg" to={"/term/" + selectedTerm._id} role="button">Til termside</Link>
             </div>
           </div>
         )}

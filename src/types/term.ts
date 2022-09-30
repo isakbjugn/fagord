@@ -6,4 +6,5 @@ export interface Term {
   definition: string,
   field: string,
   subfield: string,
+  pos: string,
 }
