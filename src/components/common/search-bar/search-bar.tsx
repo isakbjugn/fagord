@@ -14,7 +14,7 @@ const SearchBar = () => {
     : [];
 
   const openTermPage = (selected: any) => {
-    navigate("/term/" + selected.en.replace(" ", "_"));
+    navigate("/term/" + selected._id);
   }
 
   const SearchIcon = () => <div className="container mr-1"><span className="fa fa-search"></span></div>
@@ -31,7 +31,9 @@ const SearchBar = () => {
   return (
     <div className={styles.search}>
       <Select
-        placeholder='Søk'
+        value={null}
+        className={styles.input}
+        placeholder='Finn en term'
         components={{ DropdownIndicator: SearchIcon, IndicatorSeparator: null }}
         onChange={openTermPage}
         options={options}

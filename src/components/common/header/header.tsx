@@ -27,34 +27,34 @@ const Header = () => {
             alt="Fagord"
           />
         </NavbarBrand>
-        <NavbarToggler onClick={toggleSearch}>
+        <NavbarToggler onClick={toggleSearch} className={styles.search}>
           <span className="fa fa-search" />
         </NavbarToggler>        
         <Collapse isOpen={isNavOpen} navbar>
           <Nav navbar onClick={() => setIsNavOpen(false)}>
             <NavItem>
               <NavLink className="nav-link text-nowrap" to="/hjem">
-                <span className="fa fa-home fa-lg" /> Hjem
+                <span className={"fa fa-home fa-lg " + styles.icon} /> Hjem
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink className="nav-link text-nowrap" to="/termliste">
-                <span className="fa fa-book fa-lg" /> Termliste
+                <span className={"fa fa-book fa-lg " + styles.icon} /> Termliste
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink className="nav-link text-nowrap" to="/ny-term">
-                <span className="fa fa-lightbulb-o fa-lg" /> Ny term
+                <span className={"fa fa-lightbulb-o fa-lg " + styles.icon} /> Ny term
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink className="nav-link text-nowrap" to="/om">
-                <span className="fa fa-info fa-lg" /> Om oss
+                <span className={"fa fa-info fa-lg " + styles.icon} /> Om oss
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink className="nav-link text-nowrap" to="/kontakt">
-                <span className="fa fa-address-card fa-lg" /> Kontakt oss
+                <span className={"fa fa-address-card " + styles.icon} /> Kontakt
               </NavLink>
             </NavItem>
           </Nav>

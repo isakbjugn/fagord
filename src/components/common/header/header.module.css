@@ -1,3 +1,16 @@
 .navbar {
   background-color: #29648A;
 }
+
+@media only screen and (max-width: 768px) {
+  .icon {
+    display: inline-block;
+    text-align: center;
+    width: 26px;
+  }
+}
+
+.search {
+  width: 56px;
+  height: 40px;
+}
