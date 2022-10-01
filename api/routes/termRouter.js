@@ -36,9 +36,9 @@ termRouter.route('/')
     res.end("DELETE-operasjonen er ikke tillatt på /termer");
   });
 
-termRouter.route('/:term')
+termRouter.route('/:termId')
   .get((req, res, next) => {
-    getRowByTerm(req.params.term)
+    getRowByTermId(req.params.termId)
     .then((row) => {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
@@ -51,7 +51,7 @@ termRouter.route('/:term')
 		res.end('POST-operasjon ikke tillatt på /termer/'+ req.params.term);
 	})
 	.put((req, res, next) => {
-    getRowByTerm(req.params.term)
+    getRowByTermId(req.params.termId)
     .then((row) => {
         updateRow(row, req.body)
           .then(row => {
@@ -63,7 +63,7 @@ termRouter.route('/:term')
         .catch((err) => next(err));
 	})
   .delete((req, res, next) => {
-    getRowByTerm(req.params.term)
+    getRowByTermId(req.params.termId)
     .then((row) => {
         disableRow(row)
           .then(row => {
@@ -111,7 +111,7 @@ const postRow = async (term) => {
   return newRow;
 };
 
-const getRowByTerm = async (term) => {
+const getRowByTermId = async (termId) => {
   const SHEET_ID = process.env.SHEET_ID;
   const doc = new GoogleSpreadsheet(SHEET_ID);
   await doc.useServiceAccountAuth({
@@ -122,7 +122,7 @@ const getRowByTerm = async (term) => {
 
   const sheet = doc.sheetsByIndex[0];
   const rows = await sheet.getRows();
-  return getRowByColumnValue(term, "en", rows);
+  return getRowByColumnValue(termId, "_id", rows);
 }
 
 const getRowByColumnValue = (value, columnName, rows) =>

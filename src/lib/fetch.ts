@@ -25,3 +25,24 @@ export const postTerm = async (term: any) => {
   }
   throw Error(res.statusText);
 }
+
+interface UpdateTermArguments {
+  termId: string;
+  term: any;
+}
+
+export const updateTerm = async ({ termId, term }: UpdateTermArguments) => {
+  const res = await fetch(baseApiUri + '/api/termer/' + termId, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'PUT',
+    body: JSON.stringify(term)
+  })
+  const json = await res.json();
+  if (res.ok) {
+    return json;
+  }
+  throw Error(res.statusText);
+}

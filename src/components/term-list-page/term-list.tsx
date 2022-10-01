@@ -13,7 +13,7 @@ interface TermListProps {
 }
 
 const TermList = ({dictionary = []}: TermListProps)  => {
-  const [selectedTerm, setSelectedTerm] = useState<Term>();
+  const [selectedTermId, setSelectedTermId] = useState<string>();
   const [dictionaryView, setDictionaryView] = useState<Term[]>([]);
   const pageSize = 10;
 
@@ -23,10 +23,6 @@ const TermList = ({dictionary = []}: TermListProps)  => {
   )}, [dictionary]);
 
   if (dictionary.length === 0) return <Loader />;
-
-  const selectTerm = (selectedId: string) => {
-    setSelectedTerm(dictionary.filter(term => term._id === selectedId)[0]);
-  }
   
   return (
     <div className="container-sm my-2">
@@ -41,16 +37,16 @@ const TermList = ({dictionary = []}: TermListProps)  => {
           </thead>
           <tbody>
             {dictionaryView.map((term: Term) =>
-              <TermEntry term={term} key={term._id} onSelect={selectTerm} />
+              <TermEntry term={term} key={term._id} onSelect={setSelectedTermId} />
             )}
           </tbody>
         </Table>
         <Paginator onPageChange={onPageChange} pageSize={pageSize} tableLength={dictionary.length} />
-        {selectedTerm && (
+        {selectedTermId && (
           <div>
-            <TermComponent term={selectedTerm} />
+            <TermComponent term={dictionary.filter(term => term._id === selectedTermId)[0]} />
             <div className="col text-center my-2" >
-              <Link className="btn btn-outline-light btn-lg" to={"/term/" + selectedTerm._id} role="button">Til termside</Link>
+              <Link className="btn btn-outline-light btn-lg" to={"/term/" + selectedTermId} role="button">Til termside</Link>
             </div>
           </div>
         )}

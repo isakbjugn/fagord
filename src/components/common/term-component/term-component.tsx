@@ -1,4 +1,5 @@
 import { Term } from "../../../types/term"
+import Definition from "./definition/definition"
 import TranslationCard from "./translation-card/translation-card"
 
 interface TermComponentProps {
@@ -18,7 +19,7 @@ const TermComponent = ({term}: TermComponentProps) => {
       </div>
       <div className="row">
         <div className="col-12 col-md-6">
-          {term.definition}
+          <Definition termId={term._id} definition={term.definition} />
         </div>
         <div className="col-8 col-sm-8 col-md-6 mt-2">
           <TranslationCard term={term} />

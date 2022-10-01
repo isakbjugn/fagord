@@ -36,9 +36,9 @@ const NewTermPage = () => {
       <p>Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå lagt til i en voksende termbase.</p>
       <span className={style.buttons}>
         <Link to={"../term/" + result._id}>
-          <Button color="primary">Gå til term</Button>
+          <Button outline color="light">Gå til term</Button>
         </Link>
-        <Button onClick={() => setResult(null)} color="primary">Opprett ny term</Button>
+        <Button outline color="light" onClick={() => setResult(null)}>Opprett ny term</Button>
       </span>
     </div>
   )
