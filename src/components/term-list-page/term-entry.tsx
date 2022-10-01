@@ -17,9 +17,9 @@ const TermEntry = ({term, onSelect}: TermEntryProps) => {
 
   return (
     <tr onClick={handleClick}>
-      <th scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
+      <td tabIndex={0} onKeyDown={handleKeyDown}>
         {term.en}
-      </th>
+      </td>
       <td tabIndex={0} onKeyDown={handleKeyDown}>
         {term.nb}
       </td>

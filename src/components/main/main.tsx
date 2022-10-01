@@ -2,7 +2,7 @@ import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react'
 import Home from '../home-page/home-page';
 import Header from '../common/header/header'
-import TermList from '../termlist-page/term-list'
+import TermList from '../term-list-page/term-list'
 import TermPage from '../term-page/term-page'
 import { Term } from "../../types/term"
 import Footer from '../common/footer/footer'

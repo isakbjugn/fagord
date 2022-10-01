@@ -6,10 +6,14 @@ interface TermComponentProps {
 }
 
 const TermComponent = ({term}: TermComponentProps) => {
+
+  const fieldSpec = (term.subfield) ? term.subfield : term.field;
+  const fieldSpecStr = (fieldSpec) ? " (" + fieldSpec + ")" : "";
+
   return (
     <div>
       <div className="row">
-        <h1><em>{term.en}</em> ({term.subfield})</h1>
+        <h1>{term.en} {fieldSpecStr}</h1>
         <hr />
       </div>
       <div className="row">
