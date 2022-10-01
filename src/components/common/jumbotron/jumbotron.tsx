@@ -6,7 +6,7 @@ interface JumbotronProps {
 }
 
 const Jumbotron = ({children}: JumbotronProps) => 
-  <div className={"p-3 p-sm-5 rounded-lg m-3 m-sm-5 " + styles.jumbotron}>
+  <div className={"p-4 p-sm-5 rounded-lg m-3 m-sm-5 " + styles.jumbotron}>
     {children}
   </div>
 
