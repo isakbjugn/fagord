@@ -40,6 +40,7 @@ const Main = () => {
         <Route path="/termliste" element={<TermList dictionary={dictionary.data} />} />
         <Route path="/term/:termId" element={<RenderTermPage />} />
         <Route path="/ny-term" element={<NewTermPage />} />
+        <Route path="/ny-term/:term" element={<NewTermPage />} />
         <Route path="" element={<Redirect to="/hjem" />} />
       </Routes>
       <Footer/>

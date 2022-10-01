@@ -1,11 +1,15 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Select from "react-select"
+import { Button } from "reactstrap"
 import { Term } from "../../../types/term"
 import useDictionary from "../../utils/use-dictionary"
 import styles from "./search-bar.module.css";
 
 const SearchBar = () => {
 
+  const [input, setInput] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const dictionary = useDictionary();
   let navigate = useNavigate();
 
@@ -32,14 +36,22 @@ const SearchBar = () => {
     <div className={styles.search}>
       <Select
         value={null}
+        menuIsOpen={menuOpen}
         className={styles.input}
         placeholder='Finn en term'
         components={{ DropdownIndicator: SearchIcon, IndicatorSeparator: null }}
         onChange={openTermPage}
+        onInputChange={(str) => {
+          setMenuOpen(!!str)
+          setInput(str)
+        }}
         options={options}
         getOptionLabel={(option: Term) => option.en}
         getOptionValue={(option: Term) => option._id}
-        noOptionsMessage={() => 'Ingen termer samsvarer'}
+        noOptionsMessage={() => <Button outline onClick={() => {
+          setMenuOpen(false);
+          navigate("/ny-term/" + input)
+        }}>Legg til term</Button>}
         styles={selectStyles}
       />
     </div>

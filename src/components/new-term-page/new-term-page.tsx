@@ -6,13 +6,11 @@ import { postTerm } from "../../lib/fetch";
 import { useState } from "react";
 import Spinner from "../common/spinner/spinner"
 import { Term } from "../../types/term"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useMutation, useQueryClient } from "react-query"
 
-interface NewTermPageProps {
-  term?: string;
-}
-const NewTermPage = ({ term }: NewTermPageProps) => {
+const NewTermPage = () => {
+  let { term } = useParams();
   const queryClient = useQueryClient();
   const { register, watch, reset, handleSubmit } = useForm();
   const [result, setResult] = useState<Term | null>();
@@ -54,7 +52,7 @@ const NewTermPage = ({ term }: NewTermPageProps) => {
           <Row>
             <Label>
               Engelsk term
-              <input className="form-control" type="text" {...register("en", { required: true })} />
+              <input value={(term) ? term : undefined} className="form-control" type="text" {...register("en", { required: true })} />
             </Label>
           </Row>
           <Label>Norske termer</Label>
