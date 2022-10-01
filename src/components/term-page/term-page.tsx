@@ -4,8 +4,8 @@ import {
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
-import TermComponent from "../term-component/term-component"
-import InfoMessage from "../info-message/info-message"
+import TermComponent from "../common/term-component/term-component"
+import InfoMessage from "../common/info-message/info-message"
 
 const TermPage = ({term}: PropsType) => {
   if (!term) return (

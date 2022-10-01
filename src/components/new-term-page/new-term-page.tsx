@@ -4,7 +4,7 @@ import style from "./new-term-page.module.css"
 import { pickBy } from "lodash";
 import { postTerm } from "../../lib/fetch";
 import { useState } from "react";
-import Spinner from "../spinner/spinner"
+import Spinner from "../common/spinner/spinner"
 import { Term } from "../../types/term"
 import { Link } from "react-router-dom"
 import { useMutation, useQueryClient } from "react-query"

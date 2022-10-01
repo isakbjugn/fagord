@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import Select from "react-select"
-import { Term } from "../../types/term"
-import useDictionary from "../utils/use-dictionary"
+import { Term } from "../../../types/term"
+import useDictionary from "../../utils/use-dictionary"
 import styles from "./search-bar.module.css";
 
 const SearchBar = () => {

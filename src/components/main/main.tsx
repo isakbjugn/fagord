@@ -1,14 +1,14 @@
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react'
 import Home from '../home-page/home-page';
-import Header from '../header/header'
+import Header from '../common/header/header'
 import TermList from '../termlist-page/term-list'
 import TermPage from '../term-page/term-page'
 import { Term } from "../../types/term"
-import Footer from '../footer/footer'
+import Footer from '../common/footer/footer'
 import styles from "./main.module.css"
 import useDictionary from '../utils/use-dictionary'
-import Loader from '../loader/loader'
+import Loader from '../common/loader/loader'
 import NewTermPage from '../new-term-page/new-term-page'
 
 function Redirect({ to }: any) {

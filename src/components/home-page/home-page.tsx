@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import Jumbotron from "../jumbotron/jumbotron"
+import Jumbotron from "../common/jumbotron/jumbotron"
 
 const Home = () => {
   return(

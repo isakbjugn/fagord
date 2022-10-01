@@ -8,7 +8,7 @@ import {
   NavbarToggler,
 } from "reactstrap";
 import SearchBar from "../search-bar/search-bar"
-import useToggle from "../utils/use-toggle"
+import useToggle from "../../utils/use-toggle"
 import styles from "./header.module.css"
 
 const Header = () => {
