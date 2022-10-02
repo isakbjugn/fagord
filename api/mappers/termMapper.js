@@ -1,5 +1,3 @@
-const { GoogleSpreadsheetRow } = require("google-spreadsheet")
-
 const termMapper = (row) => {
   return {
     _id: row._id,
