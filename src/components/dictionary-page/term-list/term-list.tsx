@@ -25,7 +25,7 @@ const TermList = ({dictionary = []}: TermListProps)  => {
 
   useEffect(() => {
     toggleResetPage();
-  }, [dictionary, toggleResetPage])
+  }, [dictionary.length, toggleResetPage])
   
   return (
     <>
