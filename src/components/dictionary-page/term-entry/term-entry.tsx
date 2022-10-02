@@ -1,4 +1,4 @@
-import { Term } from "../../types/term"
+import { Term } from "../../../types/term"
 
 interface TermEntryProps {
   term: Term;

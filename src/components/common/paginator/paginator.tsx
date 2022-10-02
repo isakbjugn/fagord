@@ -5,13 +5,18 @@ interface PaginatorProps {
   onPageChange: (page: number) => void;
   pageSize: number;
   tableLength: number;
+  resetPaginator?: boolean;
 }
 
-const Paginator = ({onPageChange, pageSize, tableLength}: PaginatorProps) => {
+const Paginator = ({onPageChange, pageSize, tableLength, resetPaginator}: PaginatorProps) => {
   const [pageIndex, setPageIndex] = useState(0);
   const numPages = Math.ceil(tableLength / pageSize);
   const pages = Array.from(Array(numPages).keys());
   const lastPage = numPages - 1;
+
+  useEffect(() => {
+    setPageIndex(0);
+  }, [resetPaginator])
 
   useEffect(() => {
     onPageChange(pageIndex);
