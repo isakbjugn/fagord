@@ -8,6 +8,7 @@ import { Term } from "../../types/term"
 import Loader from "../common/loader/loader"
 import TermList from "./term-list/term-list"
 import styles from "./dictionary-page.module.css";
+import Spinner from "../common/spinner/spinner"
 
 interface DictionaryPageProps {
   dictionary: Term[];
@@ -27,7 +28,7 @@ const DictionaryPage = ({dictionary = []}: DictionaryPageProps)  => {
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
   const [subjectFilter, setSubjectFilter] = useState<Subject | null>(AllSubjects);
 
-  const { data: subjects } = useQuery('fields', fetchFields)
+  const { isLoading, error, data: subjects } = useQuery('fields', fetchFields)
 
   const applyTransFilter = (terms: Term[]) => {
     switch (transFilter) {
@@ -44,6 +45,22 @@ const DictionaryPage = ({dictionary = []}: DictionaryPageProps)  => {
     if (!subjectFilter) return terms;
     if (subjectFilter.field === AllSubjects.field) return terms;
     return terms.filter(term => term.field === subjectFilter.field);
+  }
+
+  const subjectFilterComponent = () => {
+    if (isLoading) return <Spinner />;
+    if (error) return <p>Kunne ikke laste fagfelt.</p>;
+    return (
+      <Select
+        className={styles.subjects}
+        value={subjectFilter}
+        placeholder='Filtrer fagfelt'
+        options={[{ field: "Alle", subfields: [] }, ...subjects]}
+        onChange={(choice) => setSubjectFilter(choice)}
+        getOptionLabel={(subject: Subject) => subject.field}
+        getOptionValue={(subject: Subject) => subject.field}
+      />
+    )
   }
   
   const transFilters: TransFilter[] = [
@@ -83,15 +100,7 @@ const DictionaryPage = ({dictionary = []}: DictionaryPageProps)  => {
               </FormGroup>
             )}
           </Form>
-          <Select
-            className={styles.subjects}
-            value={subjectFilter}
-            placeholder='Filtrer fagfelt'
-            options={[{ field: "Alle", subfields: [] }, ...subjects]}
-            onChange={(choice) => setSubjectFilter(choice)}
-            getOptionLabel={(subject: Subject) => subject.field}
-            getOptionValue={(subject: Subject) => subject.field}
-          />
+          {subjectFilterComponent()}
         </div>
         <TermList dictionary={applyTransFilter(applySubjectFilter(dictionary))}></TermList>
       </div>

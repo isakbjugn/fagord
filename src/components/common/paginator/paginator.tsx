@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
+import styles from "./paginator.module.css";
 
 interface PaginatorProps {
   onPageChange: (page: number) => void;
@@ -31,14 +32,14 @@ const Paginator = ({onPageChange, pageSize, tableLength, resetPaginator}: Pagina
   
   if (numPages < 8) {
     return (
-      <Pagination aria-label="Sidenavigering i tabell" className="pagination justify-content-end ">
+      <Pagination aria-label="Sidenavigering i tabell" className={"pagination justify-content-end " + styles.paginator}>
         { pages.map(page => toPageTab(page)) }
       </Pagination>
     )
   }
 
   return (
-    <Pagination aria-label="Sidenavigering i tabell" className="pagination justify-content-end ">
+    <Pagination aria-label="Sidenavigering i tabell" className={"pagination justify-content-end " + styles.paginator}>
       {toPageTab(0)}
       {(pageIndex < 3)
         ? [1, 2, 3, 4].map(page => toPageTab(page))
