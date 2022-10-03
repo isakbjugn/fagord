@@ -1,68 +1,99 @@
 import { useState } from "react"
+import { useQuery } from "react-query"
+import Select from "react-select"
 import { Form, FormGroup, Input, Label } from "reactstrap"
+import { fetchFields } from "../../lib/fetch"
+import { Subject } from "../../types/subject"
 import { Term } from "../../types/term"
 import Loader from "../common/loader/loader"
 import TermList from "./term-list/term-list"
+import styles from "./dictionary-page.module.css";
 
 interface DictionaryPageProps {
   dictionary: Term[];
 }
 
-type Filter = 'all' | 'translated' | 'incomplete';
+interface TransFilter {
+  text: String;
+  filter: TransFilterType;
+  defaultChecked: boolean;
+}
+
+type TransFilterType = 'all' | 'translated' | 'incomplete';
+
+const AllSubjects: Subject = { field: 'Alle', subfields: []}
 
 const DictionaryPage = ({dictionary = []}: DictionaryPageProps)  => {
-  const [filter, setFilter] = useState<Filter>('all');
+  const [transFilter, setTransFilter] = useState<TransFilterType>('all');
+  const [subjectFilter, setSubjectFilter] = useState<Subject | null>(AllSubjects);
 
-  const applyFilter = () => {
-    switch (filter) {
+  const { data: subjects } = useQuery('fields', fetchFields)
+
+  const applyTransFilter = (terms: Term[]) => {
+    switch (transFilter) {
       case 'translated':
-        return dictionary.filter(term => (term.nb || term.nn))
+        return terms.filter(term => (term.nb || term.nn))
       case 'incomplete':
-        return dictionary.filter(term => (!term.nb || !term.nn))
+        return terms.filter(term => (!term.nb || !term.nn))
       default:
-        return dictionary;
+        return terms;
     };
   }
+
+  const applySubjectFilter = (terms: Term[]) => {
+    if (!subjectFilter) return terms;
+    if (subjectFilter.field === AllSubjects.field) return terms;
+    return terms.filter(term => term.field === subjectFilter.field);
+  }
+  
+  const transFilters: TransFilter[] = [
+    {
+      text: "Alle",
+      filter: 'all',
+      defaultChecked: true,
+    },
+    {
+      text: "Oversatt",
+      filter: 'translated',
+      defaultChecked: false,
+    },
+    {
+      text: "Ufullstendig",
+      filter: 'incomplete',
+      defaultChecked: false,
+    },
+  ]
 
   if (dictionary.length === 0) return <Loader />;
 
   return (
     <div className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
-        <Form>
-          <FormGroup check inline>
-            <Input
-              name="dictionaryView"
-              type="radio"
-              onChange={() => setFilter('all')}
-              defaultChecked
-            />
-            <Label check>
-              Alle
-            </Label> 
-          </FormGroup>
-          <FormGroup check inline>
-            <Input
-              name="dictionaryView"
-              type="radio"
-              onChange={() => setFilter('translated')}
-            />
-            <Label check>
-              Oversatt
-            </Label> 
-          </FormGroup>
-          <FormGroup check inline>
-            <Input
-              name="dictionaryView"
-              type="radio"
-              onChange={() => setFilter('incomplete')}
-            />
-            <Label check>
-              Trenger oversettelse
-            </Label> 
-          </FormGroup>
-        </Form>
-        <TermList dictionary={applyFilter()}></TermList>
+        <div className={styles.header}>
+          <Form className={styles.form}>
+            {transFilters.map((filter) =>
+              <FormGroup check inline key={filter.filter}>
+                <Input
+                  name="dictionaryView"
+                  type="radio"
+                  onChange={() => setTransFilter(filter.filter)}
+                  defaultChecked={filter.defaultChecked}
+                />
+                <Label check>{filter.text}</Label> 
+              </FormGroup>
+            )}
+          </Form>
+          <Select
+            className={styles.subjects}
+            value={subjectFilter}
+            placeholder='Filtrer fagfelt'
+            options={[{ field: "Alle", subfields: [] }, ...subjects]}
+            onChange={(choice) => setSubjectFilter(choice)}
+            getOptionLabel={(subject: Subject) => subject.field}
+            getOptionValue={(subject: Subject) => subject.field}
+          />
+        </div>
+        <TermList dictionary={applyTransFilter(applySubjectFilter(dictionary))}></TermList>
       </div>
     </div>
   )

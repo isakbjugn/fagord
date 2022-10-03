@@ -10,6 +10,16 @@ export const fetchTerms = async () => {
   throw Error(res.statusText);
 }
 
+export const fetchFields = async () => {
+  const res = await fetch(baseApiUri + '/api/fagfelt');
+  const json = await res.json();
+
+  if (res.ok) {
+    return json;
+  }
+  throw Error(res.statusText);
+}
+
 export const postTerm = async (term: any) => {
   const res = await fetch(baseApiUri + '/api/termer', {
     headers: {
