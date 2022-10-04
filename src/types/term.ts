@@ -13,5 +13,5 @@ export interface Term {
 export interface Variant {
   term: string,
   dialect: 'nb' | 'nn',
-  votes: number,
+  votes?: number,
 }

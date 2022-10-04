@@ -6,8 +6,10 @@ import {
 } from "reactstrap";
 import TermComponent from "../common/term-component/term-component"
 import InfoMessage from "../common/info-message/info-message"
+import VariantCloud from "./variant-cloud/variant-cloud"
 
 const TermPage = ({term}: PropsType) => {
+
   if (!term) return (
     <InfoMessage>
       <p>Termen finnes ikke enda!</p>
@@ -26,6 +28,7 @@ const TermPage = ({term}: PropsType) => {
           </Breadcrumb>
         </div>
         <TermComponent term={term}/>
+        <VariantCloud termId={term._id} variants={term.variants} />
       </div>
     </div>
   );

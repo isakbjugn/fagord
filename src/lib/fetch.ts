@@ -1,3 +1,5 @@
+import { Variant } from "../types/term"
+
 const baseApiUri = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '';
 
 export const fetchTerms = async () => {
@@ -49,6 +51,27 @@ export const updateTerm = async ({ termId, term }: UpdateTermArguments) => {
     },
     method: 'PUT',
     body: JSON.stringify(term)
+  })
+  const json = await res.json();
+  if (res.ok) {
+    return json;
+  }
+  throw Error(res.statusText);
+}
+
+interface VoteForVariantArguments {
+  termId: string;
+  variant: Variant;
+}
+
+export const voteForVariant = async ({ termId, variant }: VoteForVariantArguments) => {
+  const res = await fetch(baseApiUri + '/api/termer/' + termId + '/varianter', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'PUT',
+    body: JSON.stringify(variant)
   })
   const json = await res.json();
   if (res.ok) {
