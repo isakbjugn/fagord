@@ -24,10 +24,14 @@ const postRow = async (term) => {
   await doc.loadInfo();
   
   const sheet = doc.sheetsByIndex[0];
-  const rows = await sheet.getRows();
   const newRow = await sheet.addRow(term);
   newRow._id = term.en.toLowerCase().replace(" ", "_") + posMapper(term.pos);
   newRow._active = true;
+
+  const variants = []
+  if (term.nb) variants.push({ term: term.nb, dialect: 'nb', votes: 1});
+  if (term.nn) variants.push({ term: term.nn, dialect: 'nn', votes: 1});
+  newRow.variants = JSON.stringify(variants);
 
   const today = new Date();
   newRow._added = today;
@@ -63,6 +67,35 @@ const updateRow = async (row, payload) => {
   return row;
 }
 
+const addVariant = async (row, payload) => {
+  const variants = JSON.parse(row.variants);
+  variants.push({ term: payload.term, dialect: payload.dialect, votes: 1 });
+  row.variants = JSON.stringify(variants);
+  
+  await row.save();
+  return row;
+}
+
+const promoteVariant = async (row, payload) => {
+  const variants = JSON.parse(row.variants);
+  const variantIdx = variants.findIndex(v => v.term === payload.term && v.dialect === payload.dialect);
+  variants[variantIdx].votes++;
+  row.variants = JSON.stringify(variants);
+  
+  const variant = variants[variantIdx];
+  if (variant.votes > featuredVariantVotes(row, payload.dialect))
+    row[payload.dialect] = variant.term;
+
+  await row.save();
+  return row;
+}
+
+const featuredVariantVotes = (row, dialect) => {
+  const featuredTerm = row[dialect];
+  const variants = JSON.parse(row.variants);
+  return variants.find(v => v.term === featuredTerm && v.dialect === dialect).votes;
+}
+
 const disableRow = async (row) => {
   row._active = false;
   await row.save();
@@ -74,5 +107,7 @@ module.exports = {
   postRow: postRow,
   getRowByTermId: getRowByTermId,
   updateRow: updateRow,
+  addVariant: addVariant,
+  promoteVariant: promoteVariant,
   disableRow: disableRow,
 }

@@ -4,6 +4,7 @@ const termMapper = (row) => {
     en: row.en,
     nb: row.nb,
     nn: row.nn,
+    variants: parseVariants(row.variants),
     field: row.field,
     subfield: row.subfield,
     pos: row.pos,
@@ -12,6 +13,14 @@ const termMapper = (row) => {
     _modified: row._modified,
     _active: row._active,
     definition: row.definition
+  }
+}
+
+const parseVariants = (variants) => {
+  try {
+    return JSON.parse(variants);
+  } catch (err) {
+    return [];
   }
 }
 
