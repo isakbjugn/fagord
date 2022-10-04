@@ -71,7 +71,7 @@ const disableRow = async (row) => {
 
 module.exports = {
   getRows: getRows,
-  postRows: postRow,
+  postRow: postRow,
   getRowByTermId: getRowByTermId,
   updateRow: updateRow,
   disableRow: disableRow,
