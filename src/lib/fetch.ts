@@ -59,6 +59,27 @@ export const updateTerm = async ({ termId, term }: UpdateTermArguments) => {
   throw Error(res.statusText);
 }
 
+export interface AddVariantArguments {
+  termId: string;
+  variant: Variant;
+}
+
+export const addVariant = async ({ termId, variant }: VoteForVariantArguments) => {
+  const res = await fetch(baseApiUri + '/api/termer/' + termId + '/varianter', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(variant)
+  })
+  const json = await res.json();
+  if (res.ok) {
+    return json;
+  }
+  throw Error(res.statusText);
+}
+
 export interface VoteForVariantArguments {
   termId: string;
   variant: Variant;

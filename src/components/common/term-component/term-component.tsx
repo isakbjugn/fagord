@@ -8,6 +8,8 @@ interface TermComponentProps {
 
 const TermComponent = ({term}: TermComponentProps) => {
 
+  if (!term) return null;
+
   const fieldSpec = (term.subfield) ? term.subfield : term.field;
   const fieldSpecStr = (fieldSpec) ? " (" + fieldSpec + ")" : "";
 

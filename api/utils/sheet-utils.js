@@ -69,7 +69,9 @@ const updateRow = async (row, payload) => {
 
 const addVariant = async (row, payload) => {
   const variant = { term: payload.term, dialect: payload.dialect, votes: 1 };
-  const variants = JSON.parse(row.variants);
+  if (!row[variant.dialect]) row[variant.dialect] = variant.term;
+
+  const variants = (row.variants) ? JSON.parse(row.variants) : [];
   variants.push(variant);
   row.variants = JSON.stringify(variants);
   

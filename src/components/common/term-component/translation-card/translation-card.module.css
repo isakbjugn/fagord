@@ -6,3 +6,7 @@
   border-width: 0.5px;
   border-radius: 5px;
 }
+
+.buttons > * {
+  margin-right: 10px;
+}
