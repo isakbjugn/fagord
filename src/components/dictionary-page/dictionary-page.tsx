@@ -9,10 +9,7 @@ import Loader from "../common/loader/loader"
 import TermList from "./term-list/term-list"
 import styles from "./dictionary-page.module.css";
 import Spinner from "../common/spinner/spinner"
-
-interface DictionaryPageProps {
-  dictionary: Term[];
-}
+import useDictionary from "../utils/use-dictionary"
 
 interface TransFilter {
   text: String;
@@ -24,11 +21,19 @@ type TransFilterType = 'all' | 'translated' | 'incomplete';
 
 const AllSubjects: Subject = { field: 'Alle', subfields: []}
 
-const DictionaryPage = ({dictionary = []}: DictionaryPageProps)  => {
+const DictionaryPage = ()  => {
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
   const [subjectFilter, setSubjectFilter] = useState<Subject | null>(AllSubjects);
 
-  const { isLoading, error, data: subjects } = useQuery('fields', fetchFields)
+  const {
+    isLoading: dictionaryLoading,
+    isError: dictionaryError,
+    data: dictionary
+  } = useDictionary();
+  const { isLoading: subjectLoading, isError: subjectError, data: subjects } = useQuery('fields', fetchFields)
+
+  if (dictionaryLoading) return <Loader />;
+  if (dictionaryError) return <p>Kunne ikke laste termliste.</p>
 
   const applyTransFilter = (terms: Term[]) => {
     switch (transFilter) {
@@ -48,8 +53,8 @@ const DictionaryPage = ({dictionary = []}: DictionaryPageProps)  => {
   }
 
   const subjectFilterComponent = () => {
-    if (isLoading) return <Spinner />;
-    if (error) return <p>Kunne ikke laste fagfelt.</p>;
+    if (subjectLoading) return <Spinner />;
+    if (subjectError) return <p>Kunne ikke laste fagfelt.</p>;
     return (
       <Select
         className={styles.subjects}
@@ -80,8 +85,6 @@ const DictionaryPage = ({dictionary = []}: DictionaryPageProps)  => {
       defaultChecked: false,
     },
   ]
-
-  if (dictionary.length === 0) return <Loader />;
 
   return (
     <div className="container-sm my-2">

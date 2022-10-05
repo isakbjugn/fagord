@@ -68,12 +68,13 @@ const updateRow = async (row, payload) => {
 }
 
 const addVariant = async (row, payload) => {
+  const variant = { term: payload.term, dialect: payload.dialect, votes: 1 };
   const variants = JSON.parse(row.variants);
-  variants.push({ term: payload.term, dialect: payload.dialect, votes: 1 });
+  variants.push(variant);
   row.variants = JSON.stringify(variants);
   
   await row.save();
-  return row;
+  return variant;
 }
 
 const promoteVariant = async (row, payload) => {
@@ -87,7 +88,7 @@ const promoteVariant = async (row, payload) => {
     row[payload.dialect] = variant.term;
 
   await row.save();
-  return row;
+  return variants[variantIdx];
 }
 
 const featuredVariantVotes = (row, dialect) => {

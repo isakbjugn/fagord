@@ -59,7 +59,7 @@ export const updateTerm = async ({ termId, term }: UpdateTermArguments) => {
   throw Error(res.statusText);
 }
 
-interface VoteForVariantArguments {
+export interface VoteForVariantArguments {
   termId: string;
   variant: Variant;
 }

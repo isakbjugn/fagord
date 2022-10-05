@@ -7,16 +7,12 @@ interface TermEntryProps {
 
 const TermEntry = ({term, onSelect}: TermEntryProps) => {
 
-  const handleClick = () => {
-    onSelect(term._id);
-  }
-
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') onSelect(term._id);
   }
 
   return (
-    <tr onClick={handleClick}>
+    <tr onClick={() => onSelect(term._id)}>
       <td tabIndex={0} onKeyDown={handleKeyDown}>
         {term.en}
       </td>

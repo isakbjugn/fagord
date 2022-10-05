@@ -90,10 +90,10 @@ termRouter.route('/:termId/varianter')
     getRowByTermId(req.params.termId)
       .then(row => {
         addVariant(row, req.body)
-          .then(row => {
+          .then(variant => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(termMapper(row));
+            res.json(variant);
           }, (err) => next(err))
           .catch((err) => next(err));
       })
@@ -102,10 +102,10 @@ termRouter.route('/:termId/varianter')
     getRowByTermId(req.params.termId)
     .then((row) => {
         promoteVariant(row, req.body)
-          .then(row => {
+          .then(variant => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(termMapper(row));
+            res.json(variant);
           }, (err) => next(err))
         }, (err) => next(err))
         .catch((err) => next(err));
