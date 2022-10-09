@@ -21,7 +21,7 @@ const Header = () => {
         <NavbarToggler onClick={toggleNav} />
         <NavbarBrand className="mr-auto" href="/">
           <img
-            src="assets/images/fagord-logo.png"
+            src="fagord-logo240.png"
             height="70"
             width="150"
             alt="Fagord"
