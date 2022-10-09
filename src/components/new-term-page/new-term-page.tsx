@@ -3,12 +3,14 @@ import { Button, Form, Label, Row } from "reactstrap"
 import style from "./new-term-page.module.css"
 import { pickBy } from "lodash";
 import { postTerm } from "../../lib/fetch";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Term } from "../../types/term"
 import { Link, useParams } from "react-router-dom"
 import { setLogger, useMutation, useQueryClient } from "react-query"
 import Modal from "../common/modal/modal"
 import useToggle from "../utils/use-toggle"
+import useDictionary from "../utils/use-dictionary"
+import { createId } from "../utils/create-id"
 
 const NewTermPage = () => {
   let { term } = useParams();
@@ -17,6 +19,7 @@ const NewTermPage = () => {
   const [result, setResult] = useState<Term | null>();
   const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const {isLoading: dictLoad, isError: dictError, data: dictionary} = useDictionary();
   const { mutate, isLoading } = useMutation(postTerm, {
     onSuccess: (data) => {
       setResult(data);
@@ -43,13 +46,22 @@ const NewTermPage = () => {
     log: () => {},
     warn: () => {},
     error: () => {},
-});
+  });
 
   const watchField = watch("field", "");
+  const watchTerm = watch("en", (term) ? term : "");
+  const watchPos = watch("pos", "substantiv");
   const onSubmit = (input: any) => {
     const cleanInput = (watchField) ? input : {...input, "subfield": ""};
     mutate(pickBy(cleanInput, (value: string) => value.length > 0));
   }
+
+  const termExists = useMemo((): boolean => {
+    if (watchTerm === "") return false;
+    if (dictLoad || dictError) return false;
+    const id = createId(watchTerm, watchPos);
+    return dictionary.find((term: any) => term._id === id) !== undefined;
+  }, [dictLoad, dictError, dictionary, watchTerm, watchPos])
   
   if (result) return (
     <div className={style.success}>
@@ -71,7 +83,15 @@ const NewTermPage = () => {
           <Row>
             <Label>
               Engelsk term
-              <input value={(term) ? term : undefined} className="form-control" type="text" {...register("en", { required: true })} />
+              <input
+                defaultValue={(term) ? term : undefined}
+                type="text"
+                className={"form-control" + ((termExists) ? " is-invalid" : "")}
+                {...register("en", { required: true })}
+                />
+              <div className="invalid-feedback">
+                Kombinasjonen av term og ordklasse finnes fra før.
+              </div>
             </Label>
           </Row>
           <Label>Norske termer</Label>
