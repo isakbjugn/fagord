@@ -8,14 +8,14 @@
       "type": "image/x-icon"
     },
     {
+      "src": "fagord-logo260.png",
+      "type": "image/png",
+      "sizes": "260x260"
+    },
+    {
       "src": "fagord-logo240.png",
       "type": "image/png",
       "sizes": "240x120"
-    },
-    {
-      "src": "fagord-logo480.png",
-      "type": "image/png",
-      "sizes": "480x240"
     }
   ],
   "start_url": ".",
