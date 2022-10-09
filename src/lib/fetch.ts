@@ -31,11 +31,11 @@ export const postTerm = async (term: any) => {
     method: 'POST',
     body: JSON.stringify(term)
   })
-  const json = await res.json();
-  if (res.ok) {
-    return json;
+
+  if (!res.ok) {
+    throw Error(res.status + " " + res.statusText);
   }
-  throw Error(res.statusText);
+  return await res.json();
 }
 
 interface UpdateTermArguments {

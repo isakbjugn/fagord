@@ -4,25 +4,46 @@ import style from "./new-term-page.module.css"
 import { pickBy } from "lodash";
 import { postTerm } from "../../lib/fetch";
 import { useState } from "react";
-import Spinner from "../common/spinner/spinner"
 import { Term } from "../../types/term"
 import { Link, useParams } from "react-router-dom"
-import { useMutation, useQueryClient } from "react-query"
+import { setLogger, useMutation, useQueryClient } from "react-query"
+import Modal from "../common/modal/modal"
+import useToggle from "../utils/use-toggle"
 
 const NewTermPage = () => {
   let { term } = useParams();
   const queryClient = useQueryClient();
   const { register, watch, reset, handleSubmit } = useForm();
   const [result, setResult] = useState<Term | null>();
+  const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { mutate, isLoading } = useMutation(postTerm, {
     onSuccess: (data) => {
       setResult(data);
-    },
-    onSettled: () => {
       queryClient.invalidateQueries('dictionary');
       reset();
+    },
+    onError: (error: Error) => {
+      switch (error.message.split(' ')[0]) {
+        case "403": {
+          setErrorMessage("Kan ikke publisere formler.");
+          break;
+        }
+        case "418": {
+          setErrorMessage("Kan ikke publisere skript.");
+          break;
+        } 
+        default: setErrorMessage("Det skjedde en feil under posting av term");
+      }
+      toggleErrorModal();
     }
   })
+
+  setLogger({
+    log: () => {},
+    warn: () => {},
+    error: () => {},
+});
 
   const watchField = watch("field", "");
   const onSubmit = (input: any) => {
@@ -42,8 +63,6 @@ const NewTermPage = () => {
       </span>
     </div>
   )
-
-  if (isLoading) return <Spinner />
 
   return (
     <div className={style.form}>
@@ -111,8 +130,14 @@ const NewTermPage = () => {
               <input className="form-control" type="text" {...register("reference")} />
             </Label>
           </Row>
-          <Button color="success" type="submit">Legg til term</Button>
+          <Button color="success" type="submit">
+            {isLoading && <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true" ></span>}
+            Legg til term
+          </Button>
       </Form>
+      <Modal isOpen={isErrorModalOpen} toggle={toggleErrorModal}>
+        <p>{errorMessage}</p>
+      </Modal>
     </div>
   )
 }

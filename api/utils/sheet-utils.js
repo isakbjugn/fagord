@@ -18,7 +18,7 @@ const getRows = async () => {
   return sheet.getRows();
 };
 
-const postRow = async (term) => {  
+const postRow = async (term) => {
   const sheet = await getSheet();
   const newRow = await sheet.addRow({ "en": term.en, "pos": term.pos });
 

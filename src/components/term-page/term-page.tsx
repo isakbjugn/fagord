@@ -2,11 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { Term } from "../../types/term"
 import {
   Breadcrumb,
-  BreadcrumbItem,
-  Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
+  BreadcrumbItem
 } from "reactstrap";
 import TermComponent from "../common/term-component/term-component"
 import InfoMessage from "../common/info-message/info-message"
@@ -17,6 +13,7 @@ import { voteForVariant } from "../../lib/fetch"
 import useDictionary from "../utils/use-dictionary"
 import Spinner from "../common/spinner/spinner"
 import useToggle from "../utils/use-toggle"
+import Modal from "../common/modal/modal"
 
 const TermPage = () => {
   const { termId } = useParams();
@@ -28,11 +25,9 @@ const TermPage = () => {
 
   const { mutate } = useMutation(voteForVariant, {
     onSuccess: (data) => {
+      queryClient.invalidateQueries('dictionary');
       setVotedTerm(data.term);
       toggleModal();
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries('dictionary');
     }
   });
 
@@ -60,15 +55,8 @@ const TermPage = () => {
         </div>
         <TermComponent term={term}/>
         <VariantCloud termId={term._id} variants={term.variants} mutate={mutate} />
-        <Modal fade={false} isOpen={isModalOpen}>
-          <ModalBody>
-            Du har gitt én stemme til <em>«{votedTerm}»</em>.
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" onClick={(toggleModal)}>
-              Lukk
-            </Button>
-          </ModalFooter>
+        <Modal isOpen={isModalOpen} toggle={toggleModal}>
+          <p>Du har gitt én stemme til <em>«{votedTerm}»</em>.</p>
         </Modal>
       </div>
     </div>
