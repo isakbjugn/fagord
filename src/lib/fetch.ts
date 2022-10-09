@@ -4,22 +4,20 @@ const baseApiUri = process.env.NODE_ENV === 'development' ? 'http://localhost:80
 
 export const fetchTerms = async () => {
   const res = await fetch(baseApiUri + '/api/termer');
-  const json = await res.json();
-
-  if (res.ok) {
-    return json;
+  
+  if (!res.ok) {
+    throw Error(res.status + " " + res.statusText);
   }
-  throw Error(res.statusText);
+  return await res.json();
 }
 
 export const fetchFields = async () => {
   const res = await fetch(baseApiUri + '/api/fagfelt');
-  const json = await res.json();
 
-  if (res.ok) {
-    return json;
+  if (!res.ok) {
+    throw Error(res.status + " " + res.statusText);
   }
-  throw Error(res.statusText);
+  return await res.json();
 }
 
 export const postTerm = async (term: any) => {
@@ -52,11 +50,11 @@ export const updateTerm = async ({ termId, term }: UpdateTermArguments) => {
     method: 'PUT',
     body: JSON.stringify(term)
   })
-  const json = await res.json();
-  if (res.ok) {
-    return json;
+  
+  if (!res.ok) {
+    throw Error(res.status + " " + res.statusText);
   }
-  throw Error(res.statusText);
+  return await res.json();
 }
 
 export interface AddVariantArguments {
@@ -73,11 +71,11 @@ export const addVariant = async ({ termId, variant }: VoteForVariantArguments) =
     method: 'POST',
     body: JSON.stringify(variant)
   })
-  const json = await res.json();
-  if (res.ok) {
-    return json;
+  
+  if (!res.ok) {
+    throw Error(res.status + " " + res.statusText);
   }
-  throw Error(res.statusText);
+  return await res.json();
 }
 
 export interface VoteForVariantArguments {
@@ -94,9 +92,9 @@ export const voteForVariant = async ({ termId, variant }: VoteForVariantArgument
     method: 'PUT',
     body: JSON.stringify(variant)
   })
-  const json = await res.json();
-  if (res.ok) {
-    return json;
+  
+  if (!res.ok) {
+    throw Error(res.status + " " + res.statusText);
   }
-  throw Error(res.statusText);
+  return await res.json();
 }
