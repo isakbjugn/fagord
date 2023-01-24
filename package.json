@@ -3,16 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/css": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.6",
+    "@mui/styles": "^5.11.2",
     "@popperjs/core": "^2.11.6",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "@types/react-tagcloud": "^1.1.7",
-    "bootstrap": "^5.2.1",
+    "bootstrap": "^5.2.3",
     "bootstrap-social": "^5.1.1",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
@@ -52,6 +49,14 @@
     ]
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.186"
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/lodash": "^4.14.186",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/react-tagcloud": "^1.1.7"
   }
 }
