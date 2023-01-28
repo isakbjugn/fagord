@@ -14,9 +14,9 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { visuallyHidden } from '@mui/utils';
 import { Term, Variant } from "../../types/term";
-import style from "./table-page.module.css";
 import useDictionary from "../utils/use-dictionary";
 import Loader from "../common/loader/loader";
+import { DropdownTableCell, TermTableCell } from './styled-mui-components'
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -89,7 +89,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       <TableRow style={{"backgroundColor": "transparent"}}>
         <TableCell />
         {headCells.map((headCell) => (
-          <TableCell
+          <TermTableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -107,7 +107,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 </Box>
               ) : null}
             </TableSortLabel>
-          </TableCell>
+          </TermTableCell>
         ))}
       </TableRow>
     </TableHead>
@@ -185,6 +185,7 @@ export const TablePage = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
+            labelRowsPerPage={"Antall ord:"}
             count={dictionary.length}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -208,7 +209,7 @@ const Row = (props: { term: Term, index: number }) => {
       tabIndex={-1}
       key={term._id}
     >
-      <TableCell className={style.dropdown}>
+      <DropdownTableCell>
         <IconButton
           aria-label="expand row"
           size="small"
@@ -216,16 +217,16 @@ const Row = (props: { term: Term, index: number }) => {
         >
           {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </IconButton>
-      </TableCell>
-      <TableCell
+      </DropdownTableCell>
+      <TermTableCell
         component="th"
         id={labelId}
         scope="row"
       >
         {term.en}
-      </TableCell>
-      <TableCell align="justify">{term.nb}</TableCell>
-      <TableCell align="justify">{term.nn}</TableCell>
+      </TermTableCell>
+      <TermTableCell align="justify">{term.nb}</TermTableCell>
+      <TermTableCell align="justify">{term.nn}</TermTableCell>
     </TableRow>
   );
 }
