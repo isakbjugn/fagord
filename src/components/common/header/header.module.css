@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #29648A;
+  background-color: var(--color-dark-blue);
 }
 
 @media only screen and (max-width: 768px) {
