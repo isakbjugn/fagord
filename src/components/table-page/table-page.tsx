@@ -16,6 +16,7 @@ import { visuallyHidden } from '@mui/utils';
 import { Term, Variant } from "../../types/term";
 import useDictionary from "../utils/use-dictionary";
 import Loader from "../common/loader/loader";
+import style from "./table-page.module.css";
 import { DropdownTableCell, TermTableCell } from './styled-mui-components'
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -183,6 +184,7 @@ export const TablePage = () => {
             </Table>
           </TableContainer>
           <TablePagination
+            className={style.paginator}
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             labelRowsPerPage={"Antall ord:"}
