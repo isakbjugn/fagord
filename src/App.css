@@ -1,5 +1,5 @@
-.breadcrumb >.active {
-  color: white
+.breadcrumb > .active {
+  color: white;
 }
 
 .breadcrumb a {

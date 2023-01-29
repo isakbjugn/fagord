@@ -1,15 +1,15 @@
-import { useState } from "react"
-import { useQuery } from "react-query"
-import Select from "react-select"
-import { Form, FormGroup, Input, Label } from "reactstrap"
-import { fetchFields } from "../../lib/fetch"
-import { Subject } from "../../types/subject"
-import { Term } from "../../types/term"
-import Loader from "../common/loader/loader"
-import styles from "./dictionary-page.module.css";
-import Spinner from "../common/spinner/spinner"
-import useDictionary from "../utils/use-dictionary"
-import { Dictionary } from "./dictionary/dictionary"
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import Select from 'react-select';
+import { Form, FormGroup, Input, Label } from 'reactstrap';
+import { fetchFields } from '../../lib/fetch';
+import { Subject } from '../../types/subject';
+import { Term } from '../../types/term';
+import Loader from '../common/loader/loader';
+import styles from './dictionary-page.module.css';
+import Spinner from '../common/spinner/spinner';
+import useDictionary from '../utils/use-dictionary';
+import { Dictionary } from './dictionary/dictionary';
 
 interface TransFilter {
   text: String;
@@ -19,38 +19,44 @@ interface TransFilter {
 
 type TransFilterType = 'all' | 'translated' | 'incomplete';
 
-const AllSubjects: Subject = { field: 'Alle', subfields: []}
+const AllSubjects: Subject = { field: 'Alle', subfields: [] };
 
-const DictionaryPage = ()  => {
+const DictionaryPage = () => {
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
-  const [subjectFilter, setSubjectFilter] = useState<Subject | null>(AllSubjects);
+  const [subjectFilter, setSubjectFilter] = useState<Subject | null>(
+    AllSubjects
+  );
 
   const {
     isLoading: dictionaryLoading,
     isError: dictionaryError,
-    data: dictionary
+    data: dictionary,
   } = useDictionary();
-  const { isLoading: subjectLoading, isError: subjectError, data: subjects } = useQuery('fields', fetchFields)
+  const {
+    isLoading: subjectLoading,
+    isError: subjectError,
+    data: subjects,
+  } = useQuery('fields', fetchFields);
 
   if (dictionaryLoading) return <Loader />;
-  if (dictionaryError) return <p>Kunne ikke laste termliste.</p>
+  if (dictionaryError) return <p>Kunne ikke laste termliste.</p>;
 
   const applyTransFilter = (terms: Term[]) => {
     switch (transFilter) {
       case 'translated':
-        return terms.filter(term => (term.nb || term.nn))
+        return terms.filter((term) => term.nb || term.nn);
       case 'incomplete':
-        return terms.filter(term => (!term.nb || !term.nn))
+        return terms.filter((term) => !term.nb || !term.nn);
       default:
         return terms;
-    };
-  }
+    }
+  };
 
   const applySubjectFilter = (terms: Term[]) => {
     if (!subjectFilter) return terms;
     if (subjectFilter.field === AllSubjects.field) return terms;
-    return terms.filter(term => term.field === subjectFilter.field);
-  }
+    return terms.filter((term) => term.field === subjectFilter.field);
+  };
 
   const subjectFilterComponent = () => {
     if (subjectLoading) return <Spinner />;
@@ -59,39 +65,39 @@ const DictionaryPage = ()  => {
       <Select
         className={styles.subjects}
         value={subjectFilter}
-        placeholder='Filtrer fagfelt'
-        options={[{ field: "Alle", subfields: [] }, ...subjects]}
+        placeholder="Filtrer fagfelt"
+        options={[{ field: 'Alle', subfields: [] }, ...subjects]}
         onChange={(choice) => setSubjectFilter(choice)}
         getOptionLabel={(subject: Subject) => subject.field}
         getOptionValue={(subject: Subject) => subject.field}
       />
-    )
-  }
-  
+    );
+  };
+
   const transFilters: TransFilter[] = [
     {
-      text: "Alle",
+      text: 'Alle',
       filter: 'all',
       defaultChecked: true,
     },
     {
-      text: "Oversatt",
+      text: 'Oversatt',
       filter: 'translated',
       defaultChecked: false,
     },
     {
-      text: "Ufullstendig",
+      text: 'Ufullstendig',
       filter: 'incomplete',
       defaultChecked: false,
     },
-  ]
+  ];
 
   return (
     <div className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
         <div className={styles.header}>
           <Form className={styles.form}>
-            {transFilters.map((filter) =>
+            {transFilters.map((filter) => (
               <FormGroup check inline key={filter.filter}>
                 <Input
                   name="dictionaryView"
@@ -99,16 +105,18 @@ const DictionaryPage = ()  => {
                   onChange={() => setTransFilter(filter.filter)}
                   defaultChecked={filter.defaultChecked}
                 />
-                <Label check>{filter.text}</Label> 
+                <Label check>{filter.text}</Label>
               </FormGroup>
-            )}
+            ))}
           </Form>
           {subjectFilterComponent()}
         </div>
-        <Dictionary dictionary={applyTransFilter(applySubjectFilter(dictionary))}></Dictionary>
+        <Dictionary
+          dictionary={applyTransFilter(applySubjectFilter(dictionary))}
+        ></Dictionary>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default DictionaryPage;

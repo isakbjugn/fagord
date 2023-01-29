@@ -1,5 +1,5 @@
-import { fetchTerms } from "../../lib/fetch"
-import { useQuery } from 'react-query'
+import { fetchTerms } from '../../lib/fetch';
+import { useQuery } from 'react-query';
 
 const useDictionary = () => useQuery('dictionary', fetchTerms);
 

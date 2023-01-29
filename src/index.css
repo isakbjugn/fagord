@@ -13,8 +13,8 @@ code {
 }
 
 :root {
-  --color-light-blue: #2E9CCA;
-  --color-dark-blue: #29648A;
+  --color-light-blue: #2e9cca;
+  --color-dark-blue: #29648a;
   --breakpoint-sm: 480px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
@@ -24,4 +24,3 @@ code {
 html {
   background-color: var(--color-light-blue);
 }
-

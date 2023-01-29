@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { useState } from 'react';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import TableRow from '@mui/material/TableRow';
-import { Term } from "../../../../types/term";
+import { Term } from '../../../../types/term';
 import { DropdownTableCell, TermTableCell } from '../styled-mui-components';
-import { TermDetails } from "./term-details"
+import { TermDetails } from './term-details';
 
-export const TermEntry = (props: { term: Term, index: number }) => {
+export const TermEntry = (props: { term: Term; index: number }) => {
   const [open, setOpen] = useState(false);
   const { term, index } = props;
   const labelId = `enhanced-table-checkbox-${index}`;
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') setOpen(!open);
-  } 
+  };
 
   return (
     <>
@@ -43,11 +43,15 @@ export const TermEntry = (props: { term: Term, index: number }) => {
         >
           {term.en}
         </TermTableCell>
-        <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown} >{term.nb}</TermTableCell>
-        <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown} >{term.nn}</TermTableCell>
+        <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown}>
+          {term.nb}
+        </TermTableCell>
+        <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown}>
+          {term.nn}
+        </TermTableCell>
       </TableRow>
       <TableRow>
-        <TermTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6} >
+        <TermTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <TermDetails term={term} />
           </Collapse>

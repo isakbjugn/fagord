@@ -1,5 +1,5 @@
 import TableCell from '@mui/material/TableCell';
-import { styled } from '@mui/system'
+import { styled } from '@mui/system';
 
 export const DropdownTableCell = styled(TableCell)({
   '@media (max-width: 768px)': {
@@ -15,6 +15,6 @@ export const DropdownTableCell = styled(TableCell)({
 export const TermTableCell = styled(TableCell)({
   '@media (max-width: 480px)': {
     paddingLeft: '4px',
-    paddingRight:'4px',
+    paddingRight: '4px',
   },
 });

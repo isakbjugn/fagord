@@ -1,22 +1,23 @@
-import { Term } from "../../../types/term"
-import Definition from "./definition/definition"
-import TranslationCard from "./translation-card/translation-card"
+import { Term } from '../../../types/term';
+import Definition from './definition/definition';
+import TranslationCard from './translation-card/translation-card';
 
 interface TermComponentProps {
   term: Term;
 }
 
-const TermComponent = ({term}: TermComponentProps) => {
-
+const TermComponent = ({ term }: TermComponentProps) => {
   if (!term) return null;
 
-  const fieldSpec = (term.subfield) ? term.subfield : term.field;
-  const fieldSpecStr = (fieldSpec) ? " (" + fieldSpec + ")" : "";
+  const fieldSpec = term.subfield ? term.subfield : term.field;
+  const fieldSpecStr = fieldSpec ? ' (' + fieldSpec + ')' : '';
 
   return (
     <div>
       <div className="row">
-        <h1>{term.en} {fieldSpecStr}</h1>
+        <h1>
+          {term.en} {fieldSpecStr}
+        </h1>
         <hr />
       </div>
       <div className="row">
@@ -28,7 +29,7 @@ const TermComponent = ({term}: TermComponentProps) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default TermComponent;

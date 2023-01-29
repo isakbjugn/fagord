@@ -1,8 +1,8 @@
 import './App.css';
-import { BrowserRouter } from 'react-router-dom'
-import Main from './components/main/main'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { BrowserRouter } from 'react-router-dom';
+import Main from './components/main/main';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const queryClient = new QueryClient();
 
@@ -21,12 +21,11 @@ const fagordTheme = createTheme({
 });
 
 function App() {
-
   return (
     <ThemeProvider theme={fagordTheme}>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-              <Main/>
+          <Main />
         </QueryClientProvider>
       </BrowserRouter>
     </ThemeProvider>

@@ -1,9 +1,9 @@
-import styles from "./footer.module.css"
+import styles from './footer.module.css';
 
 const Footer = () => {
-  const fagordGitHubUrl = "https://github.com/isakbjugn/fagord";
+  const fagordGitHubUrl = 'https://github.com/isakbjugn/fagord';
   return (
-    <div className={"container-fluid " + styles.footer}>
+    <div className={'container-fluid ' + styles.footer}>
       <div className="row justify-content-center">
         <div className="col-auto">
           <a href={fagordGitHubUrl}>
@@ -12,7 +12,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
-  )
-}
- 
+  );
+};
+
 export default Footer;
