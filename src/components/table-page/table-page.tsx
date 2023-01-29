@@ -18,6 +18,8 @@ import useDictionary from "../utils/use-dictionary";
 import Loader from "../common/loader/loader";
 import style from "./table-page.module.css";
 import { DropdownTableCell, TermTableCell } from './styled-mui-components'
+import { Collapse } from '@mui/material'
+import { Link } from "react-router-dom"
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -206,29 +208,65 @@ const Row = (props: { term: Term, index: number }) => {
   const labelId = `enhanced-table-checkbox-${index}`;
 
   return (
-    <TableRow
-      hover
-      tabIndex={-1}
-      key={term._id}
-    >
-      <DropdownTableCell>
-        <IconButton
-          aria-label="expand row"
-          size="small"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        </IconButton>
-      </DropdownTableCell>
-      <TermTableCell
-        component="th"
-        id={labelId}
-        scope="row"
+    <>
+      <TableRow
+        hover
+        tabIndex={-1}
+        key={term._id}
+        sx={{ '& > *': { borderBottom: 'unset' } }}
       >
-        {term.en}
-      </TermTableCell>
-      <TermTableCell align="justify">{term.nb}</TermTableCell>
-      <TermTableCell align="justify">{term.nn}</TermTableCell>
-    </TableRow>
+        <DropdownTableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </DropdownTableCell>
+        <TermTableCell
+          component="th"
+          id={labelId}
+          scope="row"
+        >
+          {term.en}
+        </TermTableCell>
+        <TermTableCell align="justify">{term.nb}</TermTableCell>
+        <TermTableCell align="justify">{term.nn}</TermTableCell>
+      </TableRow>
+      <TableRow>
+        <TermTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6} >
+          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Box sx={{ margin: 1 }}>
+              <Table size="small" aria-label="purchases">
+                <TableBody>
+                  {term.field && (
+                    <TableRow>
+                      <TableCell component="th" scope="row">Fagfelt</TableCell>
+                      <TableCell>{term.field}</TableCell>
+                    </TableRow>
+                  )}
+                  {term.subfield && (
+                    <TableRow>
+                      <TableCell component="th" scope="row">Underområde</TableCell>
+                      <TableCell>{term.subfield}</TableCell>
+                    </TableRow>
+                  )}
+                  {term.definition && (
+                    <TableRow>
+                      <TableCell component="th" scope="row">Definisjon</TableCell>
+                      <TableCell>{term.definition}</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </Box>
+            <div className={"col my-2 mx-4 " + style.button} >
+              <Link className="btn btn-outline-dark btn-sm" to={"/term/" + term._id} role="button">Til termside</Link>
+            </div>
+          </Collapse>
+        </TermTableCell>
+      </TableRow>
+    </>
   );
 }

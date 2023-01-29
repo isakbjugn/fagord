@@ -19,9 +19,3 @@ export const TermTableCell = styled(TableCell)({
     paddingRight:'4px',
   },
 });
-
-export const TablePagination = styled(MuiTablepagination)({
-  'MuiTablePagination-displayedRows': {
-    martinTop: '12px',
-  },
-});
