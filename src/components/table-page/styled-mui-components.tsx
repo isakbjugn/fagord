@@ -1,5 +1,4 @@
 import TableCell from '@mui/material/TableCell';
-import MuiTablepagination from '@mui/material/TablePagination';
 import { styled } from '@mui/system'
 
 export const DropdownTableCell = styled(TableCell)({

@@ -1,5 +1,11 @@
 import { useState } from 'react';
+import { Link } from "react-router-dom"
 import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,37 +14,32 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { visuallyHidden } from '@mui/utils';
-import { Term, Variant } from "../../types/term";
+import { DropdownTableCell, TermTableCell } from './styled-mui-components'
+import { Term } from "../../types/term";
 import useDictionary from "../utils/use-dictionary";
 import Loader from "../common/loader/loader";
 import style from "./table-page.module.css";
-import { DropdownTableCell, TermTableCell } from './styled-mui-components'
-import { Collapse } from '@mui/material'
-import { Link } from "react-router-dom"
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
+function descendingComparator<T>(A: T, B: T, orderBy: keyof T) {
+  const a = (A[orderBy] as string).toLowerCase();
+  const b = (B[orderBy] as string).toLowerCase();
+
+  if (b === '') return 0;
+  if (b < a) return -1;
+  if (b > a) return 1;
   return 0;
 }
 
 type Order = 'asc' | 'desc';
+type Language = Pick<Term, 'en' | 'nb' | 'nn'>;
 
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key,
 ): (
-  a: { [key in Key]: string | Variant[] },
-  b: { [key in Key]: string | Variant[] },
+  a: { [key in Key]: string },
+  b: { [key in Key]: string },
 ) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -46,8 +47,7 @@ function getComparator<Key extends keyof any>(
 }
 
 interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Term;
+  id: keyof Language;
   label: string;
   numeric: boolean;
 }
@@ -56,25 +56,22 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'en',
     numeric: false,
-    disablePadding: false,
     label: 'Engelsk',
   },
   {
     id: 'nb',
     numeric: false,
-    disablePadding: false,
     label: 'Bokmål',
   },
   {
     id: 'nn',
     numeric: false,
-    disablePadding: false,
     label: 'Nynorsk',
   },
 ];
 
 interface EnhancedTableProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Term) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Language) => void;
   order: Order;
   orderBy: string;
 }
@@ -83,7 +80,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler =
-    (property: keyof Term) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof Language) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -95,7 +92,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           <TermTableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -119,9 +115,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 export const TablePage = () => {
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof Term>('en');
+  const [orderBy, setOrderBy] = useState<keyof Language>('en');
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const {
     isLoading: dictionaryLoading,
     isError: dictionaryError,
@@ -130,7 +126,7 @@ export const TablePage = () => {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Term,
+    property: keyof Language,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -187,7 +183,7 @@ export const TablePage = () => {
           </TableContainer>
           <TablePagination
             className={style.paginator}
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[10, 25, 50, 100]}
             component="div"
             labelRowsPerPage={"Antall ord:"}
             count={dictionary.length}
