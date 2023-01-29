@@ -6,10 +6,10 @@ import { fetchFields } from "../../lib/fetch"
 import { Subject } from "../../types/subject"
 import { Term } from "../../types/term"
 import Loader from "../common/loader/loader"
-import TermList from "./term-list/term-list"
 import styles from "./dictionary-page.module.css";
 import Spinner from "../common/spinner/spinner"
 import useDictionary from "../utils/use-dictionary"
+import { Dictionary } from "./dictionary/dictionary"
 
 interface TransFilter {
   text: String;
@@ -105,7 +105,7 @@ const DictionaryPage = ()  => {
           </Form>
           {subjectFilterComponent()}
         </div>
-        <TermList dictionary={applyTransFilter(applySubjectFilter(dictionary))}></TermList>
+        <Dictionary dictionary={applyTransFilter(applySubjectFilter(dictionary))}></Dictionary>
       </div>
     </div>
   )

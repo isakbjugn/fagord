@@ -24,13 +24,13 @@
   width: 30px;
   height: 45px;
   border: 4px solid #FFFFFF;
-  border-left: 1px solid #2E9CCA;
+  border-left: 1px solid var(--color-light-blue);
   margin: 0;
   position: absolute;
   right: -4px;
   top: -4px;
   overflow: hidden;
-  background: #2E9CCA;
+  background: var(--color-light-blue);
   transform-style: preserve-3d;
   -webkit-transform-origin: left center;
   transform-origin: left center;
@@ -60,15 +60,15 @@
     transform: rotateY( 0deg);
   }
   20% {
-    background: #29648A;
+    background: var(--color-dark-blue);
   }
   40% {
-    background: #2E9CCA;
+    background: var(--color-light-blue);
     -webkit-transform: rotateY( -180deg);
     transform: rotateY( -180deg);
   }
   100% {
-    background: #2E9CCA;
+    background: var(--color-light-blue);
     -webkit-transform: rotateY( -180deg);
     transform: rotateY( -180deg);
   }
@@ -79,14 +79,14 @@
     transform: rotateY( 0deg);
   }
   20% {
-    background: #29648A;
+    background: var(--color-dark-blue);
   }
   40% {
-    background: #2E9CCA;
+    background: var(--color-light-blue);
     transform: rotateY( -180deg);
   }
   100% {
-    background: #2E9CCA;
+    background: var(--color-light-blue);
     transform: rotateY( -180deg);
   }
 }

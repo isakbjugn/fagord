@@ -15,3 +15,5 @@ export interface Variant {
   dialect: 'nb' | 'nn',
   votes?: number,
 }
+
+export type Language = Pick<Term, 'en' | 'nb' | 'nn'>;

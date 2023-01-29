@@ -1,5 +1,5 @@
 .footer{
   margin-top: auto;
-  background-color: #29648A;
+  background-color: var(--color-dark-blue);
   padding: 15px;
 }
