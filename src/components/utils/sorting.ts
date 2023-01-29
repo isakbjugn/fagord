@@ -4,7 +4,7 @@ function descendingComparator<T>(A: T, B: T, orderBy: keyof T) {
   const a = (A[orderBy] as string).toLowerCase();
   const b = (B[orderBy] as string).toLowerCase();
 
-  if (b === '') return 0;
+  if (b === '') return 1;
   if (b < a) return -1;
   if (b > a) return 1;
   return 0;
