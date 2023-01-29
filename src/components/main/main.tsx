@@ -9,7 +9,6 @@ import styles from "./main.module.css"
 import NewTermPage from '../new-term-page/new-term-page'
 import { useQueryClient } from 'react-query'
 import { fetchTerms } from '../../lib/fetch'
-import { TablePage } from '../table-page/table-page'
 
 function Redirect({ to }: any) {
   let navigate = useNavigate();
@@ -31,7 +30,6 @@ const Main = () => {
         <Route path="/hjem" element={<Home/>} />
         <Route path="/termliste" element={<DictionaryPage />} />
         <Route path="/term/:termId" element={<TermPage />} />
-        <Route path="/tabell" element={<TablePage />} />
         <Route path="/ny-term" element={<NewTermPage />} />
         <Route path="/ny-term/:term" element={<NewTermPage />} />
         <Route path="" element={<Redirect to="/hjem" />} />

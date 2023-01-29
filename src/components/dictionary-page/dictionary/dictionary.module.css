@@ -6,9 +6,3 @@
 .paginator :global(.MuiTablePagination-displayedRows) {
   margin-top: 12px;
 }
-
-@media (max-width: 480px) {
-  .button {
-    text-align: center;
-  }
-}
