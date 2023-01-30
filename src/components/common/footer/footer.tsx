@@ -1,6 +1,6 @@
 import styles from './footer.module.css';
 
-const Footer = () => {
+const Footer = (): JSX.Element => {
   const fagordGitHubUrl = 'https://github.com/isakbjugn/fagord';
   return (
     <div className={'container-fluid ' + styles.footer}>

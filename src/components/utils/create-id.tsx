@@ -1,8 +1,8 @@
-export const createId = (en: string, pos: POS) => {
+export const createId = (en: string, pos: POS): string => {
   return en + posMapper(pos);
 };
 
-const posMapper = (pos: POS) => {
+const posMapper = (pos: POS): string => {
   switch (pos) {
     case 'substantiv':
       return '_sub';

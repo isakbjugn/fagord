@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import Select from 'react-select';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 import { fetchFields } from '../../lib/fetch';
-import { Subject } from '../../types/subject';
-import { Term } from '../../types/term';
+import type { Subject } from '../../types/subject';
+import type { Term } from '../../types/term';
 import Loader from '../common/loader/loader';
 import styles from './dictionary-page.module.css';
 import Spinner from '../common/spinner/spinner';
@@ -12,7 +12,7 @@ import useDictionary from '../utils/use-dictionary';
 import { Dictionary } from './dictionary/dictionary';
 
 interface TransFilter {
-  text: String;
+  text: string;
   filter: TransFilterType;
   defaultChecked: boolean;
 }
@@ -21,7 +21,7 @@ type TransFilterType = 'all' | 'translated' | 'incomplete';
 
 const AllSubjects: Subject = { field: 'Alle', subfields: [] };
 
-const DictionaryPage = () => {
+const DictionaryPage = (): JSX.Element => {
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
   const [subjectFilter, setSubjectFilter] = useState<Subject | null>(
     AllSubjects
@@ -36,30 +36,30 @@ const DictionaryPage = () => {
     isLoading: subjectLoading,
     isError: subjectError,
     data: subjects,
-  } = useQuery('fields', fetchFields);
+  } = useQuery({ queryKey: ['fields'], queryFn: fetchFields });
 
-  if (dictionaryLoading) return <Loader />;
+  if (dictionaryLoading || dictionary === undefined) return <Loader />;
   if (dictionaryError) return <p>Kunne ikke laste termliste.</p>;
 
-  const applyTransFilter = (terms: Term[]) => {
+  const applyTransFilter = (terms: Term[]): Term[] => {
     switch (transFilter) {
       case 'translated':
-        return terms.filter((term) => term.nb || term.nn);
+        return terms.filter((term) => term.nb !== '' || term.nn !== '');
       case 'incomplete':
-        return terms.filter((term) => !term.nb || !term.nn);
+        return terms.filter((term) => term.nb === '' || term.nn === '');
       default:
         return terms;
     }
   };
 
-  const applySubjectFilter = (terms: Term[]) => {
-    if (!subjectFilter) return terms;
+  const applySubjectFilter = (terms: Term[]): Term[] => {
+    if (subjectFilter === null) return terms;
     if (subjectFilter.field === AllSubjects.field) return terms;
     return terms.filter((term) => term.field === subjectFilter.field);
   };
 
-  const subjectFilterComponent = () => {
-    if (subjectLoading) return <Spinner />;
+  const subjectFilterComponent = (): JSX.Element => {
+    if (subjectLoading || subjects === undefined) return <Spinner />;
     if (subjectError) return <p>Kunne ikke laste fagfelt.</p>;
     return (
       <Select
@@ -67,7 +67,9 @@ const DictionaryPage = () => {
         value={subjectFilter}
         placeholder="Filtrer fagfelt"
         options={[{ field: 'Alle', subfields: [] }, ...subjects]}
-        onChange={(choice) => setSubjectFilter(choice)}
+        onChange={(choice) => {
+          setSubjectFilter(choice);
+        }}
         getOptionLabel={(subject: Subject) => subject.field}
         getOptionValue={(subject: Subject) => subject.field}
       />
@@ -102,7 +104,9 @@ const DictionaryPage = () => {
                 <Input
                   name="dictionaryView"
                   type="radio"
-                  onChange={() => setTransFilter(filter.filter)}
+                  onChange={() => {
+                    setTransFilter(filter.filter);
+                  }}
                   defaultChecked={filter.defaultChecked}
                 />
                 <Label check>{filter.text}</Label>

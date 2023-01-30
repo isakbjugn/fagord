@@ -1,4 +1,4 @@
-import { Term } from '../../../types/term';
+import type { Term } from '../../../types/term';
 import Definition from './definition/definition';
 import TranslationCard from './translation-card/translation-card';
 
@@ -6,17 +6,17 @@ interface TermComponentProps {
   term: Term;
 }
 
-const TermComponent = ({ term }: TermComponentProps) => {
-  if (!term) return null;
+const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
+  if (term === null) return <></>;
 
-  const fieldSpec = term.subfield ? term.subfield : term.field;
-  const fieldSpecStr = fieldSpec ? ' (' + fieldSpec + ')' : '';
+  const fieldSpec = term.subfield !== '' ? term.subfield : term.field;
+  const fieldSpecStr = fieldSpec !== '' ? ' (' + fieldSpec + ')' : '';
 
   return (
     <div>
       <div className="row">
         <h1>
-          {term.en} {fieldSpecStr}
+          {term.en !== ''} {fieldSpecStr}
         </h1>
         <hr />
       </div>

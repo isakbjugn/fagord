@@ -1,4 +1,4 @@
-import { Term } from '../../../../types/term';
+import type { Term } from '../../../../types/term';
 import {
   Button,
   Card,
@@ -11,36 +11,37 @@ import {
   Row,
 } from 'reactstrap';
 import styles from './translation-card.module.css';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useToggle from '../../../utils/use-toggle';
 import { useForm } from 'react-hook-form';
 import { addVariant } from '../../../../lib/fetch';
-import Spinner from '../../spinner/spinner';
+import Spinner from '../../../common/spinner/spinner';
 
 interface TranslationCardProps {
   term: Term;
 }
 
-const TranslationCard = ({ term }: TranslationCardProps) => {
+const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
   const { register, handleSubmit } = useForm();
-  const { mutate, isLoading } = useMutation(addVariant, {
-    onSettled: () => {
-      queryClient.invalidateQueries('dictionary');
+  const { mutate, isLoading } = useMutation({
+    mutationFn: addVariant,
+    onSettled: async () => {
+      await queryClient.invalidateQueries(['dictionary']);
     },
   });
 
-  if (!term) return null;
+  if (term === null) return <></>;
 
-  const onSubmit = (input: any) => {
+  const onSubmit = (input: any): void => {
     toggleWriting();
     mutate({ termId: term._id, variant: input });
   };
 
-  const getButtonText = () => {
+  const getButtonText = (): string => {
     if (isWriting) return 'Lukk';
-    if (term.nb || term.nn) return 'Legg til forslag';
+    if (term.nb !== '' || term.nn !== '') return 'Legg til forslag';
     return 'Legg til oversettelse';
   };
 
@@ -60,7 +61,11 @@ const TranslationCard = ({ term }: TranslationCardProps) => {
         {isLoading ? (
           <Spinner />
         ) : (
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form
+            onSubmit={() => {
+              handleSubmit(onSubmit);
+            }}
+          >
             {isWriting && (
               <Row>
                 <Col>
@@ -118,7 +123,13 @@ const TranslationCard = ({ term }: TranslationCardProps) => {
                   Send inn
                 </Button>
               )}
-              <Button color="light" outline onClick={() => toggleWriting()}>
+              <Button
+                color="light"
+                outline
+                onClick={() => {
+                  toggleWriting();
+                }}
+              >
                 {getButtonText()}
               </Button>
             </span>

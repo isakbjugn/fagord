@@ -11,7 +11,7 @@ import SearchBar from '../search-bar/search-bar';
 import useToggle from '../../utils/use-toggle';
 import styles from './header.module.css';
 
-const Header = () => {
+const Header = (): JSX.Element => {
   const [isNavOpen, toggleNav, setIsNavOpen] = useToggle(false);
   const [isSearchOpen, toggleSearch] = useToggle(false);
 
@@ -26,7 +26,12 @@ const Header = () => {
           <span className="fa fa-search" />
         </NavbarToggler>
         <Collapse isOpen={isNavOpen} navbar>
-          <Nav navbar onClick={() => setIsNavOpen(false)}>
+          <Nav
+            navbar
+            onClick={() => {
+              setIsNavOpen(false);
+            }}
+          >
             <NavItem>
               <NavLink className="nav-link text-nowrap" to="/hjem">
                 <span className={'fa fa-home fa-lg ' + styles.icon} /> Hjem

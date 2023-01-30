@@ -7,20 +7,20 @@ import TermPage from '../term-page/term-page';
 import Footer from '../common/footer/footer';
 import styles from './main.module.css';
 import NewTermPage from '../new-term-page/new-term-page';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { fetchTerms } from '../../lib/fetch';
 
-function Redirect({ to }: any) {
-  let navigate = useNavigate();
+function Redirect({ to }: any): JSX.Element {
+  const navigate = useNavigate();
   useEffect(() => {
     navigate(to);
   });
-  return null;
+  return <></>;
 }
 
-const Main = () => {
+const Main = (): JSX.Element => {
   const queryClient = useQueryClient();
-  queryClient.prefetchQuery('dictionary', fetchTerms);
+  void queryClient.prefetchQuery(['dictionary'], fetchTerms);
 
   return (
     <div className={styles.wrapper}>

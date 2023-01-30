@@ -6,13 +6,14 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Term, Language } from '../../../types/term';
+import type { Term, Language } from '../../../types/term';
 import { TermEntry } from './term-entry/term-entry';
 import { DictionaryHeader } from './dictionary-header/dictionary-header';
-import { getComparator, Order } from '../../utils/sorting';
+import type { Order } from '../../utils/sorting';
+import { getComparator } from '../../utils/sorting';
 import style from './dictionary.module.css';
 
-export const Dictionary = (props: { dictionary: Term[] }) => {
+export const Dictionary = (props: { dictionary: Term[] }): JSX.Element => {
   const { dictionary } = props;
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Language>('en');
@@ -22,19 +23,19 @@ export const Dictionary = (props: { dictionary: Term[] }) => {
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Language
-  ) => {
+  ): void => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };

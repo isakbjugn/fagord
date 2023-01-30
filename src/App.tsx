@@ -1,10 +1,16 @@
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import Main from './components/main/main';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  logger: {
+    log: () => {},
+    warn: () => {},
+    error: () => {},
+  },
+});
 
 const fagordTheme = createTheme({
   palette: {
@@ -20,7 +26,7 @@ const fagordTheme = createTheme({
   },
 });
 
-function App() {
+function App(): JSX.Element {
   return (
     <ThemeProvider theme={fagordTheme}>
       <BrowserRouter>

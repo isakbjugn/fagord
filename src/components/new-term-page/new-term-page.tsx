@@ -4,16 +4,16 @@ import style from './new-term-page.module.css';
 import { pickBy } from 'lodash';
 import { postTerm } from '../../lib/fetch';
 import { useMemo, useState } from 'react';
-import { Term } from '../../types/term';
+import type { Term } from '../../types/term';
 import { Link, useParams } from 'react-router-dom';
-import { setLogger, useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Modal from '../common/modal/modal';
 import useToggle from '../utils/use-toggle';
 import useDictionary from '../utils/use-dictionary';
 import { createId } from '../utils/create-id';
 
-const NewTermPage = () => {
-  let { term } = useParams();
+const NewTermPage = (): JSX.Element => {
+  const { term } = useParams();
   const queryClient = useQueryClient();
   const { register, watch, reset, handleSubmit } = useForm();
   const [result, setResult] = useState<Term | null>();
@@ -24,10 +24,11 @@ const NewTermPage = () => {
     isError: dictError,
     data: dictionary,
   } = useDictionary();
-  const { mutate, isLoading } = useMutation(postTerm, {
-    onSuccess: (data) => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: postTerm,
+    onSuccess: async (data) => {
       setResult(data);
-      queryClient.invalidateQueries('dictionary');
+      await queryClient.invalidateQueries(['dictionary']);
       reset();
     },
     onError: (error: Error) => {
@@ -47,28 +48,22 @@ const NewTermPage = () => {
     },
   });
 
-  setLogger({
-    log: () => {},
-    warn: () => {},
-    error: () => {},
-  });
-
   const watchField = watch('field', '');
-  const watchTerm = watch('en', term ? term : '');
+  const watchTerm = watch('en', term !== '' ? term : '');
   const watchPos = watch('pos', 'substantiv');
-  const onSubmit = (input: any) => {
-    const cleanInput = watchField ? input : { ...input, subfield: '' };
+  const onSubmit = (input: any): void => {
+    const cleanInput = watchField !== null ? input : { ...input, subfield: '' };
     mutate(pickBy(cleanInput, (value: string) => value.length > 0));
   };
 
   const termExists = useMemo((): boolean => {
     if (watchTerm === '') return false;
-    if (dictLoad || dictError) return false;
+    if (dictLoad || dictError || dictionary === undefined) return false;
     const id = createId(watchTerm, watchPos);
     return dictionary.find((term: any) => term._id === id) !== undefined;
   }, [dictLoad, dictError, dictionary, watchTerm, watchPos]);
 
-  if (result)
+  if (result !== undefined && result !== null)
     return (
       <div className={style.success}>
         <h2>Du har opprettet en term!</h2>
@@ -82,7 +77,13 @@ const NewTermPage = () => {
               Gå til term
             </Button>
           </Link>
-          <Button outline color="light" onClick={() => setResult(null)}>
+          <Button
+            outline
+            color="light"
+            onClick={() => {
+              setResult(null);
+            }}
+          >
             Opprett ny term
           </Button>
         </span>
@@ -91,13 +92,17 @@ const NewTermPage = () => {
 
   return (
     <div className={style.form}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        onSubmit={() => {
+          handleSubmit(onSubmit);
+        }}
+      >
         <h2>Legg til ny term</h2>
         <Row>
           <Label>
             Engelsk term
             <input
-              defaultValue={term ? term : undefined}
+              defaultValue={term !== null ? term : undefined}
               type="text"
               className={'form-control' + (termExists ? ' is-invalid' : '')}
               {...register('en', { required: true })}
@@ -133,7 +138,7 @@ const NewTermPage = () => {
               />
             </Label>
           </div>
-          {watchField && (
+          {watchField !== null && (
             <div className="col-sm-6">
               <Label>
                 Underfelt

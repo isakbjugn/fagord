@@ -4,10 +4,10 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { Term } from '../../../../types/term';
+import type { Term } from '../../../../types/term';
 import style from './term-details.module.css';
 
-export const TermDetails = (props: { term: Term }) => {
+export const TermDetails = (props: { term: Term }): JSX.Element => {
   const { term } = props;
 
   return (
@@ -15,7 +15,7 @@ export const TermDetails = (props: { term: Term }) => {
       <Box sx={{ margin: 1 }}>
         <Table size="small" aria-label="purchases">
           <TableBody>
-            {term.field && (
+            {term.field !== '' && (
               <TableRow>
                 <TableCell component="th" scope="row">
                   Fagfelt
@@ -23,7 +23,7 @@ export const TermDetails = (props: { term: Term }) => {
                 <TableCell>{term.field}</TableCell>
               </TableRow>
             )}
-            {term.subfield && (
+            {term.subfield !== '' && (
               <TableRow>
                 <TableCell component="th" scope="row">
                   Underområde
@@ -31,7 +31,7 @@ export const TermDetails = (props: { term: Term }) => {
                 <TableCell>{term.subfield}</TableCell>
               </TableRow>
             )}
-            {term.definition && (
+            {term.definition !== '' && (
               <TableRow>
                 <TableCell component="th" scope="row">
                   Definisjon

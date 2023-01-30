@@ -1,10 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
-import { Term } from '../../types/term';
+import type { Term } from '../../types/term';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import TermComponent from '../common/term-component/term-component';
+import TermComponent from './term-component/term-component';
 import InfoMessage from '../common/info-message/info-message';
 import VariantCloud from './variant-cloud/variant-cloud';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { voteForVariant } from '../../lib/fetch';
 import useDictionary from '../utils/use-dictionary';
@@ -12,7 +12,7 @@ import Spinner from '../common/spinner/spinner';
 import useToggle from '../utils/use-toggle';
 import Modal from '../common/modal/modal';
 
-const TermPage = () => {
+const TermPage = (): JSX.Element => {
   const { termId } = useParams();
 
   const { isLoading, isError, data: dictionary } = useDictionary();
@@ -20,20 +20,21 @@ const TermPage = () => {
   const [isModalOpen, toggleModal] = useToggle(false);
   const [votedTerm, setVotedTerm] = useState<string>('');
 
-  const { mutate } = useMutation(voteForVariant, {
-    onSuccess: (data) => {
-      queryClient.invalidateQueries('dictionary');
+  const { mutate } = useMutation({
+    mutationFn: voteForVariant,
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries(['dictionary']);
       setVotedTerm(data.term);
       toggleModal();
     },
   });
 
-  if (isLoading) return <Spinner />;
+  if (isLoading || dictionary === undefined) return <Spinner />;
   if (isError) return <p>Kunne ikke laste termside.</p>;
 
   const term = dictionary.find((term: Term) => term._id === termId);
 
-  if (!term)
+  if (term === null || term === undefined)
     return (
       <InfoMessage>
         <p>Termen finnes ikke enda!</p>

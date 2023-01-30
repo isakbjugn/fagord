@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Jumbotron from '../common/jumbotron/jumbotron';
 
-const Home = () => {
+const Home = (): JSX.Element => {
   return (
     <div>
       <Jumbotron>

@@ -1,7 +1,7 @@
-import { UseMutateFunction } from 'react-query';
+import type { UseMutateFunction } from 'react-query';
 import { TagCloud } from 'react-tagcloud';
-import { VoteForVariantArguments } from '../../../lib/fetch';
-import { Variant } from '../../../types/term';
+import type { VoteForVariantArguments } from '../../../lib/fetch';
+import type { Variant } from '../../../types/term';
 import styles from './variant-cloud.module.css';
 
 interface VariantCloudProps {
@@ -10,13 +10,17 @@ interface VariantCloudProps {
   mutate: UseMutateFunction<any, unknown, VoteForVariantArguments, unknown>;
 }
 
-const VariantCloud = ({ termId, variants, mutate }: VariantCloudProps) => {
+const VariantCloud = ({
+  termId,
+  variants,
+  mutate,
+}: VariantCloudProps): JSX.Element => {
   const options = {
     luminosity: 'light',
     hue: 'red',
   };
 
-  const renderTermNoDuplicates = (variant: Variant) => {
+  const renderTermNoDuplicates = (variant: Variant): string => {
     if (variants.filter((v) => v.term === variant.term).length > 1)
       return variant.term + ' (' + variant.dialect + ')';
     return variant.term;
@@ -36,15 +40,15 @@ const VariantCloud = ({ termId, variants, mutate }: VariantCloudProps) => {
           count: v.votes,
         };
       })}
-      onClick={(tag: any) =>
+      onClick={(tag: any) => {
         mutate({
-          termId: termId,
+          termId,
           variant: {
             term: tag.term,
             dialect: tag.dialect,
           },
-        })
-      }
+        });
+      }}
     />
   );
 };

@@ -4,15 +4,18 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import TableRow from '@mui/material/TableRow';
-import { Term } from '../../../../types/term';
+import type { Term } from '../../../../types/term';
 import { DropdownTableCell, TermTableCell } from '../styled-mui-components';
 import { TermDetails } from './term-details';
 
-export const TermEntry = (props: { term: Term; index: number }) => {
+export const TermEntry = (props: {
+  term: Term;
+  index: number;
+}): JSX.Element => {
   const [open, setOpen] = useState(false);
   const { term, index } = props;
   const labelId = `enhanced-table-checkbox-${index}`;
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: any): void => {
     if (e.key === 'Enter') setOpen(!open);
   };
 
@@ -23,13 +26,17 @@ export const TermEntry = (props: { term: Term; index: number }) => {
         tabIndex={-1}
         key={term._id}
         sx={{ '& > *': { borderBottom: 'unset' } }}
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open);
+        }}
       >
         <DropdownTableCell>
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => setOpen(!open)}
+            onClick={() => {
+              setOpen(!open);
+            }}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
