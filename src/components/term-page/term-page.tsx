@@ -29,12 +29,14 @@ const TermPage = (): JSX.Element => {
     },
   });
 
-  if (isLoading || dictionary === undefined) return <Spinner />;
+  if (isLoading) return <Spinner />;
   if (isError) return <p>Kunne ikke laste termside.</p>;
 
-  const term = dictionary.find((term: Term) => term._id === termId);
+  const term: Term | undefined = dictionary.find(
+    (term: Term) => term._id === termId
+  );
 
-  if (term === null || term === undefined)
+  if (term === undefined)
     return (
       <InfoMessage>
         <p>Termen finnes ikke enda!</p>

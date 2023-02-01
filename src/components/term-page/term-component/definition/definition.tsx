@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Form, Label, Row } from 'reactstrap';
 import { updateTerm } from '../../../../lib/fetch';
 import useToggle from '../../../utils/use-toggle';
@@ -15,9 +15,10 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
   const { register, handleSubmit } = useForm();
-  const { mutate, isLoading } = useMutation(updateTerm, {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: updateTerm,
     onSettled: async () => {
-      await queryClient.invalidateQueries('dictionary');
+      await queryClient.invalidateQueries({ queryKey: ['dictionary'] });
     },
   });
 
@@ -30,7 +31,7 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
 
   const getButtonText = (): string => {
     if (isWriting) return 'Lukk';
-    if (definition !== '') return 'Endre definisjon';
+    if (definition === '') return 'Endre definisjon';
     return 'Legg til definisjon';
   };
 
@@ -43,11 +44,7 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
           <em>Ingen definisjon tilgjengelig.</em>
         )}
       </p>
-      <Form
-        onSubmit={() => {
-          handleSubmit(onSubmit);
-        }}
-      >
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {isWriting && (
           <Row>
             <Label>

@@ -52,7 +52,7 @@ const NewTermPage = (): JSX.Element => {
   const watchTerm = watch('en', term !== '' ? term : '');
   const watchPos = watch('pos', 'substantiv');
   const onSubmit = (input: any): void => {
-    const cleanInput = watchField !== null ? input : { ...input, subfield: '' };
+    const cleanInput = watchField !== '' ? input : { ...input, subfield: '' };
     mutate(pickBy(cleanInput, (value: string) => value.length > 0));
   };
 
@@ -92,11 +92,7 @@ const NewTermPage = (): JSX.Element => {
 
   return (
     <div className={style.form}>
-      <Form
-        onSubmit={() => {
-          handleSubmit(onSubmit);
-        }}
-      >
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <h2>Legg til ny term</h2>
         <Row>
           <Label>

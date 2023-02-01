@@ -1,4 +1,4 @@
-import type { UseMutateFunction } from 'react-query';
+import type { UseMutateFunction } from '@tanstack/react-query';
 import { TagCloud } from 'react-tagcloud';
 import type { VoteForVariantArguments } from '../../../lib/fetch';
 import type { Variant } from '../../../types/term';

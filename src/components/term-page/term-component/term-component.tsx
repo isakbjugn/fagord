@@ -16,7 +16,7 @@ const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
     <div>
       <div className="row">
         <h1>
-          {term.en !== ''} {fieldSpecStr}
+          {term.en} {fieldSpecStr}
         </h1>
         <hr />
       </div>
