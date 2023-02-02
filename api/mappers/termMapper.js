@@ -12,9 +12,9 @@ const termMapper = (row) => {
     _added: row._added,
     _modified: row._modified,
     _active: row._active,
-    definition: row.definition
-  }
-}
+    definition: row.definition,
+  };
+};
 
 const parseVariants = (variants) => {
   try {
@@ -22,29 +22,39 @@ const parseVariants = (variants) => {
   } catch (err) {
     return [];
   }
-}
+};
 
-const termArrayMapper = (rows) =>
-  rows.map(row => termMapper(row));
+const termArrayMapper = (rows) => rows.map((row) => termMapper(row));
 
 const posMapper = (pos) => {
-  switch(pos) {
-    case 'substantiv': return '_sub';
-    case 'verb': return '_ver';
-    case 'adjektiv': return '_adj';
-    case 'pronomen': return '_pro';
-    case 'determinativ': return '_det';
-    case 'preposisjon': return '_pre';
-    case 'adverb': return '_adv';
-    case 'subjunksjon': return '_sbj';
-    case 'konjunksjon': return '_knj';
-    case 'interjeksjon': return '_int';
-    default: return '';
+  switch (pos) {
+    case 'substantiv':
+      return '_sub';
+    case 'verb':
+      return '_ver';
+    case 'adjektiv':
+      return '_adj';
+    case 'pronomen':
+      return '_pro';
+    case 'determinativ':
+      return '_det';
+    case 'preposisjon':
+      return '_pre';
+    case 'adverb':
+      return '_adv';
+    case 'subjunksjon':
+      return '_sbj';
+    case 'konjunksjon':
+      return '_knj';
+    case 'interjeksjon':
+      return '_int';
+    default:
+      return '';
   }
-}
+};
 
 module.exports = {
   termMapper: termMapper,
   termArrayMapper: termArrayMapper,
   posMapper: posMapper,
-}
+};

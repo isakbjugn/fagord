@@ -1,6 +1,9 @@
-import { fetchTerms } from "../../lib/fetch"
-import { useQuery } from 'react-query'
+import { fetchTerms } from '../../lib/fetch';
+import { useQuery } from '@tanstack/react-query';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { Term } from '../../types/term';
 
-const useDictionary = () => useQuery('dictionary', fetchTerms);
+const useDictionary = (): UseQueryResult<Term[]> =>
+  useQuery({ queryKey: ['dictionary'], queryFn: fetchTerms });
 
 export default useDictionary;

@@ -6,13 +6,14 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Term, Language } from "../../../types/term";
-import { TermEntry } from './term-entry/term-entry'
-import { DictionaryHeader } from './dictionary-header/dictionary-header'
-import { getComparator, Order } from '../../utils/sorting'
-import style from "./dictionary.module.css";
+import type { Term, Language } from '../../../types/term';
+import { TermEntry } from './term-entry/term-entry';
+import { DictionaryHeader } from './dictionary-header/dictionary-header';
+import type { Order } from '../../utils/sorting';
+import { getComparator } from '../../utils/sorting';
+import style from './dictionary.module.css';
 
-export const Dictionary = (props: { dictionary: Term[]}) => {
+export const Dictionary = (props: { dictionary: Term[] }): JSX.Element => {
   const { dictionary } = props;
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Language>('en');
@@ -21,18 +22,20 @@ export const Dictionary = (props: { dictionary: Term[]}) => {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Language,
-  ) => {
+    property: keyof Language
+  ): void => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -44,21 +47,20 @@ export const Dictionary = (props: { dictionary: Term[]}) => {
   return (
     <Paper sx={{ width: '100%', mb: 2, bgcolor: 'background.paper' }}>
       <TableContainer>
-        <Table
-          aria-labelledby="tableTitle"
-          size='small'
-        >
+        <Table aria-labelledby="tableTitle" size="small">
           <DictionaryHeader
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
           />
           <TableBody>
-            {dictionary.slice().sort(getComparator(order, orderBy))
+            {dictionary
+              .slice()
+              .sort(getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((term: Term, index: number) => 
+              .map((term: Term, index: number) => (
                 <TermEntry term={term} index={index} key={term._id} />
-              )}
+              ))}
             {emptyRows > 0 && (
               <TableRow
                 style={{
@@ -75,7 +77,7 @@ export const Dictionary = (props: { dictionary: Term[]}) => {
         className={style.paginator}
         rowsPerPageOptions={[10, 25, 50, 100]}
         component="div"
-        labelRowsPerPage={"Antall ord:"}
+        labelRowsPerPage={'Antall ord:'}
         count={dictionary.length}
         rowsPerPage={rowsPerPage}
         page={page}

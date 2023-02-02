@@ -1,10 +1,11 @@
 import './loader.css';
 
-const Loader = () =>
+const Loader = (): JSX.Element => (
   <div className="loader book">
     <div className="page"></div>
     <div className="page"></div>
     <div className="page"></div>
   </div>
+);
 
 export default Loader;

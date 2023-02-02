@@ -1,6 +1,6 @@
 export type Order = 'asc' | 'desc';
 
-function descendingComparator<T>(A: T, B: T, orderBy: keyof T) {
+const descendingComparator = <T>(A: T, B: T, orderBy: keyof T): number => {
   const a = (A[orderBy] as string).toLowerCase();
   const b = (B[orderBy] as string).toLowerCase();
 
@@ -10,14 +10,10 @@ function descendingComparator<T>(A: T, B: T, orderBy: keyof T) {
   return 0;
 };
 
-
-export function getComparator<Key extends keyof any>(
+export const getComparator = <Key extends keyof any>(
   order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: string },
-  b: { [key in Key]: string },
-) => number {
+  orderBy: Key
+): ((a: { [key in Key]: string }, b: { [key in Key]: string }) => number) => {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
