@@ -14,7 +14,7 @@ interface DefinitionProps {
 const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const { mutate, isLoading } = useMutation({
     mutationFn: updateTerm,
     onSettled: async () => {
@@ -31,7 +31,7 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
 
   const getButtonText = (): string => {
     if (isWriting) return 'Lukk';
-    if (definition === '') return 'Endre definisjon';
+    if (definition !== '') return 'Endre definisjon';
     return 'Legg til definisjon';
   };
 
@@ -66,6 +66,7 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
             color="light"
             outline
             onClick={() => {
+              setValue('definition', definition);
               toggleWriting();
             }}
           >
