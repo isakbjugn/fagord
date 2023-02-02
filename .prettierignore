@@ -3,4 +3,3 @@ build
 coverage
 dist
 pnpm-lock.yaml
-public/assets

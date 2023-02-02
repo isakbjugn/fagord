@@ -44,7 +44,7 @@ const Header = (): JSX.Element => {
             </NavItem>
             <NavItem>
               <NavLink className="nav-link text-nowrap" to="/ny-term">
-                <span className={'fa fa-lightbulb-o fa-lg ' + styles.icon} /> Ny
+                <span className={'fa fa-lightbulb fa-lg ' + styles.icon} /> Ny
                 term
               </NavLink>
             </NavItem>
