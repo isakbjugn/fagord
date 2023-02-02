@@ -7,7 +7,7 @@ const Footer = (): JSX.Element => {
       <div className="row justify-content-center">
         <div className="col-auto">
           <a href={fagordGitHubUrl}>
-            <span className="fa fa-github fa-inverse fa-2x"></span>
+            <span className="fa-brands fa-github fa-inverse fa-2x"></span>
           </a>
         </div>
       </div>

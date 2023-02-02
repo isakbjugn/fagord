@@ -1,7 +1,7 @@
 .breadcrumb > .active {
-  color: white;
+  color: white !important;
 }
 
 .breadcrumb a {
-  color: floralwhite;
+  color: floralwhite !important;
 }

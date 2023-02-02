@@ -47,7 +47,7 @@ const getRowByTermId = async (termId) => {
 };
 
 const getRowByColumnValue = (value, columnName, rows) => {
-  const row = rows.filter((row) => row[columnName] == value)[0];
+  const row = rows.filter((row) => row[columnName] === value)[0];
   if (row === undefined) {
     const err = new Error('Termen finnes ikke.');
     err.statusCode = 404;
@@ -109,11 +109,11 @@ const disableRow = async (row) => {
 };
 
 module.exports = {
-  getRows: getRows,
-  postRow: postRow,
-  getRowByTermId: getRowByTermId,
-  updateRow: updateRow,
-  addVariant: addVariant,
-  promoteVariant: promoteVariant,
-  disableRow: disableRow,
+  getRows,
+  postRow,
+  getRowByTermId,
+  updateRow,
+  addVariant,
+  promoteVariant,
+  disableRow,
 };
