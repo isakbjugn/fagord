@@ -61,11 +61,7 @@ const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
         {isLoading ? (
           <Spinner />
         ) : (
-          <Form
-            onSubmit={() => {
-              handleSubmit(onSubmit);
-            }}
-          >
+          <Form onSubmit={handleSubmit(onSubmit)}>
             {isWriting && (
               <Row>
                 <Col>
