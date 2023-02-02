@@ -54,7 +54,7 @@ const posMapper = (pos) => {
 };
 
 module.exports = {
-  termMapper: termMapper,
-  termArrayMapper: termArrayMapper,
-  posMapper: posMapper,
+  termMapper,
+  termArrayMapper,
+  posMapper,
 };

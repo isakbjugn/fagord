@@ -1,5 +1,5 @@
 const fieldMapper = (rows) => {
-  let fields = [];
+  const fields = [];
   for (const row of rows) {
     if (!row.field || !row._active) continue;
     if (!fields.some((field) => field.field === row.field)) {
@@ -19,5 +19,5 @@ const fieldMapper = (rows) => {
 };
 
 module.exports = {
-  fieldMapper: fieldMapper,
+  fieldMapper,
 };

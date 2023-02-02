@@ -1,7 +1,7 @@
 .card {
-  background-color: var(--color-dark-blue);
+  background-color: var(--color-dark-blue) !important;
   color: floralwhite;
-  border-color: #808080;
+  border-color: #808080 !important;
   border-style: solid;
   border-width: 0.5px;
   border-radius: 5px;

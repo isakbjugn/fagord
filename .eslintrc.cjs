@@ -9,7 +9,8 @@ module.exports = {
     'prettier',
     'plugin:@tanstack/eslint-plugin-query/recommended',
   ],
-  overrides: [],
+  ignorePatterns: ['vite-env.d.ts', 'vite.config.ts', 'api/*'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -18,10 +19,6 @@ module.exports = {
   plugins: ['react', '@tanstack/query'],
   rules: {
     'react/react-in-jsx-scope': 'off',
-    '@typescript-eslint/strict-boolean-expressions': 'warn',
-    '@typescript-eslint/no-floating-promises': 'warn',
     '@typescript-eslint/no-misused-promises': 'warn',
-    '@typescript-eslint/prefer-nullish-coalescing': 'warn',
-    '@typescript-eslint/consistent-type-imports': 'warn',
   },
 };
