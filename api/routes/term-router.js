@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { termMapper, termArrayMapper } = require('../mappers/termMapper');
+const { termMapper, termArrayMapper } = require('../mappers/term-mapper');
 const {
   getRows,
   postRow,

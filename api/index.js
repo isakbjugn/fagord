@@ -4,8 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const { verifyNoFormula } = require('./utils/sheet-middleware');
 
-const termRouter = require('./routes/termRouter');
-const fieldRouter = require('./routes/fieldRouter');
+const termRouter = require('./routes/term-router');
+const fieldRouter = require('./routes/field-router');
 
 const app = express();
 app.set('port', process.env.PORT || 8080);
