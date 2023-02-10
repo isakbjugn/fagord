@@ -1,7 +1,6 @@
 const { google } = require('googleapis');
 
 const scopes = ['https://www.googleapis.com/auth/drive.readonly'];
-
 const jwt = new google.auth.JWT(
   process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
   null,
@@ -11,24 +10,21 @@ const jwt = new google.auth.JWT(
 
 const drive = google.drive({ version: 'v3', auth: jwt });
 
-const getFolder = async (folderId) => {
-  return await drive.files.get({ fileId: folderId });
-};
-
-const getFolderContent = async (folderId) => {
-  const folder = await drive.files.list({
-    q: `'${folderId}' in parents and trashed=false`,
+const exportFileAsHtml = async (fileId) => {
+  return await drive.files.export({
+    fileId,
+    mimeType: 'text/html',
   });
-  return folder.data.files;
 };
 
 const getFileIdsInFolder = async (folderId) => {
-  const files = await getFolderContent(folderId);
-  return files.map((file) => file.id);
+  const folder = await drive.files.list({
+    q: `'${folderId}' in parents and trashed=false`,
+  });
+  return folder.data.files.map((file) => file.id);
 };
 
 module.exports = {
-  getFolder,
-  getFolderContent,
   getFileIdsInFolder,
+  exportFileAsHtml,
 };
