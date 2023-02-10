@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import Jumbotron from '../common/jumbotron/jumbotron';
+import { Articles } from './articles/articles';
 
 const Home = (): JSX.Element => {
+  const showArticles = process.env.NODE_ENV === 'development';
+
   return (
     <div>
       <Jumbotron>
@@ -16,6 +19,7 @@ const Home = (): JSX.Element => {
           Til termliste!
         </Link>
       </Jumbotron>
+      {showArticles && <Articles />}
     </div>
   );
 };
