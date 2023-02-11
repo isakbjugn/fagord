@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import Jumbotron from '../common/jumbotron/jumbotron';
 import { Articles } from './articles/articles';
+import style from './home-page.module.css';
 
 const Home = (): JSX.Element => {
   const showArticles = process.env.NODE_ENV === 'development';
 
   return (
-    <div>
+    <div className={style.home}>
       <Jumbotron>
         <h1 className="display-4">Velkommen til Fagord!</h1>
         <p className="lead">

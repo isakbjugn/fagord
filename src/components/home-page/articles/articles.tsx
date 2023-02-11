@@ -1,8 +1,15 @@
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { Card, CardBody, CardGroup, CardSubtitle, CardTitle } from 'reactstrap';
 import { fetchArticles } from '../../../lib/fetch';
 import Spinner from '../../common/spinner/spinner';
+import style from './articles.module.css';
 
 export const Articles = (): JSX.Element => {
   const {
@@ -15,36 +22,35 @@ export const Articles = (): JSX.Element => {
   if (isError) return <></>;
 
   return (
-    <div className="p-4 p-sm-5 rounded-lg m-3 m-sm-5 ">
-      <CardGroup>
-        {articles.map((article: any) => (
-          <Link to={'/artikkel/' + article.documentId} key={article.documentId}>
-            <Card
-              style={{
-                width: '18rem',
-              }}
-            >
-              {article.imageUrl !== '' ? (
-                <img
-                  alt="Sample"
-                  src={article.imageUrl}
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <img alt="Sample" src="https://picsum.photos/300/200" />
-              )}
-              <CardBody>
-                <CardTitle style={{ color: '#000000' }} tag="h5">
-                  {article.title}
-                </CardTitle>
-                <CardSubtitle className="mb-2 text-muted" tag="h6">
-                  {article.subtitle}
-                </CardSubtitle>
-              </CardBody>
-            </Card>
-          </Link>
-        ))}
-      </CardGroup>
+    <div className={style.grid}>
+      {articles.map((article: any) => (
+        <Card className={style.article} key={article.documentKey}>
+          <CardActionArea
+            component={Link}
+            to={'/artikkel/' + article.documentId}
+          >
+            <CardMedia
+              component="img"
+              height="140"
+              image={article.imageUrl || 'https://picsum.photos/300/200'}
+              referrerPolicy="no-referrer"
+            />
+            <CardContent>
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="div"
+                color="white"
+              >
+                {article.title}
+              </Typography>
+              <Typography variant="body2" color="white">
+                {article.subtitle}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))}
     </div>
   );
 };
