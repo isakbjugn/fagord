@@ -24,10 +24,15 @@ export const Articles = (): JSX.Element => {
   return (
     <div className={style.grid}>
       {articles.map((article: any) => (
-        <Card className={style.article} key={article.documentKey}>
+        <Card
+          className={style.article}
+          key={article.documentKey}
+          sx={{ backgroundColor: '#29648a' }}
+        >
           <CardActionArea
             component={Link}
             to={'/artikkel/' + article.documentId}
+            className={style['action-area']}
           >
             <CardMedia
               component="img"

@@ -1,5 +1,10 @@
-.article {
-  background-color: var(--color-dark-blue) !important;
+.article:hover {
+  opacity: 80%;
+  transition: 0.25s;
+}
+
+.action-area {
+  height: 100%;
 }
 
 .grid {
