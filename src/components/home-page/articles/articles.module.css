@@ -3,12 +3,19 @@
 }
 
 .grid {
-  margin: 16px;
   display: grid;
   justify-items: stretch;
   justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, 298px);
   gap: 16px;
+  margin: 48px auto;
+}
+
+@media screen and (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+    margin: 48px 16px;
+  }
 }
 
 @media screen and (min-width: 576px) {
