@@ -9,6 +9,7 @@ import styles from './main.module.css';
 import NewTermPage from '../new-term-page/new-term-page';
 import { useQueryClient } from '@tanstack/react-query';
 import { fetchTerms } from '../../lib/fetch';
+import { ArticlePage } from '../article-page/article-page';
 
 function Redirect({ to }: any): JSX.Element {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Main = (): JSX.Element => {
       <Header />
       <Routes>
         <Route path="/hjem" element={<Home />} />
+        <Route path="/artikkel/:articleKey" element={<ArticlePage />} />
         <Route path="/termliste" element={<DictionaryPage />} />
         <Route path="/term/:termId" element={<TermPage />} />
         <Route path="/ny-term" element={<NewTermPage />} />

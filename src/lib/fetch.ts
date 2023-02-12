@@ -4,6 +4,8 @@ import type { Term, Variant } from '../types/term';
 const baseApiUri =
   process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '';
 
+export const articleUrl = baseApiUri + '/api/artikler/';
+
 export const fetchTerms = async (): Promise<Term[]> => {
   const res = await fetch(baseApiUri + '/api/termer');
 
@@ -20,6 +22,27 @@ export const fetchFields = async (): Promise<Subject[]> => {
     throw Error(res.status.toString() + ' ' + res.statusText);
   }
   return await res.json();
+};
+
+export const fetchArticles = async (): Promise<any[]> => {
+  const res = await fetch(baseApiUri + '/api/artikler');
+
+  if (!res.ok) {
+    throw Error(res.status.toString() + ' ' + res.statusText);
+  }
+  return await res.json();
+};
+
+export const fetchArticleHtml = async ({ queryKey }: any): Promise<string> => {
+  const [_, articleId] = queryKey;
+  const res = await fetch(baseApiUri + '/api/artikler/' + articleId);
+
+  if (!res.ok) {
+    throw Error(res.status.toString() + ' ' + res.statusText);
+  }
+
+  const innerHtml = await res.text();
+  return innerHtml;
 };
 
 export const postTerm = async (term: any): Promise<Term> => {

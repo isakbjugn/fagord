@@ -1,5 +1,5 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { posMapper } = require('../mappers/termMapper');
+const { posMapper } = require('../mappers/term-mapper');
 
 const getSheet = async () => {
   const SHEET_ID = process.env.SHEET_ID;

@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { getRows } = require('../utils/sheet-utils');
-const { fieldMapper } = require('../mappers/fieldMapper');
+const { fieldMapper } = require('../mappers/field-mapper');
 
 const fieldRouter = express.Router();
 
