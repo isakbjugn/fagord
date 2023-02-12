@@ -8,7 +8,7 @@ import Footer from '../common/footer/footer';
 import styles from './main.module.css';
 import NewTermPage from '../new-term-page/new-term-page';
 import { useQueryClient } from '@tanstack/react-query';
-import { fetchArticles, fetchTerms } from '../../lib/fetch';
+import { fetchTerms } from '../../lib/fetch';
 import { ArticlePage } from '../article-page/article-page';
 
 function Redirect({ to }: any): JSX.Element {
@@ -22,7 +22,6 @@ function Redirect({ to }: any): JSX.Element {
 const Main = (): JSX.Element => {
   const queryClient = useQueryClient();
   void queryClient.prefetchQuery(['dictionary'], fetchTerms);
-  void queryClient.prefetchQuery(['articles'], fetchArticles);
 
   return (
     <div className={styles.wrapper}>
