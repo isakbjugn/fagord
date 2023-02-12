@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import Jumbotron from '../common/jumbotron/jumbotron';
-import { Articles } from './articles/articles';
+import { ArticleGrid } from './article-grid/article-grid';
 import style from './home-page.module.css';
 
 const Home = (): JSX.Element => {
@@ -20,7 +20,7 @@ const Home = (): JSX.Element => {
           Til termliste!
         </Link>
       </Jumbotron>
-      {showArticles && <Articles />}
+      {showArticles && <ArticleGrid />}
     </div>
   );
 };

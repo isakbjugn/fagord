@@ -9,9 +9,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { fetchArticles } from '../../../lib/fetch';
 import Spinner from '../../common/spinner/spinner';
-import style from './articles.module.css';
+import style from './article-grid.module.css';
 
-export const Articles = (): JSX.Element => {
+export const ArticleGrid = (): JSX.Element => {
   const {
     isLoading,
     isError,
