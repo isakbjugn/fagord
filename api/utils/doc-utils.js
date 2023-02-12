@@ -1,16 +1,16 @@
-const { google } = require('googleapis');
-const docs = require('@googleapis/docs');
+const { JWT } = require('google-auth-library');
+const { docs } = require('@googleapis/docs');
 const { getFileIdsInFolder } = require('./drive-utils');
 
 const scopes = ['https://www.googleapis.com/auth/documents.readonly'];
-const jwt = new google.auth.JWT(
+const jwt = new JWT(
   process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
   null,
   process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
   scopes
 );
 
-const client = docs.docs({ version: 'v1', auth: jwt });
+const docsClient = docs({ version: 'v1', auth: jwt });
 
 const getFirstOfTextType = (contentArray, styleType) => {
   for (const content of contentArray) {
@@ -50,7 +50,7 @@ const getImageUrl = (inlineObjects) => {
 };
 
 const getDocument = async (documentId) => {
-  const document = await client.documents.get({
+  const document = await docsClient.documents.get({
     documentId,
   });
 
