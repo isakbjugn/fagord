@@ -31,7 +31,7 @@ export const Articles = (): JSX.Element => {
         >
           <CardActionArea
             component={Link}
-            to={'/artikkel/' + article.documentId}
+            to={'/artikkel/' + article.documentKey}
             className={style['action-area']}
           >
             <CardMedia

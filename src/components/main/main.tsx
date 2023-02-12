@@ -29,7 +29,7 @@ const Main = (): JSX.Element => {
       <Header />
       <Routes>
         <Route path="/hjem" element={<Home />} />
-        <Route path="/artikkel/:articleId" element={<ArticlePage />} />
+        <Route path="/artikkel/:articleKey" element={<ArticlePage />} />
         <Route path="/termliste" element={<DictionaryPage />} />
         <Route path="/term/:termId" element={<TermPage />} />
         <Route path="/ny-term" element={<NewTermPage />} />

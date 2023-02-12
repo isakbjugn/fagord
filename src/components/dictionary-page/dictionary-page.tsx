@@ -38,7 +38,7 @@ const DictionaryPage = (): JSX.Element => {
     data: subjects,
   } = useQuery({ queryKey: ['fields'], queryFn: fetchFields });
 
-  if (dictionaryLoading || dictionary === undefined) return <Loader />;
+  if (dictionaryLoading) return <Loader />;
   if (dictionaryError) return <p>Kunne ikke laste termliste.</p>;
 
   const applyTransFilter = (terms: Term[]): Term[] => {
