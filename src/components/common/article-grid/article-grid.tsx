@@ -5,18 +5,13 @@ import {
   CardMedia,
   Typography,
 } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { fetchArticles } from '../../../lib/fetch';
-import Spinner from '../../common/spinner/spinner';
+import { useArticles } from '../../utils/use-articles';
+import Spinner from '../spinner/spinner';
 import style from './article-grid.module.css';
 
 export const ArticleGrid = (): JSX.Element => {
-  const {
-    isLoading,
-    isError,
-    data: articles,
-  } = useQuery({ queryKey: ['articles'], queryFn: fetchArticles });
+  const { isLoading, isError, data: articles } = useArticles();
 
   if (isLoading) return <Spinner />;
   if (isError) return <></>;

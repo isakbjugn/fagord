@@ -1,46 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchArticleHtml } from '../../../lib/fetch';
-import Spinner from '../../common/spinner/spinner';
-import sanitizeHtml from 'sanitize-html';
-import style from './article.module.css';
+import { useParams } from 'react-router-dom';
 import InfoMessage from '../../common/info-message/info-message';
+import { useArticles } from '../../utils/use-articles';
+import { ArticleContent } from './article-content/article-content';
 
-export const Article = ({ articleId }: { articleId: string }): JSX.Element => {
-  const {
-    isLoading: isLoadingHtml,
-    isError: isHtmlError,
-    data: articleHtml,
-  } = useQuery({
-    queryKey: ['article', articleId],
-    queryFn: fetchArticleHtml,
-  });
+export const Article = (): JSX.Element => {
+  const { articleKey } = useParams();
+  const { data: articles } = useArticles();
+  if (articles === undefined) return <></>;
 
-  if (isLoadingHtml) return <Spinner />;
-  if (isHtmlError)
+  if (!articles.some((article) => article.documentKey === articleKey)) {
     return (
       <InfoMessage>
-        <p>Kunne ikke laste artikkel.</p>
+        <p>Artikkelen finnes ikke.</p>
       </InfoMessage>
     );
+  }
 
-  const cleanHtml = sanitizeHtml(articleHtml, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-    allowedAttributes: false,
-    transformTags: {
-      img: sanitizeHtml.simpleTransform('img', {
-        referrerpolicy: 'no-referrer',
-      }),
-    },
-  });
+  const articleId: string = articles
+    .filter((article) => article.documentKey === articleKey)
+    .map((article) => article.documentId)[0];
 
-  return (
-    <div className="container-sm m-5">
-      <div className="col-12 col-lg-8 mx-auto">
-        <div
-          className={style.article}
-          dangerouslySetInnerHTML={{ __html: cleanHtml }}
-        />
-      </div>
-    </div>
-  );
+  return <ArticleContent articleId={articleId} />;
 };
