@@ -20,7 +20,7 @@ const Header = (): JSX.Element => {
       <Navbar dark expand="md" className={styles.navbar}>
         <NavbarToggler onClick={toggleNav} />
         <NavbarBrand className="mr-auto" href="/">
-          <img src="fagord-logo240.png" height="70" width="150" alt="Fagord" />
+          <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />
         </NavbarBrand>
         <NavbarToggler onClick={toggleSearch} className={styles.search}>
           <span className="fa fa-search" />
