@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import Jumbotron from '../common/jumbotron/jumbotron';
-import { ArticleGrid } from './article-grid/article-grid';
+import { ArticleGrid } from '../common/article-grid/article-grid';
 import style from './home-page.module.css';
 
 const Home = (): JSX.Element => {
