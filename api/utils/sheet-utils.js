@@ -75,6 +75,7 @@ const addVariant = async (row, payload) => {
   variants.push(variant);
   row.variants = JSON.stringify(variants);
 
+  row._modified = new Date();
   await row.save();
   return variant;
 };
@@ -91,6 +92,7 @@ const promoteVariant = async (row, payload) => {
   if (variant.votes > featuredVariantVotes(row, payload.dialect))
     row[payload.dialect] = variant.term;
 
+  row._modified = new Date();
   await row.save();
   return variants[variantIdx];
 };
@@ -104,6 +106,7 @@ const featuredVariantVotes = (row, dialect) => {
 
 const disableRow = async (row) => {
   row._active = false;
+  row._modified = new Date();
   await row.save();
   return row;
 };
