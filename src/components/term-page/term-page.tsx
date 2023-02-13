@@ -30,7 +30,12 @@ const TermPage = (): JSX.Element => {
   });
 
   if (isLoading) return <Spinner />;
-  if (isError) return <p>Kunne ikke laste termside.</p>;
+  if (isError)
+    return (
+      <InfoMessage>
+        <p>Kunne ikke laste termside.</p>
+      </InfoMessage>
+    );
 
   const term: Term | undefined = dictionary.find(
     (term: Term) => term._id === termId

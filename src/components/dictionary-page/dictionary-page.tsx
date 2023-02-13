@@ -10,6 +10,7 @@ import styles from './dictionary-page.module.css';
 import Spinner from '../common/spinner/spinner';
 import useDictionary from '../utils/use-dictionary';
 import { Dictionary } from './dictionary/dictionary';
+import InfoMessage from '../common/info-message/info-message';
 
 interface TransFilter {
   text: string;
@@ -39,7 +40,12 @@ const DictionaryPage = (): JSX.Element => {
   } = useQuery({ queryKey: ['fields'], queryFn: fetchFields });
 
   if (dictionaryLoading) return <Loader />;
-  if (dictionaryError) return <p>Kunne ikke laste termliste.</p>;
+  if (dictionaryError)
+    return (
+      <InfoMessage>
+        <p>Kunne ikke laste termliste.</p>
+      </InfoMessage>
+    );
 
   const applyTransFilter = (terms: Term[]): Term[] => {
     switch (transFilter) {

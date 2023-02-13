@@ -3,6 +3,7 @@ import { fetchArticleHtml } from '../../../lib/fetch';
 import Spinner from '../../common/spinner/spinner';
 import sanitizeHtml from 'sanitize-html';
 import style from './article.module.css';
+import InfoMessage from '../../common/info-message/info-message';
 
 export const Article = ({ articleId }: { articleId: string }): JSX.Element => {
   const {
@@ -15,7 +16,12 @@ export const Article = ({ articleId }: { articleId: string }): JSX.Element => {
   });
 
   if (isLoadingHtml) return <Spinner />;
-  if (isHtmlError) return <p>Kunne ikke laste artikkel.</p>;
+  if (isHtmlError)
+    return (
+      <InfoMessage>
+        <p>Kunne ikke laste artikkel.</p>
+      </InfoMessage>
+    );
 
   const cleanHtml = sanitizeHtml(articleHtml, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
