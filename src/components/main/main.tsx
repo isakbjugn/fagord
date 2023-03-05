@@ -1,5 +1,4 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from '../home-page/home-page';
 import Header from '../common/header/header';
 import DictionaryPage from '../dictionary-page/dictionary-page';
@@ -11,14 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { fetchTerms } from '../../lib/fetch';
 import { ArticlePage } from '../article-page/article-page';
 import { Article } from '../article-page/article/article';
-
-function Redirect({ to }: any): JSX.Element {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate(to);
-  });
-  return <></>;
-}
+import { AboutPage } from '../about-page/about-page';
 
 const Main = (): JSX.Element => {
   const queryClient = useQueryClient();
@@ -36,7 +28,8 @@ const Main = (): JSX.Element => {
         <Route path="/term/:termId" element={<TermPage />} />
         <Route path="/ny-term" element={<NewTermPage />} />
         <Route path="/ny-term/:term" element={<NewTermPage />} />
-        <Route path="" element={<Redirect to="/hjem" />} />
+        <Route path="/om-oss" element={<AboutPage />} />
+        <Route path="*" element={<Navigate to="/hjem" replace />} />
       </Routes>
       <Footer />
     </div>

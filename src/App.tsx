@@ -16,10 +16,10 @@ const queryClient = new QueryClient({
 const fagordTheme = createTheme({
   palette: {
     primary: {
-      main: '#29648a',
+      main: '#2e9cca',
     },
     secondary: {
-      main: '#2e9cca',
+      main: '#29648a',
     },
     background: {
       paper: '#fbfcfd',
