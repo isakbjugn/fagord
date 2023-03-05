@@ -5,4 +5,5 @@ export interface Person {
   image: string;
   email: string;
   linkedin: string;
+  description: string;
 }

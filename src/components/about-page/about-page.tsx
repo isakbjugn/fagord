@@ -18,6 +18,8 @@ const team: Person[] = [
     image: '/isak.jpg',
     email: 'isakbjugn@gmail.com',
     linkedin: 'isakbjugn',
+    description:
+      'Isak har mastergrad i Nanoteknologi og Entreprenørskap, utvekslet til Berkeley, og jobber i dag som frontend-utvikler hos SpareBank 1 utvikling i Oslo. Under studietiden sang han i TSS og Pirum, og synger nå i Uranienborg Vokalensemble.',
   },
   {
     key: 'simen',
@@ -26,6 +28,8 @@ const team: Person[] = [
     image: '/simen.jpg',
     email: 'simen.ringdahl@gmail.com',
     linkedin: 'simen-ringdahl-01b237159',
+    description:
+      'Simen har mastergrad i Nanoteknologi, ledet konferansen INASCON i 2018, tilbrakte et år på Stanford University, og var studentrepresentant i NTNU-styret et år etter endt studium. Han jobber nå som dataanalytiker hos Aker Carbon Capture.',
   },
 ];
 
@@ -67,16 +71,14 @@ export const AboutPage = (): JSX.Element => {
           <Card sx={{ backgroundColor: '#29648a' }} key={member.key}>
             <CardMedia component="img" image={member.image} />
             <CardContent>
-              <Typography
-                gutterBottom
-                variant="h5"
-                component="div"
-                color="white"
-              >
+              <Typography gutterBottom variant="h5" color="white">
                 {member.name}
               </Typography>
-              <Typography variant="body2" color="white">
+              <Typography variant="subtitle1" color="white">
                 {member.title}
+              </Typography>
+              <Typography variant="body2" color="white">
+                {member.description}
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
