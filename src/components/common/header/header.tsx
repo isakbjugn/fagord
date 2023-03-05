@@ -19,7 +19,7 @@ const Header = (): JSX.Element => {
     <>
       <Navbar dark expand="md" className={styles.navbar}>
         <NavbarToggler onClick={toggleNav} />
-        <NavbarBrand className="mr-auto" href="/">
+        <NavbarBrand className="mr-auto" href="/hjem">
           <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />
         </NavbarBrand>
         <NavbarToggler onClick={toggleSearch} className={styles.search}>
@@ -49,7 +49,7 @@ const Header = (): JSX.Element => {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink className="nav-link text-nowrap" to="/om">
+              <NavLink className="nav-link text-nowrap" to="/om-oss">
                 <span className={'fa fa-info fa-lg ' + styles.icon} /> Om oss
               </NavLink>
             </NavItem>
