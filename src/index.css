@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-light-blue);
 }
 
 code {
@@ -21,6 +22,17 @@ code {
   --breakpoint-xl: 1280px;
 }
 
-html {
-  background-color: var(--color-light-blue);
+#root {
+  min-height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.breadcrumb > .active {
+  color: white !important;
+}
+
+.breadcrumb a {
+  color: floralwhite !important;
 }
