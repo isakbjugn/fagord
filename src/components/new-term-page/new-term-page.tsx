@@ -101,6 +101,7 @@ const NewTermPage = (): JSX.Element => {
               defaultValue={term !== null ? term : undefined}
               type="text"
               className={'form-control' + (termExists ? ' is-invalid' : '')}
+              autoCapitalize="none"
               {...register('en', { required: true })}
             />
             <div className="invalid-feedback">
@@ -113,13 +114,23 @@ const NewTermPage = (): JSX.Element => {
           <div className="col-sm-6">
             <Label>
               Bokmål
-              <input className="form-control" type="text" {...register('nb')} />
+              <input
+                className="form-control"
+                type="text"
+                autoCapitalize="none"
+                {...register('nb')}
+              />
             </Label>
           </div>
           <div className="col-sm-6">
             <Label>
               Nynorsk
-              <input className="form-control" type="text" {...register('nn')} />
+              <input
+                className="form-control"
+                type="text"
+                autoCapitalize="none"
+                {...register('nn')}
+              />
             </Label>
           </div>
         </Row>
