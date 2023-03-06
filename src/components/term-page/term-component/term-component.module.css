@@ -1,0 +1,9 @@
+.title {
+  display: flex;
+  align-items: baseline;
+}
+
+.field {
+  margin-left: 16px;
+  margin-right: auto;
+}
