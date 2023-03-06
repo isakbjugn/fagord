@@ -1,7 +1,0 @@
-.wrapper {
-  background-color: var(--color-light-blue);
-  color: white;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
