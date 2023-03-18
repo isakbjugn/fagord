@@ -23,10 +23,13 @@ const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
   return (
     <div>
       <div className="row">
-        <span className={style.title}>
-          <h1>{term.en} </h1>
-          <h3 className={style.field}>{fieldSpecStr}</h3>
+        <div className={style.header}>
+          <div className={style.title}>
+            <h1>{term.en}</h1>
+            <h3>{fieldSpecStr}</h3>
+          </div>
           <IconButton
+            className={style.share}
             sx={{ color: '#ffffff' }}
             onClick={() => {
               try {
@@ -38,7 +41,7 @@ const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
           >
             <IosShare />
           </IconButton>
-        </span>
+        </div>
         <hr />
       </div>
       <div className="row">

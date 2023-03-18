@@ -1,9 +1,16 @@
-.title {
-  display: flex;
-  align-items: baseline;
+.header {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  align-content: baseline;
 }
 
-.field {
-  margin-left: 16px;
-  margin-right: auto;
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
+}
+
+.share {
+  align-self: end;
 }
