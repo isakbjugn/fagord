@@ -101,7 +101,7 @@ const DictionaryPage = (): JSX.Element => {
   ];
 
   return (
-    <div className="container-sm my-2">
+    <main className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
         <div className={styles.header}>
           <Form className={styles.form}>
@@ -125,7 +125,7 @@ const DictionaryPage = (): JSX.Element => {
           dictionary={applyTransFilter(applySubjectFilter(dictionary))}
         ></Dictionary>
       </div>
-    </div>
+    </main>
   );
 };
 

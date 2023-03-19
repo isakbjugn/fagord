@@ -6,9 +6,9 @@ interface JumbotronProps {
 }
 
 const Jumbotron = ({ children }: JumbotronProps): JSX.Element => (
-  <div className={'p-4 p-sm-5 rounded-lg m-3 m-sm-5 ' + styles.jumbotron}>
+  <section className={'p-4 p-sm-5 rounded-lg m-3 m-sm-5 ' + styles.jumbotron}>
     {children}
-  </div>
+  </section>
 );
 
 export default Jumbotron;
