@@ -10,6 +10,7 @@ import { fetchTerms } from '../../lib/fetch';
 import { ArticlePage } from '../article-page/article-page';
 import { Article } from '../article-page/article/article';
 import { AboutPage } from '../about-page/about-page';
+import { ContactPage } from '../contact-page/contact-page';
 
 export const Router = (): JSX.Element => {
   const queryClient = useQueryClient();
@@ -28,6 +29,7 @@ export const Router = (): JSX.Element => {
         <Route path="/ny-term" element={<NewTermPage />} />
         <Route path="/ny-term/:term" element={<NewTermPage />} />
         <Route path="/om-oss" element={<AboutPage />} />
+        <Route path="/kontakt" element={<ContactPage />} />
         <Route path="*" element={<Navigate to="/hjem" replace />} />
       </Routes>
       <Footer />
