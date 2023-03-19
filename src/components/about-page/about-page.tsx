@@ -9,29 +9,7 @@ import {
 } from '@mui/material';
 import { Person } from '../../types/person';
 import style from './about-page.module.css';
-
-const team: Person[] = [
-  {
-    key: 'isak',
-    name: 'Isak Kyrre Lichtwarck Bjugn',
-    title: 'Sivilingeniør',
-    image: '/isak.jpg',
-    email: 'isakbjugn@gmail.com',
-    linkedin: 'isakbjugn',
-    description:
-      'Isak har mastergrad i Nanoteknologi og Entreprenørskap, utvekslet til Berkeley, og jobber i dag som frontend-utvikler hos SpareBank 1 utvikling i Oslo. Under studietiden sang han i TSS og Pirum, og synger nå i Uranienborg Vokalensemble.',
-  },
-  {
-    key: 'simen',
-    name: 'Simen Ringdahl',
-    title: 'Sivilingeniør',
-    image: '/simen.jpg',
-    email: 'simen.ringdahl@gmail.com',
-    linkedin: 'simen-ringdahl-01b237159',
-    description:
-      'Simen har mastergrad i Nanoteknologi, ledet konferansen INASCON i 2018, tilbrakte et år på Stanford University, og var studentrepresentant i NTNU-styret et år etter endt studium. Han jobber nå som dataanalytiker hos Aker Carbon Capture.',
-  },
-];
+import { team } from './team';
 
 export const AboutPage = (): JSX.Element => {
   return (
