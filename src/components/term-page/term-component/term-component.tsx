@@ -21,7 +21,7 @@ const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
   };
 
   return (
-    <div>
+    <article>
       <div className="row">
         <div className={style.header}>
           <div className={style.title}>
@@ -52,7 +52,7 @@ const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
           <TranslationCard term={term} />
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

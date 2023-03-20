@@ -49,7 +49,7 @@ const TermPage = (): JSX.Element => {
     );
 
   return (
-    <div className="container my-3">
+    <main className="container my-3">
       <div className="col-12 col-lg-10 mx-auto ">
         <div className="row" style={{ color: 'white' }}>
           <Breadcrumb>
@@ -71,7 +71,7 @@ const TermPage = (): JSX.Element => {
           </p>
         </Modal>
       </div>
-    </div>
+    </main>
   );
 };
 

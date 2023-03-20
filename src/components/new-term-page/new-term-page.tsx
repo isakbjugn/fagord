@@ -65,7 +65,7 @@ const NewTermPage = (): JSX.Element => {
 
   if (result !== undefined && result !== null)
     return (
-      <div className={style.success}>
+      <section className={style.success}>
         <h2>Du har opprettet en term!</h2>
         <p>
           Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå
@@ -87,11 +87,11 @@ const NewTermPage = (): JSX.Element => {
             Opprett ny term
           </Button>
         </span>
-      </div>
+      </section>
     );
 
   return (
-    <div className={style.form}>
+    <main className={style.form}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <h2>Legg til ny term</h2>
         <Row>
@@ -201,7 +201,7 @@ const NewTermPage = (): JSX.Element => {
       <Modal isOpen={isErrorModalOpen} toggle={toggleErrorModal}>
         <p>{errorMessage}</p>
       </Modal>
-    </div>
+    </main>
   );
 };
 
