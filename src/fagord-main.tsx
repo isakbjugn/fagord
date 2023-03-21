@@ -5,12 +5,9 @@ import { Router } from './components/router/router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { inject } from '@vercel/analytics';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-social/bootstrap-social.css';
 import './index.css';
-
-inject();
 
 const queryClient = new QueryClient({
   defaultOptions: {
