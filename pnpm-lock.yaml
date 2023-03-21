@@ -20,6 +20,7 @@ specifiers:
   '@types/sanitize-html': ^2.8.0
   '@typescript-eslint/eslint-plugin': ^5.0.0
   '@typescript-eslint/parser': ^5.50.0
+  '@vercel/analytics': ^0.1.11
   '@vitejs/plugin-react-swc': ^3.1.0
   bootstrap: ^5.2.3
   bootstrap-social: ^5.1.1
@@ -53,6 +54,7 @@ dependencies:
   '@popperjs/core': 2.11.6
   '@tanstack/react-query': 4.24.4_biqbaboplfbrettd7655fr4n2y
   '@tanstack/react-query-devtools': 4.24.4_pkeil6ml7pq7xvil3imldjs2sa
+  '@vercel/analytics': 0.1.11_react@18.2.0
   bootstrap: 5.2.3_@popperjs+core@2.11.6
   bootstrap-social: 5.1.1
   lodash: 4.17.21
@@ -1253,6 +1255,14 @@ packages:
       '@typescript-eslint/types': 5.50.0
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@vercel/analytics/0.1.11_react@18.2.0:
+    resolution: {integrity: sha512-mj5CPR02y0BRs1tN3oZcBNAX9a8NxsIUl9vElDPcqxnMfP0RbRc9fI9Ud7+QDg/1Izvt5uMumsr+6YsmVHcyuw==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /@vitejs/plugin-react-swc/3.1.0_vite@4.1.0:
     resolution: {integrity: sha512-xnDULNrkEbtTtRNnMPp+RsuIuIbk1JJV0xY7irchYyv9JJS4uvmc1EYip+qyrnkcX7TQ9c8vCS3AmkQqADI0Fw==}
