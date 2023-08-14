@@ -10,13 +10,13 @@
   "author": "Isak Kyrre Lichtwarck Bjugn",
   "license": "ISC",
   "dependencies": {
-    "@googleapis/docs": "^2.0.0",
-    "@googleapis/drive": "^4.0.2",
-    "body-parser": "^1.20.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.2",
-    "express": "^4.18.1",
-    "google-auth-library": "^8.7.0",
-    "google-spreadsheet": "^3.3.0"
+    "@googleapis/docs": "2.0.2",
+    "@googleapis/drive": "4.0.2",
+    "body-parser": "1.20.2",
+    "cors": "2.8.5",
+    "dotenv": "16.3.1",
+    "express": "4.18.2",
+    "google-auth-library": "9.0.0",
+    "google-spreadsheet": "3.3.0"
   }
 }
