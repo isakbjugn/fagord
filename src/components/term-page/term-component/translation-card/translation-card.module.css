@@ -1,6 +1,6 @@
 .card {
   background-color: var(--color-dark-blue) !important;
-  color: floralwhite;
+  color: floralwhite !important;
   border-color: #808080 !important;
   border-style: solid;
   border-width: 0.5px;

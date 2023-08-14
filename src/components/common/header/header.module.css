@@ -11,6 +11,10 @@
 }
 
 .search {
-  width: 56px;
-  height: 40px;
+  flex-basis: 0 !important;
+  flex-grow: 0 !important;
+}
+
+.search-field {
+  margin: 8px 16px;
 }
