@@ -19,6 +19,6 @@ export const team: Person[] = [
     email: 'simen.ringdahl@gmail.com',
     linkedin: 'simen-ringdahl-01b237159',
     description:
-      'Simen har mastergrad i Nanoteknologi, ledet konferansen INASCON i 2018, tilbrakte et år på Stanford University, og var studentrepresentant i NTNU-styret et år etter endt studium. Han jobber nå som dataanalytiker hos Aker Carbon Capture.',
+      'Simen har mastergrad i Nanoteknologi, ledet konferansen INASCON i 2018, tilbrakte et år på Stanford University, og var studentrepresentant i NTNU-styret et år etter endt studium. Han jobber nå som dataanalytiker hos Gritera.',
   },
 ];

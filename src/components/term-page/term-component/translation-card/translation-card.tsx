@@ -69,6 +69,7 @@ const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
                     <input
                       placeholder="Forslag"
                       className="form-control"
+                      autoCapitalize="none"
                       {...register('term', { required: true })}
                     />
                   </Label>

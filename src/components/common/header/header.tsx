@@ -10,6 +10,7 @@ import {
 import SearchBar from '../search-bar/search-bar';
 import useToggle from '../../utils/use-toggle';
 import styles from './header.module.css';
+import { NavLinks } from './nav-links';
 
 const Header = (): JSX.Element => {
   const [isNavOpen, toggleNav, setIsNavOpen] = useToggle(false);
@@ -17,7 +18,7 @@ const Header = (): JSX.Element => {
 
   return (
     <>
-      <Navbar dark expand="md" className={styles.navbar}>
+      <Navbar dark expand="lg" className={styles.navbar}>
         <NavbarToggler onClick={toggleNav} />
         <NavbarBrand className="mr-auto" href="/hjem">
           <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />
@@ -32,36 +33,20 @@ const Header = (): JSX.Element => {
               setIsNavOpen(false);
             }}
           >
-            <NavItem>
-              <NavLink className="nav-link text-nowrap" to="/hjem">
-                <span className={'fa fa-home fa-lg ' + styles.icon} /> Hjem
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink className="nav-link text-nowrap" to="/termliste">
-                <span className={'fa fa-book fa-lg ' + styles.icon} /> Termliste
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink className="nav-link text-nowrap" to="/ny-term">
-                <span className={'fa fa-lightbulb fa-lg ' + styles.icon} /> Ny
-                term
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink className="nav-link text-nowrap" to="/om-oss">
-                <span className={'fa fa-info fa-lg ' + styles.icon} /> Om oss
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink className="nav-link text-nowrap" to="/kontakt">
-                <span className={'fa fa-address-card ' + styles.icon} /> Kontakt
-              </NavLink>
-            </NavItem>
+            {NavLinks.map((navItem) => (
+              <NavItem key={navItem.address}>
+                <NavLink className="nav-link text-nowrap" to={navItem.address}>
+                  <span
+                    className={'fa fa-lg ' + navItem.icon + ' ' + styles.icon}
+                  />{' '}
+                  {navItem.text}
+                </NavLink>
+              </NavItem>
+            ))}
           </Nav>
         </Collapse>
-        <Collapse isOpen={isSearchOpen} navbar>
-          <Nav className="ml-auto" navbar>
+        <Collapse isOpen={isSearchOpen} navbar className="ms-auto">
+          <Nav navbar>
             <NavItem>
               <SearchBar />
             </NavItem>

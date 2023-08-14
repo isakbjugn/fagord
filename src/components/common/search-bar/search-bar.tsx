@@ -1,14 +1,27 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Select from 'react-select';
+import { SelectInstance } from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';
 import type { Term } from '../../../types/term';
 import useDictionary from '../../utils/use-dictionary';
-import styles from './search-bar.module.css';
+import style from './search-bar.module.css';
+
+const formatOptionLabel = (term: Term) => (
+  <div>
+    <div className={style['item-title']}>{term.en}</div>
+    <div className={style['item-subtitle']}>
+      {term.nb && <span>{term.nb}</span>}
+      {term.nb && term.nn && <span>/</span>}
+      {term.nn && <span>{term.nn}</span>}
+    </div>
+  </div>
+);
 
 const SearchBar = (): JSX.Element => {
+  const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
-  const [menuOpen, setMenuOpen] = useState(false);
+
   const {
     isLoading: dictionaryLoading,
     isError: dictionaryError,
@@ -18,8 +31,44 @@ const SearchBar = (): JSX.Element => {
 
   const options = !dictionaryLoading && !dictionaryError ? dictionary : [];
 
+  const filterOptions = (input: string) =>
+    options
+      .filter(
+        (term) =>
+          term.en.toLowerCase().includes(input) ||
+          term.nb.toLowerCase().includes(input) ||
+          term.nn.toLowerCase().includes(input)
+      )
+      .slice(0, 5);
+
+  const loadOptions = (input: string, callback: (options: Term[]) => void) => {
+    console.log('input: ', input);
+    setTimeout(() => {
+      callback(filterOptions(input.toLowerCase()));
+    }, 1000);
+  };
+
   const openTermPage = (selected: any): void => {
+    setInput('');
     navigate('/term/' + (selected._id as string));
+  };
+
+  const noOptionsMessage = () => {
+    if (dictionaryLoading) return <p>Laster termliste</p>;
+    if (dictionaryError) return <p>Kunne ikke laste termliste</p>;
+    if (input === '') return null;
+    return (
+      <Button
+        outline
+        onClick={() => {
+          selectRef.current?.blur();
+          navigate('/ny-term/' + input);
+          setInput('');
+        }}
+      >
+        Opprett ny term
+      </Button>
+    );
   };
 
   const SearchIcon = (): JSX.Element => (
@@ -28,43 +77,30 @@ const SearchBar = (): JSX.Element => {
     </div>
   );
 
-  const selectStyles = {
-    menuList: (styles: any) => {
-      return {
-        ...styles,
-        maxHeight: 250,
-      };
-    },
-  };
-
   return (
-    <div className={styles.search}>
-      <Select
-        value={null}
-        menuIsOpen={menuOpen}
-        className={styles.input}
-        placeholder="Finn en term"
-        components={{ DropdownIndicator: SearchIcon, IndicatorSeparator: null }}
-        onChange={openTermPage}
-        onInputChange={(str: string) => {
-          setMenuOpen(str !== '');
-          setInput(str);
+    <div className={style.search}>
+      <AsyncSelect
+        ref={selectRef}
+        className={style.select}
+        placeholder="Søk etter term"
+        formatOptionLabel={formatOptionLabel}
+        components={{
+          DropdownIndicator: SearchIcon,
+          IndicatorSeparator: null,
         }}
+        maxMenuHeight={400}
         options={options}
-        getOptionLabel={(option: Term) => option.en}
         getOptionValue={(option: Term) => option._id}
-        noOptionsMessage={() => (
-          <Button
-            outline
-            onClick={() => {
-              setMenuOpen(false);
-              navigate('/ny-term/' + input);
-            }}
-          >
-            Legg til term
-          </Button>
-        )}
-        styles={selectStyles}
+        value={null}
+        inputValue={input}
+        onInputChange={(value, action) => {
+          if (action.action === 'input-change') setInput(value);
+        }}
+        onChange={openTermPage}
+        noOptionsMessage={noOptionsMessage}
+        cacheOptions
+        defaultOptions
+        loadOptions={loadOptions}
       />
     </div>
   );
