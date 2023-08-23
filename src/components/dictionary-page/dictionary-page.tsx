@@ -28,19 +28,11 @@ const DictionaryPage = (): JSX.Element => {
     AllSubjects
   );
 
-  const {
-    isLoading: dictionaryLoading,
-    isError: dictionaryError,
-    data: dictionary,
-  } = useDictionary();
-  const {
-    isLoading: subjectLoading,
-    isError: subjectError,
-    data: subjects,
-  } = useQuery({ queryKey: ['fields'], queryFn: fetchFields });
+  const dictionaryQuery = useDictionary();
+  const subjectQuery = useQuery({ queryKey: ['fields'], queryFn: fetchFields });
 
-  if (dictionaryLoading) return <Loader />;
-  if (dictionaryError)
+  if (dictionaryQuery.isLoading) return <Loader />;
+  if (dictionaryQuery.isError)
     return (
       <InfoMessage>
         <p>Kunne ikke laste termliste.</p>
@@ -65,14 +57,14 @@ const DictionaryPage = (): JSX.Element => {
   };
 
   const subjectFilterComponent = (): JSX.Element => {
-    if (subjectLoading || subjects === undefined) return <Spinner />;
-    if (subjectError) return <p>Kunne ikke laste fagfelt.</p>;
+    if (subjectQuery.isLoading) return <Spinner />;
+    if (subjectQuery.isError) return <p>Kunne ikke laste fagfelt.</p>;
     return (
       <Select
         className={styles.subjects}
         value={subjectFilter}
         placeholder="Filtrer fagfelt"
-        options={[{ field: 'Alle', subfields: [] }, ...subjects]}
+        options={[{ field: 'Alle', subfields: [] }, ...subjectQuery.data]}
         onChange={(choice) => {
           setSubjectFilter(choice);
         }}
@@ -122,7 +114,7 @@ const DictionaryPage = (): JSX.Element => {
           {subjectFilterComponent()}
         </div>
         <Dictionary
-          dictionary={applyTransFilter(applySubjectFilter(dictionary))}
+          dictionary={applyTransFilter(applySubjectFilter(dictionaryQuery.data))}
         ></Dictionary>
       </div>
     </main>
