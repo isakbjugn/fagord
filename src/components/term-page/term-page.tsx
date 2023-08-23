@@ -15,7 +15,7 @@ import Modal from '../common/modal/modal';
 const TermPage = (): JSX.Element => {
   const { termId } = useParams();
 
-  const { isLoading, isError, data: dictionary } = useDictionary();
+  const dictionaryQuery = useDictionary();
   const queryClient = useQueryClient();
   const [isModalOpen, toggleModal] = useToggle(false);
   const [votedTerm, setVotedTerm] = useState<string>('');
@@ -29,15 +29,15 @@ const TermPage = (): JSX.Element => {
     },
   });
 
-  if (isLoading) return <Spinner />;
-  if (isError)
+  if (dictionaryQuery.isLoading) return <Spinner />;
+  if (dictionaryQuery.isError)
     return (
       <InfoMessage>
         <p>Kunne ikke laste termside.</p>
       </InfoMessage>
     );
 
-  const term: Term | undefined = dictionary.find(
+  const term: Term | undefined = dictionaryQuery.data.find(
     (term: Term) => term._id === termId
   );
 

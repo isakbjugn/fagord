@@ -16,3 +16,7 @@
 .buttons > * {
   margin-right: 10px;
 }
+
+:global(.valid-feedback) {
+  filter: brightness(130%);
+}

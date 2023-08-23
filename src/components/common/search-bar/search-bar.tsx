@@ -22,14 +22,10 @@ const SearchBar = (): JSX.Element => {
   const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
 
-  const {
-    isLoading: dictionaryLoading,
-    isError: dictionaryError,
-    data: dictionary,
-  } = useDictionary();
+  const dictionaryQuery = useDictionary();
   const navigate = useNavigate();
 
-  const options = !dictionaryLoading && !dictionaryError ? dictionary : [];
+  const options = !dictionaryQuery.isLoading && !dictionaryQuery.isError ? dictionaryQuery.data : [];
 
   const filterOptions = (input: string) =>
     options
@@ -54,8 +50,8 @@ const SearchBar = (): JSX.Element => {
   };
 
   const noOptionsMessage = () => {
-    if (dictionaryLoading) return <p>Laster termliste</p>;
-    if (dictionaryError) return <p>Kunne ikke laste termliste</p>;
+    if (dictionaryQuery.isLoading) return <p>Laster termliste</p>;
+    if (dictionaryQuery.isError) return <p>Kunne ikke laste termliste</p>;
     if (input === '') return null;
     return (
       <Button

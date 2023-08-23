@@ -3,7 +3,7 @@ import { Button, Form, Label, Row } from 'reactstrap';
 import style from './new-term-page.module.css';
 import { pickBy } from 'lodash';
 import { postTerm } from '../../lib/fetch';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Term } from '../../types/term';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -11,6 +11,8 @@ import Modal from '../common/modal/modal';
 import useToggle from '../utils/use-toggle';
 import useDictionary from '../utils/use-dictionary';
 import { createId } from '../utils/create-id';
+import { fetchSuggestions } from '../../lib/fetch-ordbokene';
+import type { OrdbokeneResponse, Lookup } from '../../types/ordbokene';
 
 const NewTermPage = (): JSX.Element => {
   const { term } = useParams();
@@ -19,11 +21,7 @@ const NewTermPage = (): JSX.Element => {
   const [result, setResult] = useState<Term | null>();
   const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const {
-    isLoading: dictLoad,
-    isError: dictError,
-    data: dictionary,
-  } = useDictionary();
+  const dictionaryQuery = useDictionary();
   const { mutate, isLoading } = useMutation({
     mutationFn: postTerm,
     onSuccess: async (data) => {
@@ -47,21 +45,61 @@ const NewTermPage = (): JSX.Element => {
       toggleErrorModal();
     },
   });
+  const [NBSuggestion, setNBSuggestion] = useState<Lookup>({exact: false, inflect: []});
+  const [NNSuggestion, setNNSuggestion] = useState<Lookup>({exact: false, inflect: []});
 
   const watchField = watch('field', '');
-  const watchTerm = watch('en', term !== '' ? term : '');
+  const watchEn = watch('en', term !== '' ? term : '');
+  const watchNb = watch('nb', term !== '' ? term : '');
+  const watchNn = watch('nn', term !== '' ? term : '');
   const watchPos = watch('pos', 'substantiv');
   const onSubmit = (input: any): void => {
     const cleanInput = watchField !== '' ? input : { ...input, subfield: '' };
     mutate(pickBy(cleanInput, (value: string) => value.length > 0));
   };
 
-  const termExists = useMemo((): boolean => {
-    if (watchTerm === '') return false;
-    if (dictLoad || dictError || dictionary === undefined) return false;
-    const id = createId(watchTerm, watchPos);
-    return dictionary.find((term: any) => term._id === id) !== undefined;
-  }, [dictLoad, dictError, dictionary, watchTerm, watchPos]);
+  const existsInTermbase = useMemo((): boolean => {
+    if (watchEn === '') return false;
+    if (dictionaryQuery.isLoading || dictionaryQuery.isError) return false;
+    const id = createId(watchEn, watchPos);
+    return dictionaryQuery.data.find((term: any) => term._id === id) !== undefined;
+  }, [dictionaryQuery, watchEn, watchPos]);
+
+  useEffect(() => {
+    if (watchNb) {
+      fetchSuggestions(watchNb, 'bm')
+      .then((suggestion: OrdbokeneResponse) => {
+        setNBSuggestion(getTermsFromSuggestion(suggestion, watchNb))
+      })
+      .catch(error => {
+        console.error('API-kall til Bokmålsordboka feilet: ', error)
+      })
+    } else {
+      setNBSuggestion({exact: false, inflect: []});
+    }
+  }, [watchNb])
+
+  useEffect(() => {
+    if (watchNn) {
+      fetchSuggestions(watchNn, 'nn')
+      .then((suggestion: OrdbokeneResponse) => {
+        setNNSuggestion(getTermsFromSuggestion(suggestion, watchNn))
+      })
+      .catch(error => {
+        console.error('API-kall til Nynorskordboka feilet: ', error)
+      })
+    } else {
+      setNNSuggestion({exact: false, inflect: []});
+    }
+  }, [watchNn])
+
+  const getTermsFromSuggestion = (suggestion: OrdbokeneResponse, searchTerm: string): Lookup => {
+    const exactMatches: string[] = suggestion.a.exact ? suggestion.a.exact.map(term => term[0]) : [];
+    const exact = exactMatches.includes(searchTerm);
+    const inflect = suggestion.a.inflect ? suggestion.a.inflect.map(term => term[0]) : [];
+  
+    return { exact, inflect };
+  };
 
   if (result !== undefined && result !== null)
     return (
@@ -90,6 +128,20 @@ const NewTermPage = (): JSX.Element => {
       </section>
     );
 
+  const showSuggestion = (suggestion: Lookup): boolean =>
+    suggestion.exact || suggestion.inflect.length > 0;
+
+  const viewSuggestion = (suggestion: Lookup | undefined, dialect: 'nb' | 'nn'): string => {
+    if (suggestion?.exact) {
+      return 'Finnes i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorsordboka');
+    }
+    else if (suggestion?.inflect) {
+      return 'Bøyning av ' + suggestion.inflect[0] + ' i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorsordboka');
+    } else {
+      return ';'
+    }
+  }
+
   return (
     <main className={style.form}>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -100,7 +152,7 @@ const NewTermPage = (): JSX.Element => {
             <input
               defaultValue={term !== null ? term : undefined}
               type="text"
-              className={'form-control' + (termExists ? ' is-invalid' : '')}
+              className={'form-control' + (existsInTermbase ? ' is-invalid' : '')}
               autoCapitalize="none"
               {...register('en', { required: true })}
             />
@@ -115,22 +167,28 @@ const NewTermPage = (): JSX.Element => {
             <Label>
               Bokmål
               <input
-                className="form-control"
+                className={'form-control' + (showSuggestion(NBSuggestion) ? ' is-valid' : '')}
                 type="text"
                 autoCapitalize="none"
                 {...register('nb')}
               />
+              <div className="valid-feedback">
+                {viewSuggestion(NBSuggestion, 'nb')}
+              </div>
             </Label>
           </div>
           <div className="col-sm-6">
             <Label>
               Nynorsk
               <input
-                className="form-control"
+                className={'form-control' + (showSuggestion(NNSuggestion) ? ' is-valid' : '')}
                 type="text"
                 autoCapitalize="none"
                 {...register('nn')}
               />
+              <div className="valid-feedback">
+                {viewSuggestion(NNSuggestion, 'nn')}
+              </div>
             </Label>
           </div>
         </Row>
