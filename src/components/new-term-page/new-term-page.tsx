@@ -3,7 +3,7 @@ import { Button, Form, Label, Row } from 'reactstrap';
 import style from './new-term-page.module.css';
 import { pickBy } from 'lodash';
 import { postTerm } from '../../lib/fetch';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Term } from '../../types/term';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -11,13 +11,17 @@ import Modal from '../common/modal/modal';
 import useToggle from '../utils/use-toggle';
 import useDictionary from '../utils/use-dictionary';
 import { createId } from '../utils/create-id';
-import { fetchSuggestions } from '../../lib/fetch-ordbokene';
-import type { OrdbokeneResponse, Lookup } from '../../types/ordbokene';
+import useOrdbokene from '../utils/use-ordbokene';
+import { useDebounce } from '../utils/use-debounce';
 
 const NewTermPage = (): JSX.Element => {
   const { term } = useParams();
   const queryClient = useQueryClient();
   const { register, watch, reset, handleSubmit } = useForm();
+  const debouncedBokmalTerm = useDebounce(watch('nb'), 200);
+  const debouncedNynorskTerm = useDebounce(watch('nn'), 200);
+  const [bokmalValidationText, isBokmalTermValid] = useOrdbokene(debouncedBokmalTerm, 'nb');
+  const [nynorskValidationText, isNynorskTermValid] = useOrdbokene(debouncedNynorskTerm, 'nn');
   const [result, setResult] = useState<Term | null>();
   const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -45,13 +49,9 @@ const NewTermPage = (): JSX.Element => {
       toggleErrorModal();
     },
   });
-  const [NBSuggestion, setNBSuggestion] = useState<Lookup>({exact: false, inflect: []});
-  const [NNSuggestion, setNNSuggestion] = useState<Lookup>({exact: false, inflect: []});
 
   const watchField = watch('field', '');
   const watchEn = watch('en', term !== '' ? term : '');
-  const watchNb = watch('nb', term !== '' ? term : '');
-  const watchNn = watch('nn', term !== '' ? term : '');
   const watchPos = watch('pos', 'substantiv');
   const onSubmit = (input: any): void => {
     const cleanInput = watchField !== '' ? input : { ...input, subfield: '' };
@@ -64,42 +64,6 @@ const NewTermPage = (): JSX.Element => {
     const id = createId(watchEn, watchPos);
     return dictionaryQuery.data.find((term: any) => term._id === id) !== undefined;
   }, [dictionaryQuery, watchEn, watchPos]);
-
-  useEffect(() => {
-    if (watchNb) {
-      fetchSuggestions(watchNb, 'bm')
-      .then((suggestion: OrdbokeneResponse) => {
-        setNBSuggestion(getTermsFromSuggestion(suggestion, watchNb))
-      })
-      .catch(error => {
-        console.error('API-kall til Bokmålsordboka feilet: ', error)
-      })
-    } else {
-      setNBSuggestion({exact: false, inflect: []});
-    }
-  }, [watchNb])
-
-  useEffect(() => {
-    if (watchNn) {
-      fetchSuggestions(watchNn, 'nn')
-      .then((suggestion: OrdbokeneResponse) => {
-        setNNSuggestion(getTermsFromSuggestion(suggestion, watchNn))
-      })
-      .catch(error => {
-        console.error('API-kall til Nynorskordboka feilet: ', error)
-      })
-    } else {
-      setNNSuggestion({exact: false, inflect: []});
-    }
-  }, [watchNn])
-
-  const getTermsFromSuggestion = (suggestion: OrdbokeneResponse, searchTerm: string): Lookup => {
-    const exactMatches: string[] = suggestion.a.exact ? suggestion.a.exact.map(term => term[0]) : [];
-    const exact = exactMatches.includes(searchTerm);
-    const inflect = suggestion.a.inflect ? suggestion.a.inflect.map(term => term[0]) : [];
-  
-    return { exact, inflect };
-  };
 
   if (result !== undefined && result !== null)
     return (
@@ -128,19 +92,7 @@ const NewTermPage = (): JSX.Element => {
       </section>
     );
 
-  const showSuggestion = (suggestion: Lookup): boolean =>
-    suggestion.exact || suggestion.inflect.length > 0;
-
-  const viewSuggestion = (suggestion: Lookup | undefined, dialect: 'nb' | 'nn'): string => {
-    if (suggestion?.exact) {
-      return 'Finnes i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorskordboka');
-    }
-    else if (suggestion?.inflect) {
-      return 'Bøyning av ' + suggestion.inflect[0] + ' i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorskordboka');
-    } else {
-      return ';'
-    }
-  }
+  
 
   return (
     <main className={style.form}>
@@ -167,13 +119,13 @@ const NewTermPage = (): JSX.Element => {
             <Label>
               Bokmål
               <input
-                className={'form-control' + (showSuggestion(NBSuggestion) ? ' is-valid' : '')}
+                className={'form-control' + (isBokmalTermValid ? ' is-valid' : '')}
                 type="text"
                 autoCapitalize="none"
                 {...register('nb')}
               />
               <div className="valid-feedback">
-                {viewSuggestion(NBSuggestion, 'nb')}
+                {bokmalValidationText}
               </div>
             </Label>
           </div>
@@ -181,13 +133,13 @@ const NewTermPage = (): JSX.Element => {
             <Label>
               Nynorsk
               <input
-                className={'form-control' + (showSuggestion(NNSuggestion) ? ' is-valid' : '')}
+                className={'form-control' + (isNynorskTermValid ? ' is-valid' : '')}
                 type="text"
                 autoCapitalize="none"
                 {...register('nn')}
               />
               <div className="valid-feedback">
-                {viewSuggestion(NNSuggestion, 'nn')}
+                {nynorskValidationText}
               </div>
             </Label>
           </div>
