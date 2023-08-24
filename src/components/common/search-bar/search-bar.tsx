@@ -38,7 +38,6 @@ const SearchBar = (): JSX.Element => {
       .slice(0, 5);
 
   const loadOptions = (input: string, callback: (options: Term[]) => void) => {
-    console.log('input: ', input);
     setTimeout(() => {
       callback(filterOptions(input.toLowerCase()));
     }, 1000);
