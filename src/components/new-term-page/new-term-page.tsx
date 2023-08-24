@@ -133,10 +133,10 @@ const NewTermPage = (): JSX.Element => {
 
   const viewSuggestion = (suggestion: Lookup | undefined, dialect: 'nb' | 'nn'): string => {
     if (suggestion?.exact) {
-      return 'Finnes i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorsordboka');
+      return 'Finnes i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorskordboka');
     }
     else if (suggestion?.inflect) {
-      return 'Bøyning av ' + suggestion.inflect[0] + ' i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorsordboka');
+      return 'Bøyning av ' + suggestion.inflect[0] + ' i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorskordboka');
     } else {
       return ';'
     }
