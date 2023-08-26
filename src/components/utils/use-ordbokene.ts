@@ -2,6 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchSuggestions } from '../../lib/fetch-ordbokene';
 import { OrdbokeneResponse, Lookup } from '../../types/ordbokene';
 
+const DictionaryName = {
+  nb: "Bokmålsordboka",
+  nn: "Nynorskordboka",
+};
+
 const useOrdbokene = (searchTerm: string, dialect: 'nb' | 'nn' ) => {
   const { data: suggestion } = useQuery({
     queryKey: ['ordbokene', searchTerm, dialect],
@@ -12,7 +17,7 @@ const useOrdbokene = (searchTerm: string, dialect: 'nb' | 'nn' ) => {
 
   return suggestion === undefined || searchTerm === undefined || searchTerm === ''
     ? ['', false]
-    : [getValidationText(suggestion, dialect), isTermValid(suggestion)] as const;
+    : [getValidationText(suggestion, DictionaryName[dialect]), isTermValid(suggestion)] as const;
 };
 
 const getTermsFromSuggestion = (suggestion: OrdbokeneResponse, searchTerm: string): Lookup => {
@@ -26,12 +31,12 @@ const getTermsFromSuggestion = (suggestion: OrdbokeneResponse, searchTerm: strin
 const isTermValid = (suggestion: Lookup): boolean =>
   suggestion ? (suggestion?.exact || suggestion?.inflect.length > 0) : false;
 
-const getValidationText = (suggestion: Lookup, dialect: 'nb' | 'nn'): string => {
+const getValidationText = (suggestion: Lookup, dictionaryName: string): string => {
   if (suggestion?.exact) {
-    return 'Finnes i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorsordboka');
+    return `Finnes i ${dictionaryName}`;
   }
   else if (suggestion?.inflect) {
-    return 'Bøyning av ' + suggestion.inflect[0] + ' i ' + (dialect === 'nb' ? 'Bokmålsordboka' : 'Nynorsordboka');
+    return `Bøyning av ${suggestion.inflect[0]} i ${dictionaryName}`;
   } else {
     return '';
   }
