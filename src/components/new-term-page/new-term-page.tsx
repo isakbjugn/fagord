@@ -3,7 +3,7 @@ import { Button, Form, Label, Row } from 'reactstrap';
 import style from './new-term-page.module.css';
 import { pickBy } from 'lodash';
 import { postTerm } from '../../lib/fetch';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Term } from '../../types/term';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -15,7 +15,7 @@ import useOrdbokene from '../utils/use-ordbokene';
 import { useDebounce } from '../utils/use-debounce';
 
 const NewTermPage = (): JSX.Element => {
-  const { term } = useParams();
+  const { term: termFromUrl } = useParams();
   const queryClient = useQueryClient();
   const { register, setValue, watch, reset, handleSubmit } = useForm();
   const debouncedBokmalTerm = useDebounce(watch('nb'), 200);
@@ -50,8 +50,12 @@ const NewTermPage = (): JSX.Element => {
     },
   });
 
+  useEffect(() => {
+    setValue('en', termFromUrl);
+  }, [termFromUrl])
+
   const watchField = watch('field', '');
-  const watchEn = watch('en', term !== '' ? term : '');
+  const watchEn = watch('en', termFromUrl);
   const watchPos = watch('pos', 'substantiv');
   const onSubmit = (input: any): void => {
     const cleanInput = watchField !== '' ? input : { ...input, subfield: '' };
@@ -64,6 +68,11 @@ const NewTermPage = (): JSX.Element => {
     const id = createId(watchEn, watchPos);
     return dictionaryQuery.data.find((term: any) => term._id === id) !== undefined;
   }, [dictionaryQuery, watchEn, watchPos]);
+
+  const setFieldFromResult = (result: Term) => {
+    setValue('field', result.field);
+    setValue('subfield', result.subfield);
+  }
 
   if (result !== undefined && result !== null)
     return (
@@ -79,20 +88,19 @@ const NewTermPage = (): JSX.Element => {
               Gå til term
             </Button>
           </Link>
-          <Button
-            outline
-            color="light"
-            onClick={() => {
-              setResult(null);
-            }}
-          >
-            Opprett ny term
-          </Button>
+          <Link to='/ny-term' onClick={() => setResult(null)}>
+            <Button outline color="light">
+              Opprett ny term
+            </Button>
+          </Link>
+          <Link to='/ny-term' onClick={() => {setFieldFromResult(result); setResult(null)}}>
+            <Button outline color="light">
+              Ny term i samme fagfelt
+            </Button>
+          </Link>
         </span>
       </section>
     );
-
-  
 
   return (
     <main className={style.form}>
@@ -102,7 +110,7 @@ const NewTermPage = (): JSX.Element => {
           <Label>
             Engelsk term
             <input
-              defaultValue={term !== null ? term : undefined}
+              defaultValue={termFromUrl}
               type="text"
               className={'form-control' + (existsInTermbase ? ' is-invalid' : '')}
               autoCapitalize="none"
@@ -172,7 +180,7 @@ const NewTermPage = (): JSX.Element => {
           {watchField !== null && (
             <div className="col-sm-6">
               <Label>
-                Underfelt
+                Gren
                 <input
                   className="form-control"
                   type="text"
