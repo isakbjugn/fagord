@@ -180,7 +180,7 @@ const NewTermPage = (): JSX.Element => {
           {watchField !== null && (
             <div className="col-sm-6">
               <Label>
-                Underfelt
+                Gren
                 <input
                   className="form-control"
                   type="text"
