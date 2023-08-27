@@ -8,9 +8,11 @@ export interface OrdbokeneResponse {
 export interface OrdbokeneLookup {
     inflect?: string[][];
     exact?: string[][];
+    similar?: string[][];
 }
 
 export interface Lookup {
     exact: boolean,
     inflect: string[],
+    similar: string[],
 }
