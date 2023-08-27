@@ -17,11 +17,11 @@ import { useDebounce } from '../utils/use-debounce';
 const NewTermPage = (): JSX.Element => {
   const { term } = useParams();
   const queryClient = useQueryClient();
-  const { register, watch, reset, handleSubmit } = useForm();
+  const { register, setValue, watch, reset, handleSubmit } = useForm();
   const debouncedBokmalTerm = useDebounce(watch('nb'), 200);
   const debouncedNynorskTerm = useDebounce(watch('nn'), 200);
-  const [bokmalValidationText, isBokmalTermValid] = useOrdbokene(debouncedBokmalTerm, 'nb');
-  const [nynorskValidationText, isNynorskTermValid] = useOrdbokene(debouncedNynorskTerm, 'nn');
+  const [isBokmalTermValid, bokmalValidationText, bokmalSuggestion] = useOrdbokene(debouncedBokmalTerm, 'nb');
+  const [isNynorskTermValid, nynorskValidationText, nynorskSuggestion] = useOrdbokene(debouncedNynorskTerm, 'nn');
   const [result, setResult] = useState<Term | null>();
   const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -127,6 +127,13 @@ const NewTermPage = (): JSX.Element => {
               <div className="valid-feedback">
                 {bokmalValidationText}
               </div>
+              {bokmalSuggestion && (
+                <div className={style["suggestion-feedback"]}>
+                  Mente du <u onClick={() => setValue('nb', bokmalSuggestion)} style={{cursor: 'pointer'}}>
+                    {bokmalSuggestion}
+                    </u>?
+                </div>
+              )}
             </Label>
           </div>
           <div className="col-sm-6">
@@ -141,6 +148,13 @@ const NewTermPage = (): JSX.Element => {
               <div className="valid-feedback">
                 {nynorskValidationText}
               </div>
+              {nynorskSuggestion && (
+                <div className={style["suggestion-feedback"]}>
+                  Mente du <u onClick={() => setValue('nn', nynorskSuggestion)} style={{cursor: 'pointer'}}>
+                    {nynorskSuggestion}
+                    </u>?
+                </div>
+              )}
             </Label>
           </div>
         </Row>

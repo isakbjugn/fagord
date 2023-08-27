@@ -8,35 +8,44 @@ const DictionaryName = {
 };
 
 const useOrdbokene = (searchTerm: string, dialect: 'nb' | 'nn' ) => {
-  const { data: suggestion } = useQuery({
+  const { data: lookup } = useQuery({
     queryKey: ['ordbokene', searchTerm, dialect],
     queryFn: () => fetchSuggestions(searchTerm, dialect),
-    select: data => getTermsFromSuggestion(data, searchTerm),
+    select: data => getLookupFromOrdbokene(data, searchTerm),
     enabled: searchTerm !== undefined && searchTerm !== '',
   });
 
-  return suggestion === undefined || searchTerm === undefined || searchTerm === ''
+  return lookup === undefined || searchTerm === undefined || searchTerm === ''
     ? ['', false]
-    : [getValidationText(suggestion, DictionaryName[dialect]), isTermValid(suggestion)] as const;
+    : [isTermValid(lookup), getValidationText(lookup, DictionaryName[dialect]), getSuggestion(lookup)] as const;
 };
 
-const getTermsFromSuggestion = (suggestion: OrdbokeneResponse, searchTerm: string): Lookup => {
-  const exactMatches: string[] = suggestion.a.exact ? suggestion.a.exact.map(term => term[0]) : [];
+const getLookupFromOrdbokene = (lookup: OrdbokeneResponse, searchTerm: string): Lookup => {
+  const exactMatches: string[] = lookup.a.exact ? lookup.a.exact.map(term => term[0]) : [];
   const exact = exactMatches.includes(searchTerm);
-  const inflect = suggestion.a.inflect ? suggestion.a.inflect.map(term => term[0]) : [];
+  const inflect = lookup.a.inflect ? lookup.a.inflect.map(term => term[0]) : [];
+  const similar = lookup.a.similar ? lookup.a.similar.map(term => term[0]) : [];
 
-  return { exact, inflect };
+  return { exact, inflect, similar };
 };
 
-const isTermValid = (suggestion: Lookup): boolean =>
-  suggestion ? (suggestion?.exact || suggestion?.inflect.length > 0) : false;
+const isTermValid = (lookup: Lookup): boolean =>
+  lookup ? (lookup?.exact || lookup?.inflect.length > 0) : false;
 
-const getValidationText = (suggestion: Lookup, dictionaryName: string): string => {
-  if (suggestion?.exact) {
+const getValidationText = (lookup: Lookup, dictionaryName: string): string => {
+  if (lookup.exact) {
     return `Finnes i ${dictionaryName}`;
   }
-  else if (suggestion?.inflect) {
-    return `Bøyning av ${suggestion.inflect[0]} i ${dictionaryName}`;
+  else if (lookup.inflect) {
+    return `Bøyning av ${lookup.inflect[0]} i ${dictionaryName}`;
+  } else {
+    return '';
+  }
+}
+
+const getSuggestion = (lookup: Lookup): string => {
+  if (lookup.similar.length > 0 && !lookup.exact && lookup.inflect.length == 0) {
+    return lookup.similar[0];
   } else {
     return '';
   }

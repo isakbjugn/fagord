@@ -17,6 +17,12 @@
   margin-right: 10px;
 }
 
+.suggestion-feedback {
+  margin-top: .25rem;
+  font-size: .875em;
+  filter: brightness(85%);
+}
+
 :global(.valid-feedback) {
   filter: brightness(130%);
 }
