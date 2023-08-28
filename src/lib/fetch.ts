@@ -1,8 +1,10 @@
-import type { Subject } from '../types/subject';
-import type { Term, Variant } from '../types/term';
+import { QueryFunctionContext } from '@tanstack/react-query';
 
-const baseApiUri =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '';
+import { Article } from '../types/article';
+import type { Subject } from '../types/subject';
+import type { SubmitTerm, SubmitVariant, Term, Variant } from '../types/term';
+
+const baseApiUri = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '';
 
 export const articleUrl = baseApiUri + '/api/artikler/';
 
@@ -24,7 +26,7 @@ export const fetchFields = async (): Promise<Subject[]> => {
   return await res.json();
 };
 
-export const fetchArticles = async (): Promise<any[]> => {
+export const fetchArticles = async (): Promise<Article[]> => {
   const res = await fetch(baseApiUri + '/api/artikler');
 
   if (!res.ok) {
@@ -33,7 +35,7 @@ export const fetchArticles = async (): Promise<any[]> => {
   return await res.json();
 };
 
-export const fetchArticleHtml = async ({ queryKey }: any): Promise<string> => {
+export const fetchArticleHtml = async ({ queryKey }: QueryFunctionContext): Promise<string> => {
   const [_, articleId] = queryKey;
   const res = await fetch(baseApiUri + '/api/artikler/' + articleId);
 
@@ -45,7 +47,7 @@ export const fetchArticleHtml = async ({ queryKey }: any): Promise<string> => {
   return innerHtml;
 };
 
-export const postTerm = async (term: any): Promise<Term> => {
+export const postTerm = async (term: SubmitTerm): Promise<Term> => {
   const res = await fetch(baseApiUri + '/api/termer', {
     headers: {
       Accept: 'application/json',
@@ -63,13 +65,10 @@ export const postTerm = async (term: any): Promise<Term> => {
 
 interface UpdateTermArguments {
   termId: string;
-  term: any;
+  term: SubmitTerm;
 }
 
-export const updateTerm = async ({
-  termId,
-  term,
-}: UpdateTermArguments): Promise<Term> => {
+export const updateTerm = async ({ termId, term }: UpdateTermArguments): Promise<Term> => {
   const res = await fetch(baseApiUri + '/api/termer/' + termId, {
     headers: {
       Accept: 'application/json',
@@ -87,13 +86,10 @@ export const updateTerm = async ({
 
 export interface AddVariantArguments {
   termId: string;
-  variant: Variant;
+  variant: SubmitVariant;
 }
 
-export const addVariant = async ({
-  termId,
-  variant,
-}: VoteForVariantArguments): Promise<Variant> => {
+export const addVariant = async ({ termId, variant }: AddVariantArguments): Promise<Variant> => {
   const res = await fetch(baseApiUri + '/api/termer/' + termId + '/varianter', {
     headers: {
       Accept: 'application/json',

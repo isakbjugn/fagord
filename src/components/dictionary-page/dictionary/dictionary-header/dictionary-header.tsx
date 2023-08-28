@@ -4,9 +4,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
-import { TermTableCell } from '../styled-mui-components';
+
 import type { Language } from '../../../../types/term';
 import type { Order } from '../../../utils/sorting';
+import { TermTableCell } from '../styled-mui-components';
 
 interface HeadCell {
   id: keyof Language;
@@ -33,20 +34,16 @@ const headCells: readonly HeadCell[] = [
 ];
 
 interface DictionaryHeaderProps {
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Language
-  ) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Language) => void;
   order: Order;
   orderBy: string;
 }
 
 export const DictionaryHeader = (props: DictionaryHeaderProps): JSX.Element => {
   const { order, orderBy, onRequestSort } = props;
-  const createSortHandler =
-    (property: keyof Language) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
+  const createSortHandler = (property: keyof Language) => (event: React.MouseEvent<unknown>) => {
+    onRequestSort(event, property);
+  };
 
   return (
     <TableHead>

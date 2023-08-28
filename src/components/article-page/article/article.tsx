@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
-import InfoMessage from '../../common/info-message/info-message';
+
+import { InfoMessage } from '../../common/info-message/info-message';
 import { useArticles } from '../../utils/use-articles';
 import { ArticleContent } from './article-content/article-content';
 

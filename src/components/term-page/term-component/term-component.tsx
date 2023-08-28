@@ -1,15 +1,16 @@
 import { IosShare } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+
 import type { Term } from '../../../types/term';
-import Definition from './definition/definition';
-import TranslationCard from './translation-card/translation-card';
+import { Definition } from './definition/definition';
 import style from './term-component.module.css';
+import { TranslationCard } from './translation-card/translation-card';
 
 interface TermComponentProps {
   term: Term;
 }
 
-const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
+export const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
   if (term === null) return <></>;
 
   const fieldSpec = term.subfield !== '' ? term.subfield : term.field;
@@ -55,5 +56,3 @@ const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
     </article>
   );
 };
-
-export default TermComponent;

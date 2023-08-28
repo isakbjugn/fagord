@@ -1,7 +1,8 @@
 import { Outlet, useParams } from 'react-router-dom';
+
 import { ArticleGrid } from '../common/article-grid/article-grid';
-import InfoMessage from '../common/info-message/info-message';
-import Spinner from '../common/spinner/spinner';
+import { InfoMessage } from '../common/info-message/info-message';
+import { Spinner } from '../common/spinner/spinner';
 import { useArticles } from '../utils/use-articles';
 
 export const ArticlePage = (): JSX.Element => {

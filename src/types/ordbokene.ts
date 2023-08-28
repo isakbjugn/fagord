@@ -1,18 +1,18 @@
 export interface OrdbokeneResponse {
-    q: string;
-    cnt: number;
-    cmatch: number;
-    a: OrdbokeneLookup
+  q: string;
+  cnt: number;
+  cmatch: number;
+  a: OrdbokeneLookup;
 }
 
 export interface OrdbokeneLookup {
-    inflect?: string[][];
-    exact?: string[][];
-    similar?: string[][];
+  inflect?: string[][];
+  exact?: string[][];
+  similar?: string[][];
 }
 
 export interface Lookup {
-    exact: boolean,
-    inflect: string[],
-    similar: string[],
+  exact: boolean;
+  inflect: string[];
+  similar: string[];
 }

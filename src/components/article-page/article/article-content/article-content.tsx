@@ -1,15 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchArticleHtml } from '../../../../lib/fetch';
-import Spinner from '../../../common/spinner/spinner';
 import sanitizeHtml from 'sanitize-html';
-import style from './article-content.module.css';
-import InfoMessage from '../../../common/info-message/info-message';
 
-export const ArticleContent = ({
-  articleId,
-}: {
-  articleId: string;
-}): JSX.Element => {
+import { fetchArticleHtml } from '../../../../lib/fetch';
+import { InfoMessage } from '../../../common/info-message/info-message';
+import { Spinner } from '../../../common/spinner/spinner';
+import style from './article-content.module.css';
+
+export const ArticleContent = ({ articleId }: { articleId: string }): JSX.Element => {
   const {
     isLoading: isLoadingHtml,
     isError: isHtmlError,
@@ -40,10 +37,7 @@ export const ArticleContent = ({
   return (
     <div className="container-sm m-5">
       <div className="col-12 col-lg-8 mx-auto">
-        <div
-          className={style.article}
-          dangerouslySetInnerHTML={{ __html: cleanHtml }}
-        />
+        <div className={style.article} dangerouslySetInnerHTML={{ __html: cleanHtml }} />
       </div>
     </div>
   );

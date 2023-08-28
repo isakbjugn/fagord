@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SelectInstance } from 'react-select';
+import { SelectInstance, SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';
+
 import type { Term } from '../../../types/term';
-import useDictionary from '../../utils/use-dictionary';
+import { useDictionary } from '../../utils/use-dictionary';
 import style from './search-bar.module.css';
 
 const formatOptionLabel = (term: Term) => (
@@ -18,14 +19,15 @@ const formatOptionLabel = (term: Term) => (
   </div>
 );
 
-const SearchBar = (): JSX.Element => {
+export const SearchBar = (): JSX.Element => {
   const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
 
   const dictionaryQuery = useDictionary();
   const navigate = useNavigate();
 
-  const options = !dictionaryQuery.isLoading && !dictionaryQuery.isError ? dictionaryQuery.data : [];
+  const options =
+    !dictionaryQuery.isLoading && !dictionaryQuery.isError ? dictionaryQuery.data : [];
 
   const filterOptions = (input: string) =>
     options
@@ -33,7 +35,7 @@ const SearchBar = (): JSX.Element => {
         (term) =>
           term.en.toLowerCase().includes(input) ||
           term.nb.toLowerCase().includes(input) ||
-          term.nn.toLowerCase().includes(input)
+          term.nn.toLowerCase().includes(input),
       )
       .slice(0, 5);
 
@@ -43,9 +45,11 @@ const SearchBar = (): JSX.Element => {
     }, 1000);
   };
 
-  const openTermPage = (selected: any): void => {
-    setInput('');
-    navigate('/term/' + (selected._id as string));
+  const openTermPage = (selected?: SingleValue<Term>): void => {
+    if (selected) {
+      setInput('');
+      navigate('/term/' + (selected._id as string));
+    }
   };
 
   const noOptionsMessage = () => {
@@ -100,5 +104,3 @@ const SearchBar = (): JSX.Element => {
     </div>
   );
 };
-
-export default SearchBar;

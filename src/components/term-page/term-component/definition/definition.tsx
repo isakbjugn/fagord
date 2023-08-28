@@ -1,17 +1,19 @@
-import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 import { Button, Form, Label, Row } from 'reactstrap';
+
 import { updateTerm } from '../../../../lib/fetch';
-import useToggle from '../../../utils/use-toggle';
-import Spinner from '../../../common/spinner/spinner';
-import styles from './definition.module.css';
+import { SubmitTerm } from '../../../../types/term';
+import { Spinner } from '../../../common/spinner/spinner';
+import { useToggle } from '../../../utils/use-toggle';
+import style from './definition.module.css';
 
 interface DefinitionProps {
   termId: string;
   definition?: string;
 }
 
-const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
+export const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
   const { register, handleSubmit, setValue } = useForm();
@@ -24,7 +26,7 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
 
   if (isLoading) return <Spinner />;
 
-  const onSubmit = (input: any): void => {
+  const onSubmit = (input: SubmitTerm): void => {
     toggleWriting();
     mutate({ termId, term: input });
   };
@@ -37,13 +39,7 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
 
   return (
     <div>
-      <p>
-        {definition !== '' ? (
-          definition
-        ) : (
-          <em>Ingen definisjon tilgjengelig.</em>
-        )}
-      </p>
+      <p>{definition !== '' ? definition : <em>Ingen definisjon tilgjengelig.</em>}</p>
       <Form onSubmit={handleSubmit(onSubmit)}>
         {isWriting && (
           <Row>
@@ -56,7 +52,7 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
             </Label>
           </Row>
         )}
-        <span className={styles.buttons}>
+        <span className={style.buttons}>
           {isWriting && (
             <Button color="success" type="submit">
               Send inn
@@ -77,5 +73,3 @@ const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
     </div>
   );
 };
-
-export default Definition;

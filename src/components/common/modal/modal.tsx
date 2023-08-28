@@ -1,10 +1,5 @@
 import type { ReactElement } from 'react';
-import {
-  Button,
-  Modal as ReactstrapModal,
-  ModalBody,
-  ModalFooter,
-} from 'reactstrap';
+import { Button, Modal as ReactstrapModal, ModalBody, ModalFooter } from 'reactstrap';
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,7 +7,7 @@ interface ModalProps {
   children: ReactElement;
 }
 
-const Modal = ({ isOpen, toggle, children }: ModalProps): JSX.Element => (
+export const Modal = ({ isOpen, toggle, children }: ModalProps): JSX.Element => (
   <ReactstrapModal fade={false} isOpen={isOpen}>
     <ModalBody>{children}</ModalBody>
     <ModalFooter>
@@ -22,5 +17,3 @@ const Modal = ({ isOpen, toggle, children }: ModalProps): JSX.Element => (
     </ModalFooter>
   </ReactstrapModal>
 );
-
-export default Modal;

@@ -1,9 +1,9 @@
-import styles from './footer.module.css';
+import style from './footer.module.css';
 
 const fagordGitHubUrl = 'https://github.com/isakbjugn/fagord';
 
-const Footer = (): JSX.Element => (
-  <footer className={'container-fluid ' + styles.footer}>
+export const Footer = (): JSX.Element => (
+  <footer className={'container-fluid ' + style.footer}>
     <div className="row justify-content-center">
       <div className="col-auto">
         <a href={fagordGitHubUrl}>
@@ -13,5 +13,3 @@ const Footer = (): JSX.Element => (
     </div>
   </footer>
 );
-
-export default Footer;
