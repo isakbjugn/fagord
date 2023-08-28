@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import { Link } from 'react-router-dom';
+
 import type { Term } from '../../../../types/term';
 import style from './term-details.module.css';
 
@@ -43,11 +44,7 @@ export const TermDetails = (props: { term: Term }): JSX.Element => {
         </Table>
       </Box>
       <div className={'col my-2 mx-4 ' + style.button}>
-        <Link
-          className="btn btn-outline-dark btn-sm"
-          to={'/term/' + term._id}
-          role="button"
-        >
+        <Link className="btn btn-outline-dark btn-sm" to={'/term/' + term._id} role="button">
           Til termside
         </Link>
       </div>

@@ -1,27 +1,34 @@
-import { useForm } from 'react-hook-form';
-import { Button, Form, Label, Row } from 'reactstrap';
-import style from './new-term-page.module.css';
-import { pickBy } from 'lodash';
-import { postTerm } from '../../lib/fetch';
-import { useEffect, useMemo, useState } from 'react';
-import type { Term } from '../../types/term';
-import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Modal from '../common/modal/modal';
-import useToggle from '../utils/use-toggle';
-import useDictionary from '../utils/use-dictionary';
-import { createId } from '../utils/create-id';
-import useOrdbokene from '../utils/use-ordbokene';
-import { useDebounce } from '../utils/use-debounce';
+import { pickBy } from 'lodash';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Form, Label, Row } from 'reactstrap';
 
-const NewTermPage = (): JSX.Element => {
+import { postTerm } from '../../lib/fetch';
+import type { SubmitTerm, Term } from '../../types/term';
+import { Modal } from '../common/modal/modal';
+import { createId } from '../utils/create-id';
+import { useDebounce } from '../utils/use-debounce';
+import { useDictionary } from '../utils/use-dictionary';
+import { useOrdbokene } from '../utils/use-ordbokene';
+import { useToggle } from '../utils/use-toggle';
+import style from './new-term-page.module.css';
+
+export const NewTermPage = (): JSX.Element => {
   const { term: termFromUrl } = useParams();
   const queryClient = useQueryClient();
   const { register, setValue, watch, reset, handleSubmit } = useForm();
   const debouncedBokmalTerm = useDebounce(watch('nb'), 200);
   const debouncedNynorskTerm = useDebounce(watch('nn'), 200);
-  const [isBokmalTermValid, bokmalValidationText, bokmalSuggestion] = useOrdbokene(debouncedBokmalTerm, 'nb');
-  const [isNynorskTermValid, nynorskValidationText, nynorskSuggestion] = useOrdbokene(debouncedNynorskTerm, 'nn');
+  const [isBokmalTermValid, bokmalValidationText, bokmalSuggestion] = useOrdbokene(
+    debouncedBokmalTerm,
+    'nb',
+  );
+  const [isNynorskTermValid, nynorskValidationText, nynorskSuggestion] = useOrdbokene(
+    debouncedNynorskTerm,
+    'nn',
+  );
   const [result, setResult] = useState<Term | null>();
   const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -52,12 +59,12 @@ const NewTermPage = (): JSX.Element => {
 
   useEffect(() => {
     setValue('en', termFromUrl);
-  }, [termFromUrl])
+  }, [termFromUrl]);
 
   const watchField = watch('field', '');
   const watchEn = watch('en', termFromUrl);
   const watchPos = watch('pos', 'substantiv');
-  const onSubmit = (input: any): void => {
+  const onSubmit = (input: SubmitTerm): void => {
     const cleanInput = watchField !== '' ? input : { ...input, subfield: '' };
     mutate(pickBy(cleanInput, (value: string) => value.length > 0));
   };
@@ -66,21 +73,21 @@ const NewTermPage = (): JSX.Element => {
     if (watchEn === '') return false;
     if (dictionaryQuery.isLoading || dictionaryQuery.isError) return false;
     const id = createId(watchEn, watchPos);
-    return dictionaryQuery.data.find((term: any) => term._id === id) !== undefined;
+    return dictionaryQuery.data.find((term: Term) => term._id === id) !== undefined;
   }, [dictionaryQuery, watchEn, watchPos]);
 
   const setFieldFromResult = (result: Term) => {
     setValue('field', result.field);
     setValue('subfield', result.subfield);
-  }
+  };
 
   if (result !== undefined && result !== null)
     return (
       <section className={style.success}>
         <h2>Du har opprettet en term!</h2>
         <p>
-          Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå
-          lagt til i en voksende termbase.
+          Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå lagt til i en voksende
+          termbase.
         </p>
         <span className={style.buttons}>
           <Link to={'../term/' + result._id}>
@@ -88,12 +95,18 @@ const NewTermPage = (): JSX.Element => {
               Gå til term
             </Button>
           </Link>
-          <Link to='/ny-term' onClick={() => setResult(null)}>
+          <Link to="/ny-term" onClick={() => setResult(null)}>
             <Button outline color="light">
               Opprett ny term
             </Button>
           </Link>
-          <Link to='/ny-term' onClick={() => {setFieldFromResult(result); setResult(null)}}>
+          <Link
+            to="/ny-term"
+            onClick={() => {
+              setFieldFromResult(result);
+              setResult(null);
+            }}
+          >
             <Button outline color="light">
               Ny term i samme fagfelt
             </Button>
@@ -132,14 +145,14 @@ const NewTermPage = (): JSX.Element => {
                 autoCapitalize="none"
                 {...register('nb')}
               />
-              <div className="valid-feedback">
-                {bokmalValidationText}
-              </div>
+              <div className="valid-feedback">{bokmalValidationText}</div>
               {bokmalSuggestion && (
-                <div className={style["suggestion-feedback"]}>
-                  Mente du <u onClick={() => setValue('nb', bokmalSuggestion)} style={{cursor: 'pointer'}}>
+                <div className={style['suggestion-feedback']}>
+                  Mente du{' '}
+                  <u onClick={() => setValue('nb', bokmalSuggestion)} style={{ cursor: 'pointer' }}>
                     {bokmalSuggestion}
-                    </u>?
+                  </u>
+                  ?
                 </div>
               )}
             </Label>
@@ -153,14 +166,17 @@ const NewTermPage = (): JSX.Element => {
                 autoCapitalize="none"
                 {...register('nn')}
               />
-              <div className="valid-feedback">
-                {nynorskValidationText}
-              </div>
+              <div className="valid-feedback">{nynorskValidationText}</div>
               {nynorskSuggestion && (
-                <div className={style["suggestion-feedback"]}>
-                  Mente du <u onClick={() => setValue('nn', nynorskSuggestion)} style={{cursor: 'pointer'}}>
+                <div className={style['suggestion-feedback']}>
+                  Mente du{' '}
+                  <u
+                    onClick={() => setValue('nn', nynorskSuggestion)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     {nynorskSuggestion}
-                    </u>?
+                  </u>
+                  ?
                 </div>
               )}
             </Label>
@@ -170,22 +186,14 @@ const NewTermPage = (): JSX.Element => {
           <div className="col-sm-6">
             <Label>
               Fagfelt
-              <input
-                className="form-control"
-                type="text"
-                {...register('field')}
-              />
+              <input className="form-control" type="text" {...register('field')} />
             </Label>
           </div>
           {watchField !== null && (
             <div className="col-sm-6">
               <Label>
                 Gren
-                <input
-                  className="form-control"
-                  type="text"
-                  {...register('subfield')}
-                />
+                <input className="form-control" type="text" {...register('subfield')} />
               </Label>
             </div>
           )}
@@ -212,11 +220,7 @@ const NewTermPage = (): JSX.Element => {
         <Row>
           <Label>
             Referanse
-            <input
-              className="form-control"
-              type="text"
-              {...register('reference')}
-            />
+            <input className="form-control" type="text" {...register('reference')} />
           </Label>
         </Row>
         <Button color="success" type="submit">
@@ -236,5 +240,3 @@ const NewTermPage = (): JSX.Element => {
     </main>
   );
 };
-
-export default NewTermPage;

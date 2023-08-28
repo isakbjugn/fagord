@@ -1,3 +1,5 @@
+import { Term } from '../../types/term';
+
 export type Order = 'asc' | 'desc';
 
 const descendingComparator = <T>(A: T, B: T, orderBy: keyof T): number => {
@@ -10,9 +12,9 @@ const descendingComparator = <T>(A: T, B: T, orderBy: keyof T): number => {
   return 0;
 };
 
-export const getComparator = <Key extends keyof any>(
+export const getComparator = <Key extends keyof Term>(
   order: Order,
-  orderBy: Key
+  orderBy: Key,
 ): ((a: { [key in Key]: string }, b: { [key in Key]: string }) => number) => {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)

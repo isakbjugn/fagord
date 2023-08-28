@@ -1,27 +1,18 @@
-import type { Term } from '../../../../types/term';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardText,
-  CardTitle,
-  Col,
-  Form,
-  Label,
-  Row,
-} from 'reactstrap';
-import styles from './translation-card.module.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import useToggle from '../../../utils/use-toggle';
 import { useForm } from 'react-hook-form';
+import { Button, Card, CardBody, CardText, CardTitle, Col, Form, Label, Row } from 'reactstrap';
+
 import { addVariant } from '../../../../lib/fetch';
-import Spinner from '../../../common/spinner/spinner';
+import type { SubmitVariant, Term } from '../../../../types/term';
+import { Spinner } from '../../../common/spinner/spinner';
+import { useToggle } from '../../../utils/use-toggle';
+import styles from './translation-card.module.css';
 
 interface TranslationCardProps {
   term: Term;
 }
 
-const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
+export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
   const { register, handleSubmit } = useForm();
@@ -34,7 +25,7 @@ const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
 
   if (term === null) return <></>;
 
-  const onSubmit = (input: any): void => {
+  const onSubmit = (input: SubmitVariant): void => {
     toggleWriting();
     mutate({ termId: term._id, variant: input });
   };
@@ -89,10 +80,7 @@ const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
                       autoComplete="off"
                       {...register('dialect')}
                     />
-                    <label
-                      className="btn btn-outline-light"
-                      htmlFor="btncheck1"
-                    >
+                    <label className="btn btn-outline-light" htmlFor="btncheck1">
                       nb
                     </label>
 
@@ -104,10 +92,7 @@ const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
                       autoComplete="off"
                       {...register('dialect')}
                     />
-                    <label
-                      className="btn btn-outline-light"
-                      htmlFor="btncheck2"
-                    >
+                    <label className="btn btn-outline-light" htmlFor="btncheck2">
                       nn
                     </label>
                   </div>
@@ -136,5 +121,3 @@ const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
     </Card>
   );
 };
-
-export default TranslationCard;

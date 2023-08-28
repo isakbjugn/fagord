@@ -1,21 +1,19 @@
-import { useState } from 'react';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
 import TableRow from '@mui/material/TableRow';
+import { KeyboardEvent, useState } from 'react';
+
 import type { Term } from '../../../../types/term';
 import { DropdownTableCell, TermTableCell } from '../styled-mui-components';
 import { TermDetails } from './term-details';
 
-export const TermEntry = (props: {
-  term: Term;
-  index: number;
-}): JSX.Element => {
+export const TermEntry = (props: { term: Term; index: number }): JSX.Element => {
   const [open, setOpen] = useState(false);
   const { term, index } = props;
   const labelId = `enhanced-table-checkbox-${index}`;
-  const handleKeyDown = (e: any): void => {
+  const handleKeyDown = (e: KeyboardEvent): void => {
     if (e.key === 'Enter') setOpen(!open);
   };
 

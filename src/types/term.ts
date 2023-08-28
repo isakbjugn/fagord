@@ -17,3 +17,12 @@ export interface Variant {
 }
 
 export type Language = Pick<Term, 'en' | 'nb' | 'nn'>;
+
+export type SubmitTerm = Partial<Term>;
+
+export type SubmitVariant = Partial<Variant>;
+
+export type VariantVote = Variant & {
+  count: number;
+  value: string;
+};

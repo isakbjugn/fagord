@@ -18,8 +18,8 @@
 }
 
 .suggestion-feedback {
-  margin-top: .25rem;
-  font-size: .875em;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
   filter: brightness(85%);
 }
 

@@ -1,20 +1,17 @@
 import type { UseMutateFunction } from '@tanstack/react-query';
 import { TagCloud } from 'react-tagcloud';
+
 import type { VoteForVariantArguments } from '../../../lib/fetch';
-import type { Variant } from '../../../types/term';
-import styles from './variant-cloud.module.css';
+import type { Variant, VariantVote } from '../../../types/term';
+import style from './variant-cloud.module.css';
 
 interface VariantCloudProps {
   termId: string;
   variants: Variant[];
-  mutate: UseMutateFunction<any, unknown, VoteForVariantArguments, unknown>;
+  mutate: UseMutateFunction<Variant, unknown, VoteForVariantArguments, unknown>;
 }
 
-const VariantCloud = ({
-  termId,
-  variants,
-  mutate,
-}: VariantCloudProps): JSX.Element => {
+export const VariantCloud = ({ termId, variants, mutate }: VariantCloudProps): JSX.Element => {
   const options = {
     luminosity: 'light',
     hue: 'red',
@@ -28,7 +25,7 @@ const VariantCloud = ({
 
   return (
     <TagCloud
-      className={styles.cloud}
+      className={style.cloud}
       minSize={20}
       maxSize={40}
       colorOptions={options}
@@ -40,7 +37,7 @@ const VariantCloud = ({
           count: v.votes,
         };
       })}
-      onClick={(tag: any) => {
+      onClick={(tag: VariantVote) => {
         mutate({
           termId,
           variant: {
@@ -52,5 +49,3 @@ const VariantCloud = ({
     />
   );
 };
-
-export default VariantCloud;

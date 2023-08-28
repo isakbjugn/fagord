@@ -1,16 +1,17 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import Select from 'react-select';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
+
 import { fetchFields } from '../../lib/fetch';
 import type { Subject } from '../../types/subject';
 import type { Term } from '../../types/term';
-import Loader from '../common/loader/loader';
-import styles from './dictionary-page.module.css';
-import Spinner from '../common/spinner/spinner';
-import useDictionary from '../utils/use-dictionary';
+import { InfoMessage } from '../common/info-message/info-message';
+import { Loader } from '../common/loader/loader';
+import { Spinner } from '../common/spinner/spinner';
+import { useDictionary } from '../utils/use-dictionary';
 import { Dictionary } from './dictionary/dictionary';
-import InfoMessage from '../common/info-message/info-message';
+import style from './dictionary-page.module.css';
 
 interface TransFilter {
   text: string;
@@ -22,11 +23,9 @@ type TransFilterType = 'all' | 'translated' | 'incomplete';
 
 const AllSubjects: Subject = { field: 'Alle', subfields: [] };
 
-const DictionaryPage = (): JSX.Element => {
+export const DictionaryPage = (): JSX.Element => {
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
-  const [subjectFilter, setSubjectFilter] = useState<Subject | null>(
-    AllSubjects
-  );
+  const [subjectFilter, setSubjectFilter] = useState<Subject | null>(AllSubjects);
 
   const dictionaryQuery = useDictionary();
   const subjectQuery = useQuery({ queryKey: ['fields'], queryFn: fetchFields });
@@ -61,7 +60,7 @@ const DictionaryPage = (): JSX.Element => {
     if (subjectQuery.isError) return <p>Kunne ikke laste fagfelt.</p>;
     return (
       <Select
-        className={styles.subjects}
+        className={style.subjects}
         value={subjectFilter}
         placeholder="Filtrer fagfelt"
         options={[{ field: 'Alle', subfields: [] }, ...subjectQuery.data]}
@@ -95,8 +94,8 @@ const DictionaryPage = (): JSX.Element => {
   return (
     <main className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
-        <div className={styles.header}>
-          <Form className={styles.form}>
+        <div className={style.header}>
+          <Form className={style.form}>
             {transFilters.map((filter) => (
               <FormGroup check inline key={filter.filter}>
                 <Input
@@ -120,5 +119,3 @@ const DictionaryPage = (): JSX.Element => {
     </main>
   );
 };
-
-export default DictionaryPage;

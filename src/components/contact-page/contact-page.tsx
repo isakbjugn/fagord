@@ -1,13 +1,8 @@
+import { AddCircle, GitHub, Mail } from '@mui/icons-material';
+import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from '@mui/material';
+
 import style from './contact-page.module.css';
-import { AddCircle, Mail, GitHub } from '@mui/icons-material';
 
 const fagordIssuesUrl = 'https://github.com/isakbjugn/fagord/issues';
 const contactEmailUrl = 'mailto:isakbjugn@gmail.com';
@@ -17,9 +12,8 @@ export const ContactPage = (): JSX.Element => (
   <main className={style.container}>
     <h1>Ta gjerne kontakt!</h1>
     <p>
-      Fagord.no er under kontinuerlig utvikling, og vi tar mer enn gjerne imot
-      tilbakemeldinger og bidrag, både til ordboken og til nettsiden! Her er
-      noen måter du kan bidra:
+      Fagord.no er under kontinuerlig utvikling, og vi tar mer enn gjerne imot tilbakemeldinger og
+      bidrag, både til ordboken og til nettsiden! Her er noen måter du kan bidra:
     </p>
     <section className={style.categories}>
       <Card className={style.card}>
@@ -75,8 +69,8 @@ export const ContactPage = (): JSX.Element => (
             Kom i kontakt med oss
           </Typography>
           <Typography variant="body2" color="white" sx={{ mb: 2 }}>
-            Vi tar også gjerne imot direktehenvendelser, enten om du har andre
-            tanker om Fagord eller bare vil slå av en prat:
+            Vi tar også gjerne imot direktehenvendelser, enten om du har andre tanker om Fagord
+            eller bare vil slå av en prat:
           </Typography>
           <Typography variant="body2" color="white">
             E-post:{' '}
@@ -95,9 +89,9 @@ export const ContactPage = (): JSX.Element => (
     </section>
     <section>
       <p>
-        Til sist: Hvis du er fornøyd med Fagord eller har hatt stor nytte av
-        ordboken, er det også mulig å støtte den videre utviklingen finansielt.
-        Vi har enda ingen etablert måte å gjøre dette, så ta gjerne kontakt på{' '}
+        Til sist: Hvis du er fornøyd med Fagord eller har hatt stor nytte av ordboken, er det også
+        mulig å støtte den videre utviklingen finansielt. Vi har enda ingen etablert måte å gjøre
+        dette, så ta gjerne kontakt på{' '}
         <a className={style.link} href={contactEmailUrl}>
           isakbjugn@gmail.com
         </a>

@@ -1,20 +1,12 @@
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Typography,
-} from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+
+import { Article } from '../../../types/article';
 import { useArticles } from '../../utils/use-articles';
-import Spinner from '../spinner/spinner';
+import { Spinner } from '../spinner/spinner';
 import style from './article-grid.module.css';
 
-export const ArticleGrid = ({
-  hiddenKey,
-}: {
-  hiddenKey?: string;
-}): JSX.Element => {
+export const ArticleGrid = ({ hiddenKey }: { hiddenKey?: string }): JSX.Element => {
   const { isLoading, isError, data: articles } = useArticles();
 
   if (isLoading) return <Spinner />;
@@ -23,8 +15,8 @@ export const ArticleGrid = ({
   return (
     <div className={style.grid}>
       {articles
-        .filter((article: any) => article.documentKey !== hiddenKey)
-        .map((article: any) => (
+        .filter((article: Article) => article.documentKey !== hiddenKey)
+        .map((article: Article) => (
           <Card
             className={style.article}
             key={article.documentKey}
@@ -42,12 +34,7 @@ export const ArticleGrid = ({
                 referrerPolicy="no-referrer"
               />
               <CardContent>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  color="white"
-                >
+                <Typography gutterBottom variant="h5" component="div" color="white">
                   {article.title}
                 </Typography>
                 <Typography variant="body2" color="white">

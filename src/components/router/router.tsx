@@ -1,16 +1,17 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Home from '../home-page/home-page';
-import Header from '../common/header/header';
-import DictionaryPage from '../dictionary-page/dictionary-page';
-import TermPage from '../term-page/term-page';
-import Footer from '../common/footer/footer';
-import NewTermPage from '../new-term-page/new-term-page';
 import { useQueryClient } from '@tanstack/react-query';
+import { Navigate, Route, Routes } from 'react-router-dom';
+
 import { fetchTerms } from '../../lib/fetch';
-import { ArticlePage } from '../article-page/article-page';
-import { Article } from '../article-page/article/article';
 import { AboutPage } from '../about-page/about-page';
+import { Article } from '../article-page/article/article';
+import { ArticlePage } from '../article-page/article-page';
+import { Footer } from '../common/footer/footer';
+import { Header } from '../common/header/header';
 import { ContactPage } from '../contact-page/contact-page';
+import { DictionaryPage } from '../dictionary-page/dictionary-page';
+import { Home } from '../home-page/home-page';
+import { NewTermPage } from '../new-term-page/new-term-page';
+import { TermPage } from '../term-page/term-page';
 
 export const Router = (): JSX.Element => {
   const queryClient = useQueryClient();

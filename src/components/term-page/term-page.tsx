@@ -1,18 +1,19 @@
-import { Link, useParams } from 'react-router-dom';
-import type { Term } from '../../types/term';
-import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import TermComponent from './term-component/term-component';
-import InfoMessage from '../common/info-message/info-message';
-import VariantCloud from './variant-cloud/variant-cloud';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { voteForVariant } from '../../lib/fetch';
-import useDictionary from '../utils/use-dictionary';
-import Spinner from '../common/spinner/spinner';
-import useToggle from '../utils/use-toggle';
-import Modal from '../common/modal/modal';
+import { Link, useParams } from 'react-router-dom';
+import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
-const TermPage = (): JSX.Element => {
+import { voteForVariant } from '../../lib/fetch';
+import type { Term } from '../../types/term';
+import { InfoMessage } from '../common/info-message/info-message';
+import { Modal } from '../common/modal/modal';
+import { Spinner } from '../common/spinner/spinner';
+import { useDictionary } from '../utils/use-dictionary';
+import { useToggle } from '../utils/use-toggle';
+import { TermComponent } from './term-component/term-component';
+import { VariantCloud } from './variant-cloud/variant-cloud';
+
+export const TermPage = (): JSX.Element => {
   const { termId } = useParams();
 
   const dictionaryQuery = useDictionary();
@@ -37,9 +38,7 @@ const TermPage = (): JSX.Element => {
       </InfoMessage>
     );
 
-  const term: Term | undefined = dictionaryQuery.data.find(
-    (term: Term) => term._id === termId
-  );
+  const term: Term | undefined = dictionaryQuery.data.find((term: Term) => term._id === termId);
 
   if (term === undefined)
     return (
@@ -60,11 +59,7 @@ const TermPage = (): JSX.Element => {
           </Breadcrumb>
         </div>
         <TermComponent term={term} />
-        <VariantCloud
-          termId={term._id}
-          variants={term.variants}
-          mutate={mutate}
-        />
+        <VariantCloud termId={term._id} variants={term.variants} mutate={mutate} />
         <Modal isOpen={isModalOpen} toggle={toggleModal}>
           <p>
             Du har gitt én stemme til <em>«{votedTerm}»</em>.
@@ -74,5 +69,3 @@ const TermPage = (): JSX.Element => {
     </main>
   );
 };
-
-export default TermPage;
