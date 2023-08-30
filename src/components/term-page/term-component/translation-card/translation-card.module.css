@@ -8,5 +8,21 @@
 }
 
 .buttons > * {
+  margin-top: 10px;
   margin-right: 10px;
+}
+
+.suggestion-feedback {
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  filter: brightness(85%);
+  white-space: nowrap;
+}
+
+.valid-feedback {
+  white-space: nowrap;
+}
+
+:global(.valid-feedback) {
+  filter: brightness(130%);
 }
