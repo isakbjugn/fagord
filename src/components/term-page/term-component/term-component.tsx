@@ -49,7 +49,7 @@ export const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
         <div className="col-12 col-md-6">
           <Definition termId={term._id} definition={term.definition} />
         </div>
-        <div className="col-8 col-sm-8 col-md-6 mt-2">
+        <div className="col-12 col-sm-8 col-md-6 mt-2">
           <TranslationCard term={term} />
         </div>
       </div>

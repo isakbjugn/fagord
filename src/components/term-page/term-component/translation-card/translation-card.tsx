@@ -5,8 +5,11 @@ import { Button, Card, CardBody, CardText, CardTitle, Col, Form, Label, Row } fr
 import { addVariant } from '../../../../lib/fetch';
 import type { SubmitVariant, Term } from '../../../../types/term';
 import { Spinner } from '../../../common/spinner/spinner';
+import { ToggleButton } from '../../../common/toggle-button/toggle-button';
+import { useDebounce } from '../../../utils/use-debounce';
+import { useOrdbokene } from '../../../utils/use-ordbokene';
 import { useToggle } from '../../../utils/use-toggle';
-import styles from './translation-card.module.css';
+import style from './translation-card.module.css';
 
 interface TranslationCardProps {
   term: Term;
@@ -15,13 +18,18 @@ interface TranslationCardProps {
 export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
-  const { register, handleSubmit } = useForm();
+  const { handleSubmit, register, setValue, watch } = useForm();
   const { mutate, isLoading } = useMutation({
     mutationFn: addVariant,
     onSettled: async () => {
       await queryClient.invalidateQueries(['dictionary']);
     },
   });
+  const debouncedSuggestion = useDebounce(watch('term'), 200);
+  const [isVariantValid, validationText, suggestion] = useOrdbokene(
+    debouncedSuggestion,
+    watch('dialect'),
+  );
 
   if (term === null) return <></>;
 
@@ -37,7 +45,7 @@ export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => 
   };
 
   return (
-    <Card className={styles.card}>
+    <Card className={style.card}>
       <CardBody>
         <CardTitle tag="h5">Oversettelse</CardTitle>
         <CardText>
@@ -59,47 +67,38 @@ export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => 
                   <Label>
                     <input
                       placeholder="Forslag"
-                      className="form-control"
+                      className={`form-control ${isVariantValid ? 'is-valid' : ''}`}
                       autoCapitalize="none"
                       {...register('term', { required: true })}
                     />
+                    <div className={`valid-feedback ${style['valid-feedback']}`}>
+                      {validationText}
+                    </div>
+                    {suggestion && (
+                      <div className={style['suggestion-feedback']}>
+                        Mente du{' '}
+                        <u
+                          onClick={() => setValue('term', suggestion)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {suggestion}
+                        </u>
+                        ?
+                      </div>
+                    )}
                   </Label>
                 </Col>
                 <Col>
-                  <div
-                    className="btn-group"
-                    role="group"
-                    aria-label="Basic checkbox toggle button group"
-                  >
-                    <input
-                      value="nb"
-                      defaultChecked={true}
-                      type="radio"
-                      className="btn-check"
-                      id="btncheck1"
-                      autoComplete="off"
-                      {...register('dialect')}
-                    />
-                    <label className="btn btn-outline-light" htmlFor="btncheck1">
-                      nb
-                    </label>
-
-                    <input
-                      value="nn"
-                      type="radio"
-                      className="btn-check"
-                      id="btncheck2"
-                      autoComplete="off"
-                      {...register('dialect')}
-                    />
-                    <label className="btn btn-outline-light" htmlFor="btncheck2">
-                      nn
-                    </label>
-                  </div>
+                  <ToggleButton
+                    leftLabel="nb"
+                    rightLabel="nn"
+                    fieldLabel="dialect"
+                    register={register}
+                  />
                 </Col>
               </Row>
             )}
-            <span className={styles.buttons}>
+            <span className={style.buttons}>
               {isWriting && (
                 <Button color="success" type="submit">
                   Send inn
