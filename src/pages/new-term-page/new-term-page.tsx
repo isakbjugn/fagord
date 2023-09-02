@@ -59,6 +59,7 @@ export const NewTermPage = (): JSX.Element => {
 
   useEffect(() => {
     setValue('en', termFromUrl);
+    setResult(null);
   }, [termFromUrl]);
 
   const watchField = watch('field', '');
