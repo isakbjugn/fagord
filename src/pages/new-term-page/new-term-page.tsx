@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { pickBy } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router-dom';
@@ -9,6 +8,7 @@ import { Modal } from '../../components/modal/modal';
 import { postTerm } from '../../lib/fetch';
 import type { SubmitTerm, Term } from '../../types/term';
 import { createId } from '../../utils/create-id';
+import { removeEmptyString } from '../../utils/pick-by';
 import { useDebounce } from '../../utils/use-debounce';
 import { useDictionary } from '../../utils/use-dictionary';
 import { useOrdbokene } from '../../utils/use-ordbokene';
@@ -67,7 +67,7 @@ export const NewTermPage = (): JSX.Element => {
   const watchPos = watch('pos', 'substantiv');
   const onSubmit = (input: SubmitTerm): void => {
     const cleanInput = watchField !== '' ? input : { ...input, subfield: '' };
-    mutate(pickBy(cleanInput, (value: string) => value.length > 0));
+    mutate(removeEmptyString(cleanInput));
   };
 
   const existsInTermbase = useMemo((): boolean => {
