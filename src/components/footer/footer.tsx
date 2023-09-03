@@ -1,3 +1,4 @@
+import { GitHub } from '@mui/icons-material';
 import style from './footer.module.css';
 
 const fagordGitHubUrl = 'https://github.com/isakbjugn/fagord';
@@ -7,7 +8,7 @@ export const Footer = (): JSX.Element => (
     <div className="row justify-content-center">
       <div className="col-auto">
         <a href={fagordGitHubUrl}>
-          <span className="fa-brands fa-github fa-inverse fa-2x"></span>
+          <GitHub color="secondary" fontSize="large" />
         </a>
       </div>
     </div>

@@ -11,9 +11,7 @@ export const Modal = ({ isOpen, toggle, children }: ModalProps): JSX.Element => 
   <ReactstrapModal fade={false} isOpen={isOpen}>
     <ModalBody>{children}</ModalBody>
     <ModalFooter>
-      <Button color="secondary" onClick={toggle}>
-        Lukk
-      </Button>
+      <Button onClick={toggle}>Lukk</Button>
     </ModalFooter>
   </ReactstrapModal>
 );
