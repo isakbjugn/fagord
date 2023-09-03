@@ -34,3 +34,13 @@ code {
 .breadcrumb a {
   color: floralwhite !important;
 }
+
+.MuiSvgIcon-colorSecondary {
+  color: #9EB9CA;
+  transition: all 0.2s ease !important;
+
+  &:hover {
+    color: #C9D8E2;
+    transition: all 0.2s ease;
+  }
+}

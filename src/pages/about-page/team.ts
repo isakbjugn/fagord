@@ -9,7 +9,7 @@ export const team: Person[] = [
     email: 'isakbjugn@gmail.com',
     linkedin: 'isakbjugn',
     description:
-      'Isak har mastergrad i Nanoteknologi og Entreprenørskap, utvekslet til Berkeley, og jobber i dag som frontend-utvikler hos SpareBank 1 utvikling i Oslo. Under studietiden sang han i TSS og Pirum, og synger nå i Uranienborg Vokalensemble.',
+      'Isak har mastergrad i Nanoteknologi og Entreprenørskap, utvekslet til Berkeley, og jobber i dag som programvareutvikler hos SpareBank 1 Utvikling i Oslo. Han er ivrig korsanger med fortid i TSS og Pirum, og synger nå i Dns i Oslo.',
   },
   {
     key: 'simen',

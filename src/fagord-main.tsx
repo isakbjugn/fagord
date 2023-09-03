@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-social/bootstrap-social.css';
 import './index.css';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -25,7 +24,7 @@ const fagordTheme = createTheme({
       main: '#2e9cca',
     },
     secondary: {
-      main: '#29648a',
+      main: '#9eb9ca',
     },
     background: {
       paper: '#fbfcfd',
