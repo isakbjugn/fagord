@@ -124,7 +124,7 @@ termRouter
         (row) => {
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');
-          res.json(row.variants);
+          res.json(row.get('variants'));
         },
         (err) => next(err)
       )

@@ -1,18 +1,18 @@
 const termMapper = (row) => {
   return {
-    _id: row._id,
-    en: row.en,
-    nb: row.nb,
-    nn: row.nn,
-    variants: parseVariants(row.variants),
-    field: row.field,
-    subfield: row.subfield,
-    pos: row.pos,
-    reference: row.reference,
-    _added: row._added,
-    _modified: row._modified,
-    _active: row._active,
-    definition: row.definition,
+    _id: row.get('_id'),
+    en: row.get('en'),
+    nb: row.get('nb'),
+    nn: row.get('nn'),
+    variants: parseVariants(row.get('variants')),
+    field: row.get('field'),
+    subfield: row.get('subfield'),
+    pos: row.get('pos'),
+    reference: row.get('reference'),
+    _added: row.get('_added'),
+    _modified: row.get('_modified'),
+    _active: row.get('_active'),
+    definition: row.get('definition'),
   };
 };
 
