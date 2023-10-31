@@ -24,13 +24,13 @@ export const TermPage = (): JSX.Element => {
   const { mutate } = useMutation({
     mutationFn: voteForVariant,
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries(['dictionary']);
+      await queryClient.invalidateQueries({ queryKey: ['dictionary'] });
       setVotedTerm(data.term);
       toggleModal();
     },
   });
 
-  if (dictionaryQuery.isLoading) return <Spinner />;
+  if (dictionaryQuery.isPending) return <Spinner />;
   if (dictionaryQuery.isError)
     return (
       <InfoMessage>

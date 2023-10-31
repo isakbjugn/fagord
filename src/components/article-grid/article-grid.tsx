@@ -7,9 +7,9 @@ import { Spinner } from '../spinner/spinner';
 import style from './article-grid.module.css';
 
 export const ArticleGrid = ({ hiddenKey }: { hiddenKey?: string }): JSX.Element => {
-  const { isLoading, isError, data: articles } = useArticles();
+  const { isPending, isError, data: articles } = useArticles();
 
-  if (isLoading) return <Spinner />;
+  if (isPending) return <Spinner />;
   if (isError) return <></>;
 
   return (

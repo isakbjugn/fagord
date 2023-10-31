@@ -15,7 +15,7 @@ import { TermPage } from './term-page/term-page';
 
 export const Router = (): JSX.Element => {
   const queryClient = useQueryClient();
-  void queryClient.prefetchQuery(['dictionary'], fetchTerms);
+  void queryClient.prefetchQuery({ queryKey: ['dictionary'], queryFn: fetchTerms });
 
   return (
     <>

@@ -3,14 +3,13 @@ const { docs } = require('@googleapis/docs');
 const { getFileIdsInFolder } = require('./drive-utils');
 
 const scopes = ['https://www.googleapis.com/auth/documents.readonly'];
-const jwt = new JWT(
-  process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-  null,
-  process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  scopes
-);
+const serviceAccountAuth = new JWT({
+  email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+  key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  scopes: scopes
+});
 
-const docsClient = docs({ version: 'v1', auth: jwt });
+const docsClient = docs({ version: 'v1', auth: serviceAccountAuth });
 
 const getFirstOfTextType = (contentArray, styleType) => {
   for (const content of contentArray) {

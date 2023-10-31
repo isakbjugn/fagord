@@ -30,7 +30,7 @@ export const DictionaryPage = (): JSX.Element => {
   const dictionaryQuery = useDictionary();
   const subjectQuery = useQuery({ queryKey: ['fields'], queryFn: fetchFields });
 
-  if (dictionaryQuery.isLoading) return <Loader />;
+  if (dictionaryQuery.isPending) return <Loader />;
   if (dictionaryQuery.isError)
     return (
       <InfoMessage>
@@ -56,7 +56,7 @@ export const DictionaryPage = (): JSX.Element => {
   };
 
   const subjectFilterComponent = (): JSX.Element => {
-    if (subjectQuery.isLoading) return <Spinner />;
+    if (subjectQuery.isPending) return <Spinner />;
     if (subjectQuery.isError) return <p>Kunne ikke laste fagfelt.</p>;
     return (
       <Select

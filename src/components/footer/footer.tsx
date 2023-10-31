@@ -1,4 +1,5 @@
 import { GitHub } from '@mui/icons-material';
+
 import style from './footer.module.css';
 
 const fagordGitHubUrl = 'https://github.com/isakbjugn/fagord';
