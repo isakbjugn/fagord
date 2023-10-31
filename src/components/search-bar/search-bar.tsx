@@ -27,7 +27,7 @@ export const SearchBar = (): JSX.Element => {
   const navigate = useNavigate();
 
   const options =
-    !dictionaryQuery.isLoading && !dictionaryQuery.isError ? dictionaryQuery.data : [];
+    !dictionaryQuery.isPending && !dictionaryQuery.isError ? dictionaryQuery.data : [];
 
   const filterOptions = (input: string) =>
     options
@@ -53,7 +53,7 @@ export const SearchBar = (): JSX.Element => {
   };
 
   const noOptionsMessage = () => {
-    if (dictionaryQuery.isLoading) return <p>Laster termliste</p>;
+    if (dictionaryQuery.isPending) return <p>Laster termliste</p>;
     if (dictionaryQuery.isError) return <p>Kunne ikke laste termliste</p>;
     if (input === '') return null;
     return (

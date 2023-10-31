@@ -33,11 +33,11 @@ export const NewTermPage = (): JSX.Element => {
   const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
   const [errorMessage, setErrorMessage] = useState('');
   const dictionaryQuery = useDictionary();
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: postTerm,
     onSuccess: async (data) => {
       setResult(data);
-      await queryClient.invalidateQueries(['dictionary']);
+      await queryClient.invalidateQueries({ queryKey: ['dictionary'] });
       reset();
     },
     onError: (error: Error) => {
@@ -72,7 +72,7 @@ export const NewTermPage = (): JSX.Element => {
 
   const existsInTermbase = useMemo((): boolean => {
     if (watchEn === '') return false;
-    if (dictionaryQuery.isLoading || dictionaryQuery.isError) return false;
+    if (dictionaryQuery.isPending || dictionaryQuery.isError) return false;
     const id = createId(watchEn, watchPos);
     return dictionaryQuery.data.find((term: Term) => term._id === id) !== undefined;
   }, [dictionaryQuery, watchEn, watchPos]);
@@ -225,7 +225,7 @@ export const NewTermPage = (): JSX.Element => {
           </Label>
         </Row>
         <Button color="success" type="submit">
-          {isLoading && (
+          {isPending && (
             <span
               className="spinner-border spinner-border-sm me-1"
               role="status"

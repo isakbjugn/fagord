@@ -19,10 +19,10 @@ export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => 
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
   const { handleSubmit, register, setValue, watch } = useForm();
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: addVariant,
     onSettled: async () => {
-      await queryClient.invalidateQueries(['dictionary']);
+      await queryClient.invalidateQueries({ queryKey: ['dictionary'] });
     },
   });
   const debouncedSuggestion = useDebounce(watch('term'), 200);
@@ -57,7 +57,7 @@ export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => 
         <CardText>
           Nynorsk: <em>{term.nn}</em>
         </CardText>
-        {isLoading ? (
+        {isPending ? (
           <Spinner />
         ) : (
           <Form onSubmit={handleSubmit(onSubmit)}>

@@ -8,7 +8,7 @@ import style from './article-content.module.css';
 
 export const ArticleContent = ({ articleId }: { articleId: string }): JSX.Element => {
   const {
-    isLoading: isLoadingHtml,
+    isPending: isPendingHtml,
     isError: isHtmlError,
     data: articleHtml,
   } = useQuery({
@@ -16,7 +16,7 @@ export const ArticleContent = ({ articleId }: { articleId: string }): JSX.Elemen
     queryFn: fetchArticleHtml,
   });
 
-  if (isLoadingHtml) return <Spinner />;
+  if (isPendingHtml) return <Spinner />;
   if (isHtmlError)
     return (
       <InfoMessage>

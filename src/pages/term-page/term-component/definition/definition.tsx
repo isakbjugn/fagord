@@ -17,14 +17,14 @@ export const Definition = ({ termId, definition }: DefinitionProps): JSX.Element
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
   const { register, handleSubmit, setValue } = useForm();
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: updateTerm,
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ['dictionary'] });
     },
   });
 
-  if (isLoading) return <Spinner />;
+  if (isPending) return <Spinner />;
 
   const onSubmit = (input: SubmitTerm): void => {
     toggleWriting();
