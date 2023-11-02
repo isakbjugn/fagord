@@ -7,7 +7,6 @@ import { Button, Form, Label, Row } from 'reactstrap';
 import { Modal } from '../../components/modal/modal';
 import { postTerm } from '../../lib/fetch';
 import type { SubmitTerm, Term } from '../../types/term';
-import { createId } from '../../utils/create-id';
 import { removeEmptyString } from '../../utils/pick-by';
 import { useDebounce } from '../../utils/use-debounce';
 import { useDictionary } from '../../utils/use-dictionary';
@@ -73,8 +72,7 @@ export const NewTermPage = (): JSX.Element => {
   const existsInTermbase = useMemo((): boolean => {
     if (watchEn === '') return false;
     if (dictionaryQuery.isPending || dictionaryQuery.isError) return false;
-    const id = createId(watchEn, watchPos);
-    return dictionaryQuery.data.find((term: Term) => term._id === id) !== undefined;
+    return dictionaryQuery.data.find((term: Term) => term.en === watchEn && term.pos === watchPos) !== undefined;
   }, [dictionaryQuery, watchEn, watchPos]);
 
   const setFieldFromResult = (result: Term) => {
@@ -130,7 +128,7 @@ export const NewTermPage = (): JSX.Element => {
               autoCapitalize="none"
               {...register('en', { required: true })}
             />
-            <div className="invalid-feedback">
+            <div className='invalid-feedback bright-feedback-text'>
               Kombinasjonen av term og ordklasse finnes fra før.
             </div>
           </Label>
@@ -146,7 +144,7 @@ export const NewTermPage = (): JSX.Element => {
                 autoCapitalize="none"
                 {...register('nb')}
               />
-              <div className="valid-feedback">{bokmalValidationText}</div>
+              <div className='valid-feedback bright-feedback-text'>{bokmalValidationText}</div>
               {bokmalSuggestion && (
                 <div className={style['suggestion-feedback']}>
                   Mente du{' '}
@@ -167,7 +165,7 @@ export const NewTermPage = (): JSX.Element => {
                 autoCapitalize="none"
                 {...register('nn')}
               />
-              <div className="valid-feedback">{nynorskValidationText}</div>
+              <div className='valid-feedback bright-feedback-text'>{nynorskValidationText}</div>
               {nynorskSuggestion && (
                 <div className={style['suggestion-feedback']}>
                   Mente du{' '}

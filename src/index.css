@@ -18,6 +18,8 @@ code {
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
+  --bs-form-invalid-color: #e57316;
+  --bs-form-invalid-border-color: #e57316;
 }
 
 #root {
@@ -36,11 +38,15 @@ code {
 }
 
 .MuiSvgIcon-colorSecondary {
-  color: #9EB9CA;
+  color: #9eb9ca;
   transition: all 0.2s ease !important;
 
   &:hover {
-    color: #C9D8E2;
+    color: #c9d8e2;
     transition: all 0.2s ease;
   }
+}
+
+.bright-feedback-text {
+  filter: brightness(130%);
 }
