@@ -2,11 +2,11 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const { verifyNoFormula } = require('./utils/sheet-middleware');
+const { verifyNoFormula } = require('./_utils/sheets-middleware');
 
-const termRouter = require('./routes/term-router');
-const fieldRouter = require('./routes/field-router');
-const docRouter = require('./routes/doc-router');
+const termRouter = require('./_routes/term-router');
+const fieldRouter = require('./_routes/field-router');
+const docRouter = require('./_routes/article-router');
 
 const app = express();
 app.set('port', process.env.PORT || 8080);

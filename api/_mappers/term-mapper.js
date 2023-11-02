@@ -26,35 +26,7 @@ const parseVariants = (variants) => {
 
 const termArrayMapper = (rows) => rows.map((row) => termMapper(row));
 
-const posMapper = (pos) => {
-  switch (pos) {
-    case 'substantiv':
-      return '_sub';
-    case 'verb':
-      return '_ver';
-    case 'adjektiv':
-      return '_adj';
-    case 'pronomen':
-      return '_pro';
-    case 'determinativ':
-      return '_det';
-    case 'preposisjon':
-      return '_pre';
-    case 'adverb':
-      return '_adv';
-    case 'subjunksjon':
-      return '_sbj';
-    case 'konjunksjon':
-      return '_knj';
-    case 'interjeksjon':
-      return '_int';
-    default:
-      return '';
-  }
-};
-
 module.exports = {
-  termMapper,
+  termMapper: termMapper,
   termArrayMapper,
-  posMapper,
 };

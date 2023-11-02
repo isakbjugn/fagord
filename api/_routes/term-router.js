@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { termMapper, termArrayMapper } = require('../mappers/term-mapper');
+const { termMapper, termArrayMapper } = require('../_mappers/term-mapper');
 const {
   getRows,
   postRow,
@@ -9,7 +9,7 @@ const {
   addVariant,
   promoteVariant,
   disableRow,
-} = require('../utils/sheet-utils');
+} = require('../_adapter/sheets-adapter');
 
 const termRouter = express.Router();
 
