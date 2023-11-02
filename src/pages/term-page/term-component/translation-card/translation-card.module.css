@@ -22,7 +22,3 @@
 .valid-feedback {
   white-space: nowrap;
 }
-
-:global(.valid-feedback) {
-  filter: brightness(130%);
-}

@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { getAllArticles } = require('../utils/doc-utils');
-const { exportFileAsHtml } = require('../utils/drive-utils');
-const docRouter = express.Router();
+const { getAllArticles } = require('../_adapter/docs-adapter');
+const { exportFileAsHtml } = require('../_adapter/drive-adapter');
+const articleRouter = express.Router();
 
-docRouter.use(bodyParser.json());
+articleRouter.use(bodyParser.json());
 
-docRouter.route('/').get((req, res, next) => {
+articleRouter.route('/').get((req, res, next) => {
   getAllArticles()
     .then(
       (articles) => {
@@ -19,7 +19,7 @@ docRouter.route('/').get((req, res, next) => {
     .catch((err) => next(err));
 });
 
-docRouter.route('/:articleId').get((req, res, next) => {
+articleRouter.route('/:articleId').get((req, res, next) => {
   exportFileAsHtml(req.params.articleId)
     .then(
       (result) => {
@@ -32,4 +32,4 @@ docRouter.route('/:articleId').get((req, res, next) => {
     .catch((err) => next(err));
 });
 
-module.exports = docRouter;
+module.exports = articleRouter;

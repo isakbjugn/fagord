@@ -1,6 +1,6 @@
 const { JWT } = require('google-auth-library');
 const { docs } = require('@googleapis/docs');
-const { getFileIdsInFolder } = require('./drive-utils');
+const { getFileIdsInFolder } = require('./drive-adapter');
 
 const scopes = ['https://www.googleapis.com/auth/documents.readonly'];
 const serviceAccountAuth = new JWT({

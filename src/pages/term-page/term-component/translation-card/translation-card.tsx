@@ -71,7 +71,7 @@ export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => 
                       autoCapitalize="none"
                       {...register('term', { required: true })}
                     />
-                    <div className={`valid-feedback ${style['valid-feedback']}`}>
+                    <div className={`valid-feedback bright-feedback-text ${style['valid-feedback']}`}>
                       {validationText}
                     </div>
                     {suggestion && (
