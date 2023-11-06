@@ -7,12 +7,7 @@ interface ToggleButtonProps {
   register: UseFormRegister<FieldValues>;
 }
 
-export const ToggleButton = ({
-  leftLabel,
-  rightLabel,
-  fieldLabel,
-  register,
-}: ToggleButtonProps) => (
+export const ToggleButton = ({ leftLabel, rightLabel, fieldLabel, register }: ToggleButtonProps) => (
   <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
     <input
       value={leftLabel}

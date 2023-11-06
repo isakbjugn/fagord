@@ -39,13 +39,7 @@ export const TermEntry = (props: { term: Term; index: number }): JSX.Element => 
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </DropdownTableCell>
-        <TermTableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          tabIndex={0}
-          onKeyDown={handleKeyDown}
-        >
+        <TermTableCell component="th" id={labelId} scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
           {term.en}
         </TermTableCell>
         <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown}>

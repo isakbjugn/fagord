@@ -20,14 +20,8 @@ export const NewTermPage = (): JSX.Element => {
   const { register, setValue, watch, reset, handleSubmit } = useForm();
   const debouncedBokmalTerm = useDebounce(watch('nb'), 200);
   const debouncedNynorskTerm = useDebounce(watch('nn'), 200);
-  const [isBokmalTermValid, bokmalValidationText, bokmalSuggestion] = useOrdbokene(
-    debouncedBokmalTerm,
-    'nb',
-  );
-  const [isNynorskTermValid, nynorskValidationText, nynorskSuggestion] = useOrdbokene(
-    debouncedNynorskTerm,
-    'nn',
-  );
+  const [isBokmalTermValid, bokmalValidationText, bokmalSuggestion] = useOrdbokene(debouncedBokmalTerm, 'nb');
+  const [isNynorskTermValid, nynorskValidationText, nynorskSuggestion] = useOrdbokene(debouncedNynorskTerm, 'nn');
   const [result, setResult] = useState<Term | null>();
   const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -84,10 +78,7 @@ export const NewTermPage = (): JSX.Element => {
     return (
       <section className={style.success}>
         <h2>Du har opprettet en term!</h2>
-        <p>
-          Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå lagt til i en voksende
-          termbase.
-        </p>
+        <p>Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå lagt til i en voksende termbase.</p>
         <span className={style.buttons}>
           <Link to={'../term/' + result._id}>
             <Button outline color="light">
@@ -128,7 +119,7 @@ export const NewTermPage = (): JSX.Element => {
               autoCapitalize="none"
               {...register('en', { required: true })}
             />
-            <div className='invalid-feedback bright-feedback-text'>
+            <div className="invalid-feedback bright-feedback-text">
               Kombinasjonen av term og ordklasse finnes fra før.
             </div>
           </Label>
@@ -144,7 +135,7 @@ export const NewTermPage = (): JSX.Element => {
                 autoCapitalize="none"
                 {...register('nb')}
               />
-              <div className='valid-feedback bright-feedback-text'>{bokmalValidationText}</div>
+              <div className="valid-feedback bright-feedback-text">{bokmalValidationText}</div>
               {bokmalSuggestion && (
                 <div className={style['suggestion-feedback']}>
                   Mente du{' '}
@@ -165,14 +156,11 @@ export const NewTermPage = (): JSX.Element => {
                 autoCapitalize="none"
                 {...register('nn')}
               />
-              <div className='valid-feedback bright-feedback-text'>{nynorskValidationText}</div>
+              <div className="valid-feedback bright-feedback-text">{nynorskValidationText}</div>
               {nynorskSuggestion && (
                 <div className={style['suggestion-feedback']}>
                   Mente du{' '}
-                  <u
-                    onClick={() => setValue('nn', nynorskSuggestion)}
-                    style={{ cursor: 'pointer' }}
-                  >
+                  <u onClick={() => setValue('nn', nynorskSuggestion)} style={{ cursor: 'pointer' }}>
                     {nynorskSuggestion}
                   </u>
                   ?
@@ -224,11 +212,7 @@ export const NewTermPage = (): JSX.Element => {
         </Row>
         <Button color="success" type="submit">
           {isPending && (
-            <span
-              className="spinner-border spinner-border-sm me-1"
-              role="status"
-              aria-hidden="true"
-            ></span>
+            <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
           )}
           Legg til term
         </Button>

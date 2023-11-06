@@ -110,10 +110,7 @@ export interface VoteForVariantArguments {
   variant: Variant;
 }
 
-export const voteForVariant = async ({
-  termId,
-  variant,
-}: VoteForVariantArguments): Promise<Variant> => {
+export const voteForVariant = async ({ termId, variant }: VoteForVariantArguments): Promise<Variant> => {
   const res = await fetch(baseApiUri + '/api/termer/' + termId + '/varianter', {
     headers: {
       Accept: 'application/json',

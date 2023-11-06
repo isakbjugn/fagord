@@ -112,9 +112,7 @@ export const DictionaryPage = (): JSX.Element => {
           </Form>
           {subjectFilterComponent()}
         </div>
-        <Dictionary
-          dictionary={applyTransFilter(applySubjectFilter(dictionaryQuery.data))}
-        ></Dictionary>
+        <Dictionary dictionary={applyTransFilter(applySubjectFilter(dictionaryQuery.data))}></Dictionary>
       </div>
     </main>
   );

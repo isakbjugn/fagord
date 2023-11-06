@@ -26,10 +26,7 @@ export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => 
     },
   });
   const debouncedSuggestion = useDebounce(watch('term'), 200);
-  const [isVariantValid, validationText, suggestion] = useOrdbokene(
-    debouncedSuggestion,
-    watch('dialect'),
-  );
+  const [isVariantValid, validationText, suggestion] = useOrdbokene(debouncedSuggestion, watch('dialect'));
 
   if (term === null) return <></>;
 
@@ -77,10 +74,7 @@ export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => 
                     {suggestion && (
                       <div className={style['suggestion-feedback']}>
                         Mente du{' '}
-                        <u
-                          onClick={() => setValue('term', suggestion)}
-                          style={{ cursor: 'pointer' }}
-                        >
+                        <u onClick={() => setValue('term', suggestion)} style={{ cursor: 'pointer' }}>
                           {suggestion}
                         </u>
                         ?
@@ -89,12 +83,7 @@ export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => 
                   </Label>
                 </Col>
                 <Col>
-                  <ToggleButton
-                    leftLabel="nb"
-                    rightLabel="nn"
-                    fieldLabel="dialect"
-                    register={register}
-                  />
+                  <ToggleButton leftLabel="nb" rightLabel="nn" fieldLabel="dialect" register={register} />
                 </Col>
               </Row>
             )}
