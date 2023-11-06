@@ -3,7 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Footer } from '../components/footer/footer';
 import { Header } from '../components/header/header';
+import { PageAlert } from '../components/page-alert/page-alert';
 import { fetchTerms } from '../lib/fetch';
+import { featureToggles } from '../utils/feature-toggles';
 import { AboutPage } from './about-page/about-page';
 import { Article } from './article-page/article/article';
 import { ArticlePage } from './article-page/article-page';
@@ -20,11 +22,14 @@ export const Router = (): JSX.Element => {
   return (
     <>
       <Header />
+      <PageAlert />
       <Routes>
         <Route path="/hjem" element={<HomePage />} />
-        <Route path="/artikkel" element={<ArticlePage />}>
-          <Route path=":articleKey" element={<Article />} />
-        </Route>
+        {featureToggles('articles') && (
+          <Route path="/artikler" element={<ArticlePage />}>
+            <Route path=":articleKey" element={<Article />} />
+          </Route>
+        )}
         <Route path="/termliste" element={<DictionaryPage />} />
         <Route path="/term/:termId" element={<TermPage />} />
         <Route path="/ny-term" element={<NewTermPage />} />

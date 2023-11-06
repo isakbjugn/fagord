@@ -72,7 +72,10 @@ export const NewTermPage = (): JSX.Element => {
   const existsInTermbase = useMemo((): boolean => {
     if (watchEn === '') return false;
     if (dictionaryQuery.isPending || dictionaryQuery.isError) return false;
-    return dictionaryQuery.data.find((term: Term) => term.en === watchEn && term.pos === watchPos) !== undefined;
+    return (
+      dictionaryQuery.data.find((term: Term) => term.en === watchEn && term.pos === watchPos) !==
+      undefined
+    );
   }, [dictionaryQuery, watchEn, watchPos]);
 
   const setFieldFromResult = (result: Term) => {
@@ -128,7 +131,7 @@ export const NewTermPage = (): JSX.Element => {
               autoCapitalize="none"
               {...register('en', { required: true })}
             />
-            <div className='invalid-feedback bright-feedback-text'>
+            <div className="invalid-feedback bright-feedback-text">
               Kombinasjonen av term og ordklasse finnes fra før.
             </div>
           </Label>
@@ -144,7 +147,7 @@ export const NewTermPage = (): JSX.Element => {
                 autoCapitalize="none"
                 {...register('nb')}
               />
-              <div className='valid-feedback bright-feedback-text'>{bokmalValidationText}</div>
+              <div className="valid-feedback bright-feedback-text">{bokmalValidationText}</div>
               {bokmalSuggestion && (
                 <div className={style['suggestion-feedback']}>
                   Mente du{' '}
@@ -165,7 +168,7 @@ export const NewTermPage = (): JSX.Element => {
                 autoCapitalize="none"
                 {...register('nn')}
               />
-              <div className='valid-feedback bright-feedback-text'>{nynorskValidationText}</div>
+              <div className="valid-feedback bright-feedback-text">{nynorskValidationText}</div>
               {nynorskSuggestion && (
                 <div className={style['suggestion-feedback']}>
                   Mente du{' '}

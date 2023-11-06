@@ -24,7 +24,7 @@ export const ArticleGrid = ({ hiddenKey }: { hiddenKey?: string }): JSX.Element 
           >
             <CardActionArea
               component={Link}
-              to={'/artikkel/' + article.documentKey}
+              to={'/artikler/' + article.documentKey}
               className={style['action-area']}
             >
               <CardMedia

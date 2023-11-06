@@ -2,9 +2,8 @@ import { Link } from 'react-router-dom';
 
 import { ArticleGrid } from '../../components/article-grid/article-grid';
 import { Jumbotron } from '../../components/jumbotron/jumbotron';
+import { featureToggles } from '../../utils/feature-toggles';
 import style from './home-page.module.css';
-
-const showArticles = process.env.NODE_ENV === 'development';
 
 export const HomePage = (): JSX.Element => (
   <main className={style.home}>
@@ -19,6 +18,6 @@ export const HomePage = (): JSX.Element => (
         Til termliste!
       </Link>
     </Jumbotron>
-    {showArticles && <ArticleGrid />}
+    {featureToggles('articles') && <ArticleGrid />}
   </main>
 );
