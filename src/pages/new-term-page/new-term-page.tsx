@@ -20,14 +20,8 @@ export const NewTermPage = (): JSX.Element => {
   const { register, setValue, watch, reset, handleSubmit } = useForm();
   const debouncedBokmalTerm = useDebounce(watch('nb'), 200);
   const debouncedNynorskTerm = useDebounce(watch('nn'), 200);
-  const [isBokmalTermValid, bokmalValidationText, bokmalSuggestion] = useOrdbokene(
-    debouncedBokmalTerm,
-    'nb',
-  );
-  const [isNynorskTermValid, nynorskValidationText, nynorskSuggestion] = useOrdbokene(
-    debouncedNynorskTerm,
-    'nn',
-  );
+  const [isBokmalTermValid, bokmalValidationText, bokmalSuggestion] = useOrdbokene(debouncedBokmalTerm, 'nb');
+  const [isNynorskTermValid, nynorskValidationText, nynorskSuggestion] = useOrdbokene(debouncedNynorskTerm, 'nn');
   const [result, setResult] = useState<Term | null>();
   const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -72,10 +66,7 @@ export const NewTermPage = (): JSX.Element => {
   const existsInTermbase = useMemo((): boolean => {
     if (watchEn === '') return false;
     if (dictionaryQuery.isPending || dictionaryQuery.isError) return false;
-    return (
-      dictionaryQuery.data.find((term: Term) => term.en === watchEn && term.pos === watchPos) !==
-      undefined
-    );
+    return dictionaryQuery.data.find((term: Term) => term.en === watchEn && term.pos === watchPos) !== undefined;
   }, [dictionaryQuery, watchEn, watchPos]);
 
   const setFieldFromResult = (result: Term) => {
@@ -87,10 +78,7 @@ export const NewTermPage = (): JSX.Element => {
     return (
       <section className={style.success}>
         <h2>Du har opprettet en term!</h2>
-        <p>
-          Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå lagt til i en voksende
-          termbase.
-        </p>
+        <p>Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå lagt til i en voksende termbase.</p>
         <span className={style.buttons}>
           <Link to={'../term/' + result._id}>
             <Button outline color="light">
@@ -172,10 +160,7 @@ export const NewTermPage = (): JSX.Element => {
               {nynorskSuggestion && (
                 <div className={style['suggestion-feedback']}>
                   Mente du{' '}
-                  <u
-                    onClick={() => setValue('nn', nynorskSuggestion)}
-                    style={{ cursor: 'pointer' }}
-                  >
+                  <u onClick={() => setValue('nn', nynorskSuggestion)} style={{ cursor: 'pointer' }}>
                     {nynorskSuggestion}
                   </u>
                   ?
@@ -227,11 +212,7 @@ export const NewTermPage = (): JSX.Element => {
         </Row>
         <Button color="success" type="submit">
           {isPending && (
-            <span
-              className="spinner-border spinner-border-sm me-1"
-              role="status"
-              aria-hidden="true"
-            ></span>
+            <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
           )}
           Legg til term
         </Button>

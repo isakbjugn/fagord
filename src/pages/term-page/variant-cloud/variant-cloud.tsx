@@ -18,8 +18,7 @@ export const VariantCloud = ({ termId, variants, mutate }: VariantCloudProps): J
   };
 
   const renderTermNoDuplicates = (variant: Variant): string => {
-    if (variants.filter((v) => v.term === variant.term).length > 1)
-      return variant.term + ' (' + variant.dialect + ')';
+    if (variants.filter((v) => v.term === variant.term).length > 1) return variant.term + ' (' + variant.dialect + ')';
     return variant.term;
   };
 

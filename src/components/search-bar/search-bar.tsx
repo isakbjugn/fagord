@@ -26,8 +26,7 @@ export const SearchBar = (): JSX.Element => {
   const dictionaryQuery = useDictionary();
   const navigate = useNavigate();
 
-  const options =
-    !dictionaryQuery.isPending && !dictionaryQuery.isError ? dictionaryQuery.data : [];
+  const options = !dictionaryQuery.isPending && !dictionaryQuery.isError ? dictionaryQuery.data : [];
 
   const filterOptions = (input: string) =>
     options

@@ -18,11 +18,7 @@ export const useOrdbokene = (searchTerm: string, dialect: 'nb' | 'nn') => {
 
   return lookup === undefined || searchTerm === undefined || searchTerm === ''
     ? ['', false]
-    : ([
-        isTermValid(lookup),
-        getValidationText(lookup, DictionaryName[dialect]),
-        getSuggestion(lookup),
-      ] as const);
+    : ([isTermValid(lookup), getValidationText(lookup, DictionaryName[dialect]), getSuggestion(lookup)] as const);
 };
 
 const getLookupFromOrdbokene = (lookup: OrdbokeneResponse, searchTerm: string): Lookup => {
@@ -34,8 +30,7 @@ const getLookupFromOrdbokene = (lookup: OrdbokeneResponse, searchTerm: string): 
   return { exact, inflect, similar };
 };
 
-const isTermValid = (lookup: Lookup): boolean =>
-  lookup ? lookup?.exact || lookup?.inflect.length > 0 : false;
+const isTermValid = (lookup: Lookup): boolean => (lookup ? lookup?.exact || lookup?.inflect.length > 0 : false);
 
 const getValidationText = (lookup: Lookup, dictionaryName: string): string => {
   if (lookup.exact) {

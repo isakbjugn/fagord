@@ -7,10 +7,7 @@ const DictionaryKey = {
   nn: 'nn',
 };
 
-export const fetchSuggestions = async (
-  term: string,
-  dialect: 'nb' | 'nn',
-): Promise<OrdbokeneResponse> => {
+export const fetchSuggestions = async (term: string, dialect: 'nb' | 'nn'): Promise<OrdbokeneResponse> => {
   const queryString = `q=${term}&dict=${DictionaryKey[dialect]}&include=eis&dform=int`;
   const res = await fetch(`${ordbokeneApiUrl}suggest?${queryString}`);
 
