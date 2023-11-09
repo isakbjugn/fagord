@@ -1,0 +1,37 @@
+.article {
+  margin: 32px 12px;
+}
+
+@media screen and (min-width: 768px) {
+  .article {
+    margin: 48px;
+  }
+
+  .image {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .article {
+    max-width: 928px;
+    margin: 48px auto;
+  }
+}
+
+.image {
+  margin: 16px auto 32px;
+  max-width: var(--breakpoint-lg);
+  background-color: var(--color-dark-blue);
+  padding-bottom: 12px;
+}
+
+.image img {
+  width: 100%;
+  min-width: 100%;
+}
+
+.image figcaption {
+  padding: 8px 12px 0;
+}

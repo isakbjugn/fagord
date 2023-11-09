@@ -1,15 +1,19 @@
-.article > p > span {
-  color: white !important;
+.body {
+  max-width: 670px;
+  margin: 0 auto;
 }
 
-.article > table > tr > td {
-  color: white !important;
+.body p {
+  text-align: justify;
+  text-justify: inter-word;
 }
 
-.article > table > tbody > tr > td > p > span {
-  color: white !important;
+.body p span img {
+  width: 100%;
 }
 
-.article > table > tbody > tr > td {
-  border-color: #9eb9ca !important;
+@media screen and (max-width: 768px) {
+  .body {
+    max-width: 100%;
+  }
 }

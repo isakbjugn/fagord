@@ -26,19 +26,17 @@ export const ArticleContent = ({ articleId }: { articleId: string }): JSX.Elemen
 
   const cleanHtml = sanitizeHtml(articleHtml, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-    allowedAttributes: false,
     transformTags: {
       img: sanitizeHtml.simpleTransform('img', {
         referrerpolicy: 'no-referrer',
       }),
     },
+    exclusiveFilter: (frame) => frame.tag === 'p' && ['title', 'subtitle'].includes(frame.attribs.class),
   });
 
   return (
-    <div className="container-sm m-5">
-      <div className="col-12 col-lg-8 mx-auto">
-        <div className={style.article} dangerouslySetInnerHTML={{ __html: cleanHtml }} />
-      </div>
-    </div>
+    <section className={style.body}>
+      <div dangerouslySetInnerHTML={{ __html: cleanHtml }} />
+    </section>
   );
 };
