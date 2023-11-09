@@ -1,6 +1,6 @@
 const { JWT } = require('google-auth-library');
 const { docs } = require('@googleapis/docs');
-const { getFileIdsInFolder } = require('./drive-adapter');
+const { listFilesInFolder } = require('./drive-adapter');
 
 const scopes = ['https://www.googleapis.com/auth/documents.readonly'];
 const serviceAccountAuth = new JWT({
@@ -54,26 +54,35 @@ const getDocument = async (documentId) => {
   });
 
   return {
-    documentId,
-    documentKey: document.data.title.toLowerCase().replace(/\s+/g, '-'),
-    documentTitle: document.data.title,
     title: getTitle(document.data.body.content),
     subtitle: getSubtitle(document.data.body.content),
     imageUrl: getImageUrl(document.data.inlineObjects),
   };
 };
 
-const getAllArticles = async () => {
-  const documentIds = await getFileIdsInFolder(process.env.ARTICLE_FOLDER_ID);
-  let articles = [];
-  for (const id of documentIds) {
-    const article = await getDocument(id);
-    articles.push(article);
+const getAllDocuments = async () => {
+  const files = await listFilesInFolder(process.env.ARTICLE_FOLDER_ID);
+  let documents = [];
+  for (const file of files) {
+    const document = await getDocument(file.id);
+    document.id = file.id;
+    document.key = deriveDocumentKey(file.name);
+    document.name = file.name;
+    document.createdTime = file.createdTime;
+    document.modifiedTime = file.modifiedTime;
+    documents.push(document);
   }
-  return articles;
+  return documents;
 };
+
+const deriveDocumentKey = (documentTitle) =>
+  documentTitle.toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace('ø', 'o')
+      .replace('æ', 'a')
+      .replace('å', 'a');
 
 module.exports = {
   getDocument,
-  getAllArticles,
+  getAllDocuments,
 };

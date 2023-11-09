@@ -17,14 +17,20 @@ const exportFileAsHtml = async (fileId) => {
   });
 };
 
-const getFileIdsInFolder = async (folderId) => {
+const listFilesInFolder = async (folderId) => {
   const folder = await driveClient.files.list({
+    fields: 'files(id, name, createdTime, modifiedTime)',
     q: `'${folderId}' in parents and trashed=false`,
   });
-  return folder.data.files.map((file) => file.id);
+  return folder.data.files.map((file) => ({
+    id: file.id,
+    name: file.name,
+    createdTime: file.createdTime,
+    modifiedTime: file.modifiedTime,
+  }));
 };
 
 module.exports = {
-  getFileIdsInFolder,
+  listFilesInFolder,
   exportFileAsHtml,
 };

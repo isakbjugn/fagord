@@ -15,10 +15,10 @@ export const ArticleGrid = ({ hiddenKey }: { hiddenKey?: string }): JSX.Element 
   return (
     <div className={style.grid}>
       {articles
-        .filter((article: Article) => article.documentKey !== hiddenKey)
+        .filter((article: Article) => article.key !== hiddenKey)
         .map((article: Article) => (
-          <Card className={style.article} key={article.documentKey} sx={{ backgroundColor: '#29648a' }}>
-            <CardActionArea component={Link} to={'/artikler/' + article.documentKey} className={style['action-area']}>
+          <Card className={style.article} key={article.key} sx={{ backgroundColor: '#29648a' }}>
+            <CardActionArea component={Link} to={'/artikler/' + article.key} className={style['action-area']}>
               <CardMedia
                 component="img"
                 height="140"

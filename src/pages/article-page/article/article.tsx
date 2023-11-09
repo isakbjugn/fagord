@@ -9,7 +9,7 @@ export const Article = (): JSX.Element => {
   const { data: articles } = useArticles();
   if (articles === undefined) return <></>;
 
-  if (!articles.some((article) => article.documentKey === articleKey)) {
+  if (!articles.some((article) => article.key === articleKey)) {
     return (
       <InfoMessage>
         <p>Artikkelen finnes ikke.</p>
@@ -17,9 +17,7 @@ export const Article = (): JSX.Element => {
     );
   }
 
-  const articleId: string = articles
-    .filter((article) => article.documentKey === articleKey)
-    .map((article) => article.documentId)[0];
+  const article = articles.filter((article) => article.key === articleKey)[0];
 
-  return <ArticleContent articleId={articleId} />;
+  return <ArticleContent articleId={article.id} />;
 };

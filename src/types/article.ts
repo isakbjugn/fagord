@@ -1,8 +1,10 @@
 export interface Article {
-  documentId: string;
-  documentKey: string;
-  documentTitle: string;
-  imageUrl: string;
-  subtitle: string;
+  id: string;
+  key: string;
+  name: string;
+  createdTime: string;
+  modifiedTime: string;
   title: string;
+  subtitle: string;
+  imageUrl: string;
 }

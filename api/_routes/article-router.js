@@ -1,18 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { getAllArticles } = require('../_adapter/docs-adapter');
+const { getAllDocuments } = require('../_adapter/docs-adapter');
 const { exportFileAsHtml } = require('../_adapter/drive-adapter');
 const articleRouter = express.Router();
 
 articleRouter.use(bodyParser.json());
 
 articleRouter.route('/').get((req, res, next) => {
-  getAllArticles()
+  getAllDocuments()
     .then(
-      (articles) => {
+      (documents) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(articles);
+        res.json(documents);
       },
       (err) => next(err)
     )
