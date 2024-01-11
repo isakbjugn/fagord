@@ -26,11 +26,31 @@ export const ArticleContent = ({ articleId }: { articleId: string }): JSX.Elemen
 
   const cleanHtml = sanitizeHtml(articleHtml, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-    transformTags: {
-      img: sanitizeHtml.simpleTransform('img', {
-        referrerpolicy: 'no-referrer',
-      }),
+    allowedAttributes: {
+      span: ['style'],
     },
+    transformTags: {
+      span: (tagName, attribs) => {
+        const style = attribs['style'] ?? '';
+        if (style.includes('font-weight:700')) {
+          return {
+            tagName: 'b',
+            attribs: {},
+          };
+        }
+        if (style.includes('font-style:italic')) {
+          return {
+            tagName: 'i',
+            attribs: {},
+          };
+        }
+        return {
+          tagName: 'span',
+          attribs: {},
+        };
+      },
+    },
+
     exclusiveFilter: (frame) => frame.tag === 'p' && ['title', 'subtitle'].includes(frame.attribs.class),
   });
 

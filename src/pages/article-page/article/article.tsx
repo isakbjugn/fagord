@@ -27,7 +27,7 @@ export const Article = (): JSX.Element => {
         <big>{article.subtitle}</big>
       </p>
       <figure className={style.image}>
-        <img src={article.imageUrl} alt="alt-bildetekst" referrerPolicy="no-referrer" />
+        <img src={article.imageUrl || 'https://picsum.photos/928/521'} alt="alt-bildetekst" referrerPolicy="no-referrer" />
         <figcaption>{article.subtitle}</figcaption>
       </figure>
       <ArticleContent articleId={article.id} />
