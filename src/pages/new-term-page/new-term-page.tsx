@@ -1,17 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Form, Label, Row } from 'reactstrap';
 
-import { Modal } from '../../components/modal/modal';
+import { Dialog } from '../../components/dialog/dialog';
 import { postTerm } from '../../lib/fetch';
 import type { SubmitTerm, Term } from '../../types/term';
 import { removeEmptyString } from '../../utils/pick-by';
 import { useDebounce } from '../../utils/use-debounce';
 import { useDictionary } from '../../utils/use-dictionary';
 import { useOrdbokene } from '../../utils/use-ordbokene';
-import { useToggle } from '../../utils/use-toggle';
 import style from './new-term-page.module.css';
 
 export const NewTermPage = (): JSX.Element => {
@@ -23,7 +22,7 @@ export const NewTermPage = (): JSX.Element => {
   const [isBokmalTermValid, bokmalValidationText, bokmalSuggestion] = useOrdbokene(debouncedBokmalTerm, 'nb');
   const [isNynorskTermValid, nynorskValidationText, nynorskSuggestion] = useOrdbokene(debouncedNynorskTerm, 'nn');
   const [result, setResult] = useState<Term | null>();
-  const [isErrorModalOpen, toggleErrorModal] = useToggle(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const dictionaryQuery = useDictionary();
   const { mutate, isPending } = useMutation({
@@ -46,7 +45,7 @@ export const NewTermPage = (): JSX.Element => {
         default:
           setErrorMessage('Det skjedde en feil under posting av term');
       }
-      toggleErrorModal();
+      dialogRef.current?.showModal();
     },
   });
 
@@ -217,9 +216,9 @@ export const NewTermPage = (): JSX.Element => {
           Legg til term
         </Button>
       </Form>
-      <Modal isOpen={isErrorModalOpen} toggle={toggleErrorModal}>
+      <Dialog ref={dialogRef}>
         <p>{errorMessage}</p>
-      </Modal>
+      </Dialog>
     </main>
   );
 };
