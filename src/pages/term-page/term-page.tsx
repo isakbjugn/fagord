@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
+import { Dialog } from '../../components/dialog/dialog';
 import { InfoMessage } from '../../components/info-message/info-message';
-import { Modal } from '../../components/modal/modal';
 import { Spinner } from '../../components/spinner/spinner';
 import { voteForVariant } from '../../lib/fetch';
 import type { Term } from '../../types/term';
 import { useDictionary } from '../../utils/use-dictionary';
-import { useToggle } from '../../utils/use-toggle';
 import { TermComponent } from './term-component/term-component';
 import { VariantCloud } from './variant-cloud/variant-cloud';
 
@@ -18,7 +17,7 @@ export const TermPage = (): JSX.Element => {
 
   const dictionaryQuery = useDictionary();
   const queryClient = useQueryClient();
-  const [isModalOpen, toggleModal] = useToggle(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const [votedTerm, setVotedTerm] = useState<string>('');
 
   const { mutate } = useMutation({
@@ -26,7 +25,7 @@ export const TermPage = (): JSX.Element => {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: ['dictionary'] });
       setVotedTerm(data.term);
-      toggleModal();
+      dialogRef.current?.showModal();
     },
   });
 
@@ -60,11 +59,11 @@ export const TermPage = (): JSX.Element => {
         </div>
         <TermComponent term={term} />
         <VariantCloud termId={term._id} variants={term.variants} mutate={mutate} />
-        <Modal isOpen={isModalOpen} toggle={toggleModal}>
+        <Dialog ref={dialogRef}>
           <p>
             Du har gitt én stemme til <em>«{votedTerm}»</em>.
           </p>
-        </Modal>
+        </Dialog>
       </div>
     </main>
   );
