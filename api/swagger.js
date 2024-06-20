@@ -5,7 +5,7 @@ const doc = {
     title: 'Fagord API',
     description: 'Åpent API for deg som ønsker å jobbe med fagtermer'
   },
-  host: process.env.BACKEND_HOST,
+  servers: [process.env.BACKEND_URL],
   tags: ['Artikler', 'Fagfelt', 'Termer'],
   components: {
     schemas: {
