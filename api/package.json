@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index",
-    "build": "node swagger.js && node index",
+    "start": "node swagger.js && node index",
     "test": "jest"
   },
   "author": "Isak Kyrre Lichtwarck Bjugn",
