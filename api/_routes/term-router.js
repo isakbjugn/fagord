@@ -18,6 +18,12 @@ termRouter.use(bodyParser.json());
 termRouter
   .route('/')
   .get((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+      #swagger.responses[200] = {
+        schema: { $ref: "#/definitions/Term" }
+      }
+     */
     getRows()
       .then(
         (rows) => {
@@ -30,6 +36,9 @@ termRouter
       .catch((err) => next(err));
   })
   .post((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+     */
     if (Object.keys(req.body).length === 0) {
       const err = new Error('Ingen term i spørringen');
       err.statusCode = 400;
@@ -52,11 +61,23 @@ termRouter
       .catch((err) => next(err));
   })
   .put((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+      #swagger.responses[405] = {
+        description: "PUT-operasjonen er ikke tillatt på /termer"
+      }
+     */
     res.statusCode = 405;
     res.setHeader('Allow', 'GET, POST');
     res.end('PUT-operasjonen er ikke tillatt på /termer');
   })
   .delete((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+      #swagger.responses[405] = {
+        description: "DELETE-operasjonen er ikke tillatt på /termer"
+      }
+     */
     res.statusCode = 405;
     res.setHeader('Allow', 'GET, POST');
     res.end('DELETE-operasjonen er ikke tillatt på /termer');
@@ -65,6 +86,9 @@ termRouter
 termRouter
   .route('/:termId')
   .get((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -77,11 +101,20 @@ termRouter
       .catch((err) => next(err));
   })
   .post((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+      #swagger.responses[405] = {
+        description: "POST-operasjonen er ikke tillatt på /termer/:termId"
+      }
+     */
     res.statusCode = 405;
     res.setHeader('Allow', 'GET, PUT, DELETE');
     res.end('POST-operasjon ikke tillatt på /termer/' + req.params.term);
   })
   .put((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -99,6 +132,9 @@ termRouter
       .catch((err) => next(err));
   })
   .delete((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -119,6 +155,9 @@ termRouter
 termRouter
   .route('/:termId/varianter')
   .get((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -131,6 +170,9 @@ termRouter
       .catch((err) => next(err));
   })
   .post((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+     */
     if (Object.keys(req.body).length === 0) {
       const err = new Error('Ingen variant i spørringen');
       err.statusCode = 400;
@@ -153,6 +195,9 @@ termRouter
       .catch((err) => next(err));
   })
   .put((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -170,6 +215,12 @@ termRouter
       .catch((err) => next(err));
   })
   .delete((req, res, next) => {
+    /*
+      #swagger.tags = ['Termer']
+      #swagger.responses[405] = {
+        description: "DELETE-operasjonen er ikke tillatt på /termer/:termId/varianter"
+      }
+     */
     res.statusCode = 405;
     res.setHeader('Allow', 'GET, POST, PUT');
     res.end(

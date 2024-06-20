@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger.json');
 const { verifyNoFormula } = require('./_utils/sheets-middleware');
 
 const termRouter = require('./_routes/term-router');
@@ -16,16 +18,14 @@ app.use(cors());
 
 app.all('*', verifyNoFormula);
 
+app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/api/termer', termRouter);
 app.use('/api/fagfelt', fieldRouter);
 app.use('/api/artikler', docRouter);
 
-app.get('/api', (req, res) => {
-  res.send('Express på Vercel!');
-});
-
 app.listen(app.get('port'), () => {
   console.log('Tjener kjører på port', app.get('port'));
+  console.log(`API-dokumentasjon er tilgjengelig på ${process.env.URL}/api`)
 });
 
 module.exports = app;
