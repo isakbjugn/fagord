@@ -29,11 +29,17 @@ dependencies:
   google-spreadsheet:
     specifier: 4.1.0
     version: 4.1.0(google-auth-library@9.2.0)
+  swagger-ui-express:
+    specifier: ^5.0.1
+    version: 5.0.1(express@4.18.2)
 
 devDependencies:
   jest:
     specifier: 29.7.0
     version: 29.7.0
+  swagger-autogen:
+    specifier: ^2.23.7
+    version: 2.23.7
 
 packages:
 
@@ -748,6 +754,12 @@ packages:
       mime-types: 2.1.35
       negotiator: 0.6.3
     dev: false
+
+  /acorn@7.4.1:
+    resolution: {integrity: sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+    dev: true
 
   /agent-base@7.1.0:
     resolution: {integrity: sha512-o/zjMZRhJxny7OyEF+Op8X+efiELC7k7yOjMzgfzVqOzXqkBkWI79YoTdOtsuWd5BWhAGAuOY/Xa6xpiaWXiNg==}
@@ -2792,6 +2804,29 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
     dev: true
+
+  /swagger-autogen@2.23.7:
+    resolution: {integrity: sha512-vr7uRmuV0DCxWc0wokLJAwX3GwQFJ0jwN+AWk0hKxre2EZwusnkGSGdVFd82u7fQLgwSTnbWkxUL7HXuz5LTZQ==}
+    dependencies:
+      acorn: 7.4.1
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      json5: 2.2.3
+    dev: true
+
+  /swagger-ui-dist@5.17.14:
+    resolution: {integrity: sha512-CVbSfaLpstV65OnSjbXfVd6Sta3q3F7Cj/yYuvHMp1P90LztOLs6PfUnKEVAeiIVQt9u2SaPwv0LiH/OyMjHRw==}
+    dev: false
+
+  /swagger-ui-express@5.0.1(express@4.18.2):
+    resolution: {integrity: sha512-SrNU3RiBGTLLmFU8GIJdOdanJTl4TOmT27tt3bWWHppqYmAZ6IDuEuBvMU6nZq0zLEe6b/1rACXCgLZqO6ZfrA==}
+    engines: {node: '>= v0.10.32'}
+    peerDependencies:
+      express: '>=4.0.0 || >=5.0.0-beta'
+    dependencies:
+      express: 4.18.2
+      swagger-ui-dist: 5.17.14
+    dev: false
 
   /test-exclude@6.0.0:
     resolution: {integrity: sha512-cAGWPIyOHU6zlmg88jwm7VRyXnMN7iV68OGAbYDk/Mh/xC/pzVPlQtY6ngoIH/5/tciuhGfvESU8GrHrcxD56w==}

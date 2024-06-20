@@ -8,6 +8,9 @@ const fieldRouter = express.Router();
 fieldRouter.use(bodyParser.json());
 
 fieldRouter.route('/').get((req, res, next) => {
+  /*
+    #swagger.tags = ['Fagfelt']
+   */
   getRows()
     .then(
       (rows) => {
