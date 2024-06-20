@@ -30,8 +30,8 @@ dependencies:
     specifier: 4.1.0
     version: 4.1.0(google-auth-library@9.2.0)
   swagger-ui-express:
-    specifier: ^5.0.1
-    version: 5.0.1(express@4.18.2)
+    specifier: 4.6.3
+    version: 4.6.3(express@4.18.2)
 
 devDependencies:
   jest:
@@ -2818,8 +2818,8 @@ packages:
     resolution: {integrity: sha512-CVbSfaLpstV65OnSjbXfVd6Sta3q3F7Cj/yYuvHMp1P90LztOLs6PfUnKEVAeiIVQt9u2SaPwv0LiH/OyMjHRw==}
     dev: false
 
-  /swagger-ui-express@5.0.1(express@4.18.2):
-    resolution: {integrity: sha512-SrNU3RiBGTLLmFU8GIJdOdanJTl4TOmT27tt3bWWHppqYmAZ6IDuEuBvMU6nZq0zLEe6b/1rACXCgLZqO6ZfrA==}
+  /swagger-ui-express@4.6.3(express@4.18.2):
+    resolution: {integrity: sha512-CDje4PndhTD2HkgyKH3pab+LKspDeB/NhPN2OF1j+piYIamQqBYwAXWESOT1Yju2xFg51bRW9sUng2WxDjzArw==}
     engines: {node: '>= v0.10.32'}
     peerDependencies:
       express: '>=4.0.0 || >=5.0.0-beta'
