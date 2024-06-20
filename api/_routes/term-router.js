@@ -60,28 +60,6 @@ termRouter
       )
       .catch((err) => next(err));
   })
-  .put((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-      #swagger.responses[405] = {
-        description: "PUT-operasjonen er ikke tillatt på /termer"
-      }
-     */
-    res.statusCode = 405;
-    res.setHeader('Allow', 'GET, POST');
-    res.end('PUT-operasjonen er ikke tillatt på /termer');
-  })
-  .delete((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-      #swagger.responses[405] = {
-        description: "DELETE-operasjonen er ikke tillatt på /termer"
-      }
-     */
-    res.statusCode = 405;
-    res.setHeader('Allow', 'GET, POST');
-    res.end('DELETE-operasjonen er ikke tillatt på /termer');
-  });
 
 termRouter
   .route('/:termId')
@@ -99,17 +77,6 @@ termRouter
         (err) => next(err)
       )
       .catch((err) => next(err));
-  })
-  .post((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-      #swagger.responses[405] = {
-        description: "POST-operasjonen er ikke tillatt på /termer/:termId"
-      }
-     */
-    res.statusCode = 405;
-    res.setHeader('Allow', 'GET, PUT, DELETE');
-    res.end('POST-operasjon ikke tillatt på /termer/' + req.params.term);
   })
   .put((req, res, next) => {
     /*
@@ -214,20 +181,5 @@ termRouter
       )
       .catch((err) => next(err));
   })
-  .delete((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-      #swagger.responses[405] = {
-        description: "DELETE-operasjonen er ikke tillatt på /termer/:termId/varianter"
-      }
-     */
-    res.statusCode = 405;
-    res.setHeader('Allow', 'GET, POST, PUT');
-    res.end(
-      'DELETE-operasjon ikke tillatt på /termer/' +
-        req.params.term +
-        '/varianter'
-    );
-  });
 
 module.exports = termRouter;
