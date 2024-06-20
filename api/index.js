@@ -23,10 +23,6 @@ app.use('/api/fagfelt', fieldRouter);
 app.use('/api/artikler', docRouter);
 app.use('/api/dok', swaggerUi.serve, swaggerUi.setup(swaggerFile, { customCssUrl: process.env.SWAGGER_CSS_URL }));
 
-app.get('/api', (req, res) => {
-  res.send('Se /api/dok for API-dokumentasjon');
-});
-
 app.listen(app.get('port'), () => {
   console.log('Tjener kjører på port', app.get('port'));
   console.log(`API-dokumentasjon er tilgjengelig på ${process.env.BACKEND_URL}/api`)
