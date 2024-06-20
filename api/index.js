@@ -36,8 +36,10 @@ app.use('/api/dok', swaggerUi.serve, swaggerUi.setup(swaggerFile,
 ));
 
 app.listen(app.get('port'), () => {
-  console.log('Tjener kjører på port', app.get('port'));
-  console.log(`API-dokumentasjon er tilgjengelig på ${process.env.BACKEND_URL}/api`)
+  if (process.env.ENVIRONMENT === 'development') {
+    console.log('Tjener kjører på port', app.get('port'));
+    console.log(`API-dokumentasjon er tilgjengelig på http://${process.env.BACKEND_HOST}/api`)
+  }
 });
 
 module.exports = app;

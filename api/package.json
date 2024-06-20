@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index",
-    "build": "EXPORT NODE_ENV=production && node swagger.js && node index",
+    "build": "node swagger.js && node index",
     "test": "jest"
   },
   "author": "Isak Kyrre Lichtwarck Bjugn",
