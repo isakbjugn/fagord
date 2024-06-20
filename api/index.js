@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('./swagger.json');
+const swaggerFile = require('./swagger-doc.json');
 const { verifyNoFormula } = require('./_utils/sheets-middleware');
 
 const termRouter = require('./_routes/term-router');
