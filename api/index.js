@@ -21,7 +21,7 @@ app.all('*', verifyNoFormula);
 app.use('/api/termer', termRouter);
 app.use('/api/fagfelt', fieldRouter);
 app.use('/api/artikler', docRouter);
-app.use('/api/dok', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use('/api/dok', swaggerUi.serve, swaggerUi.setup(swaggerFile, { customCssUrl: process.env.SWAGGER_CSS_URL }));
 
 app.get('/api', (req, res) => {
   res.send('Se /api/dok for API-dokumentasjon');
