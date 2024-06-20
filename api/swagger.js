@@ -1,13 +1,11 @@
 const swaggerAutogen = require('swagger-autogen')({ openapi: '3.0.0' })
 
-const env = process.env.NODE_ENV || 'development'
-
 const doc = {
   info: {
     title: 'Fagord API',
     description: 'Åpent API for deg som ønsker å jobbe med fagtermer'
   },
-  host: env === 'development' ? 'localhost:8080' : 'fagord.no',
+  host: process.env.NODE_ENV === 'development' ? 'localhost:8080' : 'fagord.no',
   tags: ['Artikler', 'Fagfelt', 'Termer'],
   components: {
     schemas: {
