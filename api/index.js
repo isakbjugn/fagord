@@ -21,7 +21,19 @@ app.all('*', verifyNoFormula);
 app.use('/api/termer', termRouter);
 app.use('/api/fagfelt', fieldRouter);
 app.use('/api/artikler', docRouter);
-app.use('/api/dok', swaggerUi.serve, swaggerUi.setup(swaggerFile, { customCssUrl: process.env.SWAGGER_CSS_URL }));
+app.use('/api/dok', swaggerUi.serve, swaggerUi.setup(swaggerFile,
+  {
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
+    ],
+    customCssUrl: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
+    ],
+  }
+));
 
 app.listen(app.get('port'), () => {
   console.log('Tjener kjører på port', app.get('port'));
