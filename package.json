@@ -25,7 +25,7 @@
     "react-select": "5.7.7",
     "react-tagcloud": "2.3.3",
     "reactstrap": "9.2.0",
-    "sanitize-html": "2.11.0"
+    "sanitize-html": "2.12.1"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "5.0.5",
