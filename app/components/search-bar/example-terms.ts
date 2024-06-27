@@ -1,4 +1,4 @@
-import { Term } from '~/types/term';
+import type { Term } from '~/types/term';
 
 export const terms: Term[] = [
   {
