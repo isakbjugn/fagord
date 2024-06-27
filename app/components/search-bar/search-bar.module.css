@@ -1,0 +1,29 @@
+.search {
+  width: 100%;
+  min-width: 250px;
+  max-width: 400px;
+  color: #000;
+  margin: auto;
+}
+
+@media screen and (min-width: 1024px) {
+  .search {
+    min-width: 350px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .search {
+    min-width: 400px;
+  }
+}
+
+.item-title {
+  color: #090a3c;
+  margin-bottom: 5px;
+}
+
+.item-subtitle {
+  font-size: 14px;
+  color: #090a3c80;
+}
