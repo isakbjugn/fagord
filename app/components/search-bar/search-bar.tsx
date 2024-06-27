@@ -5,8 +5,8 @@ import { Button } from 'reactstrap';
 
 import style from '~/components/search-bar/search-bar.module.css';
 import { useNavigate } from '@remix-run/react';
-import { terms } from '~/components/search-bar/example_terms';
-import { Term } from '~/types/term';
+import { terms } from '~/components/search-bar/example-terms';
+import type { Term } from '~/types/term';
 
 const formatOptionLabel = (term: Term) => (
   <div>
