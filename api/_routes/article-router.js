@@ -7,9 +7,6 @@ const articleRouter = express.Router();
 articleRouter.use(bodyParser.json());
 
 articleRouter.route('/').get((req, res, next) => {
-  /*
-    #swagger.tags = ['Artikler']
-   */
   getAllArticles()
     .then(
       (articles) => {
@@ -23,9 +20,6 @@ articleRouter.route('/').get((req, res, next) => {
 });
 
 articleRouter.route('/:articleId').get((req, res, next) => {
-  /*
-    #swagger.tags = ['Artikler']
-   */
   exportFileAsHtml(req.params.articleId)
     .then(
       (result) => {

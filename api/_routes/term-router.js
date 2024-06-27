@@ -18,12 +18,6 @@ termRouter.use(bodyParser.json());
 termRouter
   .route('/')
   .get((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-      #swagger.responses[200] = {
-        schema: { $ref: "#/definitions/Term" }
-      }
-     */
     getRows()
       .then(
         (rows) => {
@@ -36,9 +30,6 @@ termRouter
       .catch((err) => next(err));
   })
   .post((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-     */
     if (Object.keys(req.body).length === 0) {
       const err = new Error('Ingen term i spørringen');
       err.statusCode = 400;
@@ -64,9 +55,6 @@ termRouter
 termRouter
   .route('/:termId')
   .get((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -79,9 +67,6 @@ termRouter
       .catch((err) => next(err));
   })
   .put((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -99,9 +84,6 @@ termRouter
       .catch((err) => next(err));
   })
   .delete((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -122,9 +104,6 @@ termRouter
 termRouter
   .route('/:termId/varianter')
   .get((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
@@ -137,9 +116,6 @@ termRouter
       .catch((err) => next(err));
   })
   .post((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-     */
     if (Object.keys(req.body).length === 0) {
       const err = new Error('Ingen variant i spørringen');
       err.statusCode = 400;
@@ -162,9 +138,6 @@ termRouter
       .catch((err) => next(err));
   })
   .put((req, res, next) => {
-    /*
-      #swagger.tags = ['Termer']
-     */
     getRowByTermId(req.params.termId)
       .then(
         (row) => {
