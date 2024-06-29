@@ -1,0 +1,7 @@
+.paginator :global(.MuiTablePagination-selectLabel) {
+  margin-top: 12px;
+}
+
+.paginator :global(.MuiTablePagination-displayedRows) {
+  margin-top: 12px;
+}
