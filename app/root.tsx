@@ -1,4 +1,4 @@
-import type { LinksFunction, MetaFunction } from '@remix-run/node';
+import type { LinksFunction, MetaFunction } from '@vercel/remix';
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
 import { splashscreens } from '~/links/splashscreens';

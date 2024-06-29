@@ -1,4 +1,4 @@
-import { LoaderFunction, redirect } from '@remix-run/node';
+import { LoaderFunction, redirect } from '@vercel/remix';
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
