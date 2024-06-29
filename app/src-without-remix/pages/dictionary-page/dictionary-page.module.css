@@ -1,0 +1,17 @@
+.subjects {
+  width: 250px;
+  max-width: 95vw;
+  color: #000;
+}
+
+.header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+}
