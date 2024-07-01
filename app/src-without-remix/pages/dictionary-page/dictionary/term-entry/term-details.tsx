@@ -1,8 +1,4 @@
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
+import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material';
 
 import style from './term-details.module.css';
 import type { Term } from '~/types/term';

@@ -1,11 +1,5 @@
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { useState } from 'react';
+import { Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
+import { useState, type MouseEvent, type ChangeEvent } from 'react';
 
 import style from './dictionary.module.css';
 import { DictionaryHeader } from './dictionary-header/dictionary-header';
@@ -20,7 +14,7 @@ export const Dictionary = (props: { dictionary: Term[] }): JSX.Element => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Language): void => {
+  const handleRequestSort = (event: MouseEvent<unknown>, property: keyof Language): void => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -30,7 +24,7 @@ export const Dictionary = (props: { dictionary: Term[] }): JSX.Element => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
