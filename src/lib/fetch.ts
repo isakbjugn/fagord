@@ -6,9 +6,9 @@ import type { SubmitTerm, SubmitVariant, Term, Variant } from '../types/term';
 
 const baseApiUri = 'https://www.api.fagord.no';
 
-const termsUrl = baseApiUri + '/termer';
-const fieldsUrl = baseApiUri + '/fagfelt';
-const articlesUrl = baseApiUri + '/artikler';
+const termsUrl = baseApiUri + '/termer/';
+const fieldsUrl = baseApiUri + '/fagfelt/';
+const articlesUrl = baseApiUri + '/artikler/';
 
 export const fetchTerms = async (): Promise<Term[]> => {
   const res = await fetch(termsUrl);
@@ -39,7 +39,7 @@ export const fetchArticles = async (): Promise<Article[]> => {
 
 export const fetchArticleHtml = async ({ queryKey }: QueryFunctionContext): Promise<string> => {
   const [_, articleId] = queryKey;
-  const res = await fetch(articlesUrl + '/' + articleId);
+  const res = await fetch(articlesUrl + articleId);
 
   if (!res.ok) {
     throw Error(res.status.toString() + ' ' + res.statusText);
@@ -71,7 +71,7 @@ interface UpdateTermArguments {
 }
 
 export const updateTerm = async ({ termId, term }: UpdateTermArguments): Promise<Term> => {
-  const res = await fetch(termsUrl + '/' + termId, {
+  const res = await fetch(termsUrl + termId, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ export interface AddVariantArguments {
 }
 
 export const addVariant = async ({ termId, variant }: AddVariantArguments): Promise<Variant> => {
-  const res = await fetch(termsUrl + '/' + termId + '/varianter', {
+  const res = await fetch(termsUrl + termId + '/varianter', {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export interface VoteForVariantArguments {
 }
 
 export const voteForVariant = async ({ termId, variant }: VoteForVariantArguments): Promise<Variant> => {
-  const res = await fetch(termsUrl + '/' + termId + '/varianter', {
+  const res = await fetch(termsUrl + termId + '/varianter', {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
