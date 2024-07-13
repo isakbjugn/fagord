@@ -1,12 +1,13 @@
 import { Subject } from "~/types/subject";
 import { SubmitTerm, SubmitVariant, Term, Variant } from '~/types/term';
 
-const baseApiUri = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : '';
+const baseApiUri = process.env.NODE_ENV === 'development' ? 'http://localhost:8080/api' : 'https://www.api.fagord.no';
 
-export const articleUrl = baseApiUri + '/api/artikler/';
+const termsUrl = baseApiUri + '/termer/';
+const fieldsUrl = baseApiUri + '/fagfelt/';
 
 export const fetchTerms = async (): Promise<Term[]> => {
-  const res = await fetch(baseApiUri + '/api/termer');
+  const res = await fetch(termsUrl);
 
   if (!res.ok) {
     throw Error(res.status.toString() + ' ' + res.statusText);
@@ -15,7 +16,7 @@ export const fetchTerms = async (): Promise<Term[]> => {
 };
 
 export const fetchFields = async (): Promise<Subject[]> => {
-  const res = await fetch(baseApiUri + '/api/fagfelt');
+  const res = await fetch(fieldsUrl);
 
   if (!res.ok) {
     throw Error(res.status.toString() + ' ' + res.statusText);
@@ -24,7 +25,7 @@ export const fetchFields = async (): Promise<Subject[]> => {
 };
 
 export const postTerm = async (term: SubmitTerm): Promise<Term> => {
-  const res = await fetch(baseApiUri + '/api/termer', {
+  const res = await fetch(termsUrl, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ interface UpdateTermArguments {
 }
 
 export const updateTerm = async ({ termId, term }: UpdateTermArguments): Promise<Term> => {
-  const res = await fetch(baseApiUri + '/api/termer/' + termId, {
+  const res = await fetch(termsUrl + termId, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ export interface AddVariantArguments {
 }
 
 export const addVariant = async ({ termId, variant }: AddVariantArguments): Promise<Variant> => {
-  const res = await fetch(baseApiUri + '/api/termer/' + termId + '/varianter', {
+  const res = await fetch(termsUrl + termId + '/varianter', {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ export interface VoteForVariantArguments {
 }
 
 export const voteForVariant = async ({ termId, variant }: VoteForVariantArguments): Promise<Variant> => {
-  const res = await fetch(baseApiUri + '/api/termer/' + termId + '/varianter', {
+  const res = await fetch(termsUrl + termId + '/varianter', {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
