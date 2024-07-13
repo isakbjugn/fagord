@@ -1,7 +1,7 @@
 import { Subject } from "~/types/subject";
 import { SubmitTerm, SubmitVariant, Term, Variant } from '~/types/term';
 
-const baseApiUri = process.env.NODE_ENV === 'development' ? 'http://localhost:8080/api' : 'https://www.api.fagord.no';
+const baseApiUri = 'https://www.api.fagord.no';
 
 const termsUrl = baseApiUri + '/termer/';
 const fieldsUrl = baseApiUri + '/fagfelt/';
