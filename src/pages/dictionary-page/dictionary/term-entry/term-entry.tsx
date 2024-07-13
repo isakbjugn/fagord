@@ -1,8 +1,5 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import TableRow from '@mui/material/TableRow';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
+import { Collapse, IconButton, TableRow } from '@mui/material';
 import { KeyboardEvent, useState } from 'react';
 
 import type { Term } from '../../../../types/term';
@@ -36,7 +33,7 @@ export const TermEntry = (props: { term: Term; index: number }): JSX.Element => 
               setOpen(!open);
             }}
           >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </DropdownTableCell>
         <TermTableCell component="th" id={labelId} scope="row" tabIndex={0} onKeyDown={handleKeyDown}>

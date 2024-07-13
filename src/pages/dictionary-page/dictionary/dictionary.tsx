@@ -1,10 +1,4 @@
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
+import { Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
 import { useState } from 'react';
 
 import type { Language, Term } from '../../../types/term';
@@ -55,7 +49,7 @@ export const Dictionary = (props: { dictionary: Term[] }): JSX.Element => {
             {emptyRows > 0 && (
               <TableRow
                 style={{
-                  height: 33 * emptyRows,
+                  height: 33 * emptyRows
                 }}
               >
                 <TableCell colSpan={6} />
