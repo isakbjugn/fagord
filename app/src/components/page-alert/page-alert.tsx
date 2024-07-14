@@ -1,6 +1,6 @@
 import { Alert } from 'reactstrap';
 
-import { TEST_ENV } from '../../utils/feature-toggles';
+import { TEST_ENV } from '../../utils/feature-toggles.client';
 
 export const PageAlert = () => {
   if (TEST_ENV)

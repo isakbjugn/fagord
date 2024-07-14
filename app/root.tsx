@@ -6,7 +6,7 @@ import fagordTheme from '~/theme/theme';
 
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import appStylesHref from './app.css?url';
-import { Footer } from '~/src-without-remix/components/footer/footer';
+import { Footer } from '~/src/components/footer/footer';
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: bootstrapStylesHref },

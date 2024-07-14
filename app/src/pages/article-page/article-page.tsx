@@ -1,4 +1,4 @@
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from '@remix-run/react';
 
 import { ArticleGrid } from '../../components/article-grid/article-grid';
 import { InfoMessage } from '../../components/info-message/info-message';

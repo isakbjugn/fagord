@@ -2,7 +2,7 @@ import { renderToString } from 'react-dom/server';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import createEmotionServer from '@emotion/server/create-instance';
-import { EntryContext } from '@remix-run/node';
+import type { EntryContext } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
 
 const key = 'custom';

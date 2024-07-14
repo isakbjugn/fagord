@@ -9,8 +9,8 @@
     "dev": "remix vite:dev",
     "start": "remix-serve build/index.js",
     "typecheck": "tsc",
-    "prettier": "prettier --write \"src/**/*.{ts,tsx,css}\"",
-    "lint": "eslint ./src"
+    "prettier": "prettier --write \"app/**/*.{ts,tsx,css}\"",
+    "lint": "eslint ./app"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",

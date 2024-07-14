@@ -1,5 +1,5 @@
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link } from '@remix-run/react';
 
 import type { Article } from '../../types/article';
 import { useArticles } from '../../utils/use-articles';

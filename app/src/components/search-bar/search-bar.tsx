@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@remix-run/react';
 import type { SelectInstance, SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';

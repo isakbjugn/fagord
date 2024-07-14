@@ -1,1 +1,1 @@
-export { default } from '~/src-without-remix/fagord-main';
+export { default } from '~/src/fagord-main';

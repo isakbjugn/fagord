@@ -1,6 +1,6 @@
 import { AddCircle, GitHub, Mail } from '@mui/icons-material';
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link } from '@remix-run/react';
 
 import style from './contact-page.module.css';
 
