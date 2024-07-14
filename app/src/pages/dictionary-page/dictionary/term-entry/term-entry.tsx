@@ -1,6 +1,6 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { Collapse, IconButton, TableRow } from '@mui/material';
-import type { KeyboardEvent} from 'react';
+import type { KeyboardEvent } from 'react';
 import { useState } from 'react';
 
 import type { Term } from '../../../../types/term';

@@ -49,7 +49,7 @@ export const Dictionary = (props: { dictionary: Term[] }) => {
             {emptyRows > 0 && (
               <TableRow
                 style={{
-                  height: 33 * emptyRows
+                  height: 33 * emptyRows,
                 }}
               >
                 <TableCell colSpan={6} />
