@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SelectInstance, SingleValue } from 'react-select';
+import type { SelectInstance, SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';
 

@@ -4,7 +4,7 @@ import { Button, Form, Label, Row } from 'reactstrap';
 
 import { Spinner } from '../../../../components/spinner/spinner';
 import { updateTerm } from '../../../../lib/fetch';
-import { SubmitTerm } from '../../../../types/term';
+import type { SubmitTerm } from '../../../../types/term';
 import { useToggle } from '../../../../utils/use-toggle';
 import style from './definition.module.css';
 

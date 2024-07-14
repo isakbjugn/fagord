@@ -29,6 +29,7 @@ module.exports = {
     'simple-import-sort/imports': 'error',
     '@typescript-eslint/no-misused-promises': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/consistent-type-imports': 'error',
   },
   settings: {
     react: {

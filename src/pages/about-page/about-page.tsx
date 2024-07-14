@@ -1,7 +1,7 @@
 import { Email, LinkedIn } from '@mui/icons-material';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
 
-import { Person } from '../../types/person';
+import type { Person } from '../../types/person';
 import style from './about-page.module.css';
 import { team } from './team';
 

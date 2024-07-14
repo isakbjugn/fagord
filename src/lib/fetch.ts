@@ -1,6 +1,6 @@
-import { QueryFunctionContext } from '@tanstack/react-query';
+import type { QueryFunctionContext } from '@tanstack/react-query';
 
-import { Article } from '../types/article';
+import type { Article } from '../types/article';
 import type { Subject } from '../types/subject';
 import type { SubmitTerm, SubmitVariant, Term, Variant } from '../types/term';
 

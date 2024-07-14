@@ -1,7 +1,7 @@
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import { Article } from '../../types/article';
+import type { Article } from '../../types/article';
 import { useArticles } from '../../utils/use-articles';
 import { Spinner } from '../spinner/spinner';
 import style from './article-grid.module.css';
