@@ -3,10 +3,10 @@ import { SelectInstance, SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';
 
-import style from '~/components/search-bar/search-bar.module.css';
+import style from '~/src-without-remix/components/search-bar/search-bar.module.css';
 import { useNavigate } from '@remix-run/react';
-import { terms } from '~/components/search-bar/example-terms';
 import type { Term } from '~/types/term';
+import { useDictionary } from '../../../../src/utils/use-dictionary';
 
 const formatOptionLabel = (term: Term) => (
   <div>
@@ -23,9 +23,10 @@ export const SearchBar = (): JSX.Element => {
   const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
 
+  const dictionaryQuery = useDictionary();
   const navigate = useNavigate();
 
-  const options = terms;
+  const options = !dictionaryQuery.isPending && !dictionaryQuery.isError ? dictionaryQuery.data : [];
 
   const filterOptions = (input: string) =>
     options
@@ -51,6 +52,8 @@ export const SearchBar = (): JSX.Element => {
   };
 
   const noOptionsMessage = () => {
+    if (dictionaryQuery.isPending) return <p>Laster termliste</p>;
+    if (dictionaryQuery.isError) return <p>Kunne ikke laste termliste</p>;
     if (input === '') return null;
     return (
       <Button

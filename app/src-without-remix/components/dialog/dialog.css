@@ -1,0 +1,20 @@
+dialog {
+  border-radius: 8px;
+  border: 0;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+button {
+  border-radius: 0.375rem;
+  background-color: #6c757d;
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-style: none;
+}
+
+button:hover {
+  background-color: #5a6268;
+}

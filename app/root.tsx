@@ -3,10 +3,10 @@ import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
 import { splashscreens } from '~/links/splashscreens';
 import fagordTheme from '~/theme/theme';
-import { Header } from '~/components/header/header';
 
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import appStylesHref from './app.css?url';
+import { Footer } from '~/src-without-remix/components/footer/footer';
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: bootstrapStylesHref },
@@ -39,8 +39,8 @@ export default function Root() {
     </head>
     <body>
       <ThemeProvider theme={fagordTheme}>
-        <Header />
         <Outlet />
+        <Footer />
       </ThemeProvider>
       <Scripts/>
     </body>

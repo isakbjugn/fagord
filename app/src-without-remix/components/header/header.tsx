@@ -1,10 +1,10 @@
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 
 import style from './header.module.css';
-import { navLinks } from './nav-links';
+import { navLinksClient } from './nav-links.client';
 import { NavLink } from '@remix-run/react';
 import { useToggle } from '~/utils/use-toggle';
-import { SearchBar } from '~/components/search-bar/search-bar';
+import { SearchBar } from '~/src-without-remix/components/search-bar/search-bar';
 import fagordLogo from '/fagord-logo240.png?url';
 
 export const Header = (): JSX.Element => {
@@ -28,7 +28,7 @@ export const Header = (): JSX.Element => {
               setIsNavOpen(false);
             }}
           >
-            {navLinks.map((navItem) => (
+            {navLinksClient.map((navItem) => (
               <NavItem key={navItem.address}>
                 <NavLink className="nav-link text-nowrap" to={navItem.address}>
                   <span className={'fa fa-lg ' + navItem.icon + ' ' + style.icon} /> {navItem.text}

@@ -1,0 +1,24 @@
+.card {
+  background-color: var(--color-dark-blue) !important;
+  color: floralwhite !important;
+  border-color: #808080 !important;
+  border-style: solid;
+  border-width: 0.5px;
+  border-radius: 5px;
+}
+
+.buttons > * {
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.suggestion-feedback {
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  filter: brightness(85%);
+  white-space: nowrap;
+}
+
+.valid-feedback {
+  white-space: nowrap;
+}

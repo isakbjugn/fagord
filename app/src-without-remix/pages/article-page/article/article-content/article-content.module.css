@@ -1,0 +1,15 @@
+.article > p > span {
+  color: white !important;
+}
+
+.article > table > tr > td {
+  color: white !important;
+}
+
+.article > table > tbody > tr > td > p > span {
+  color: white !important;
+}
+
+.article > table > tbody > tr > td {
+  border-color: #9eb9ca !important;
+}

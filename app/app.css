@@ -25,3 +25,25 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+.breadcrumb > .active {
+    color: white !important;
+}
+
+.breadcrumb a {
+    color: floralwhite !important;
+}
+
+.MuiSvgIcon-colorSecondary {
+    color: #9eb9ca;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+        color: #c9d8e2;
+        transition: all 0.2s ease;
+    }
+}
+
+.bright-feedback-text {
+    filter: brightness(130%);
+}

@@ -1,8 +1,8 @@
 import { Link } from '@remix-run/react';
-import { Jumbotron } from '~/components/jumbotron/jumbotron';
+import { Jumbotron } from '~/src-without-remix/components/jumbotron/jumbotron';
 import styles from '../styles/hjem.module.css';
 
-export default function Hjem() {
+export default function HjemNy() {
   return (
     <main className={styles.home}>
       <Jumbotron>

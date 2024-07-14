@@ -7,10 +7,10 @@ import { Dictionary } from './dictionary/dictionary';
 import style from './dictionary-page.module.css';
 import type { Subject } from '~/types/subject';
 import type { Term } from '~/types/term';
-import { InfoMessage } from '~/components/info-message/info-message';
-import { useDictionary } from '~/utils/use-dictionary.client';
-import { Loader } from '~/components/loader/loader';
-import { Spinner } from '~/components/spinner/spinner';
+import { InfoMessage } from '~/src-without-remix/components/info-message/info-message';
+import { useDictionary } from '~/src-without-remix/utils/use-dictionary.client';
+import { Loader } from '~/src-without-remix/components/loader/loader';
+import { Spinner } from '~/src-without-remix/components/spinner/spinner';
 import { fetchFields } from '~/src-without-remix/lib/fetch.client';
 import { ClientOnly } from 'remix-utils/client-only';
 
@@ -118,11 +118,3 @@ export const DictionaryPage = (): JSX.Element => {
     </main>
   );
 };
-
-export default function Component() {
-  return (
-    <ClientOnly fallback={null}>
-      {() => <DictionaryPage />}
-    </ClientOnly>
-  );
-}

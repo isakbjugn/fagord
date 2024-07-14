@@ -1,10 +1,13 @@
-import { Subject } from "~/types/subject";
-import { SubmitTerm, SubmitVariant, Term, Variant } from '~/types/term';
+import type { Subject } from "~/types/subject";
+import type { SubmitTerm, SubmitVariant, Term, Variant } from '~/types/term';
+import { Article } from '../../../src/types/article';
+import { QueryFunctionContext } from '@tanstack/react-query';
 
 const baseApiUri = 'https://www.api.fagord.no';
 
 const termsUrl = baseApiUri + '/termer/';
 const fieldsUrl = baseApiUri + '/fagfelt/';
+const articlesUrl = baseApiUri + '/artikler/';
 
 export const fetchTerms = async (): Promise<Term[]> => {
   const res = await fetch(termsUrl);
@@ -22,6 +25,27 @@ export const fetchFields = async (): Promise<Subject[]> => {
     throw Error(res.status.toString() + ' ' + res.statusText);
   }
   return await res.json();
+};
+
+export const fetchArticles = async (): Promise<Article[]> => {
+  const res = await fetch(articlesUrl);
+
+  if (!res.ok) {
+    throw Error(res.status.toString() + ' ' + res.statusText);
+  }
+  return await res.json();
+};
+
+export const fetchArticleHtml = async ({ queryKey }: QueryFunctionContext): Promise<string> => {
+  const [_, articleId] = queryKey;
+  const res = await fetch(articlesUrl + articleId);
+
+  if (!res.ok) {
+    throw Error(res.status.toString() + ' ' + res.statusText);
+  }
+
+  const innerHtml = await res.text();
+  return innerHtml;
 };
 
 export const postTerm = async (term: SubmitTerm): Promise<Term> => {

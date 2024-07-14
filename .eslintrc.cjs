@@ -21,6 +21,10 @@ module.exports = {
   },
   ignorePatterns: ["!**/.server", "!**/.client"],
 
+  rules: {
+    '@typescript-eslint/consistent-type-imports': 'error',
+  },
+
   // Base config
   extends: ["eslint:recommended"],
 
