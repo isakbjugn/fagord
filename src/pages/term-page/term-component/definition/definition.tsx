@@ -13,7 +13,7 @@ interface DefinitionProps {
   definition?: string;
 }
 
-export const Definition = ({ termId, definition }: DefinitionProps): JSX.Element => {
+export const Definition = ({ termId, definition }: DefinitionProps) => {
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
   const { register, handleSubmit, setValue } = useForm();

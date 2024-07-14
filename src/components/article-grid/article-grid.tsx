@@ -6,7 +6,7 @@ import { useArticles } from '../../utils/use-articles';
 import { Spinner } from '../spinner/spinner';
 import style from './article-grid.module.css';
 
-export const ArticleGrid = ({ hiddenKey }: { hiddenKey?: string }): JSX.Element => {
+export const ArticleGrid = ({ hiddenKey }: { hiddenKey?: string }) => {
   const { isPending, isError, data: articles } = useArticles();
 
   if (isPending) return <Spinner />;

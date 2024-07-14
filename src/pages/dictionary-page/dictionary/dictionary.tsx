@@ -8,7 +8,7 @@ import style from './dictionary.module.css';
 import { DictionaryHeader } from './dictionary-header/dictionary-header';
 import { TermEntry } from './term-entry/term-entry';
 
-export const Dictionary = (props: { dictionary: Term[] }): JSX.Element => {
+export const Dictionary = (props: { dictionary: Term[] }) => {
   const { dictionary } = props;
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Language>('en');

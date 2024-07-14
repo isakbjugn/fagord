@@ -15,7 +15,7 @@ interface TranslationCardProps {
   term: Term;
 }
 
-export const TranslationCard = ({ term }: TranslationCardProps): JSX.Element => {
+export const TranslationCard = ({ term }: TranslationCardProps) => {
   const queryClient = useQueryClient();
   const [isWriting, toggleWriting] = useToggle(false);
   const { handleSubmit, register, setValue, watch } = useForm();

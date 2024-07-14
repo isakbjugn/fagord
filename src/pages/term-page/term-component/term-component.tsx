@@ -10,7 +10,7 @@ interface TermComponentProps {
   term: Term;
 }
 
-export const TermComponent = ({ term }: TermComponentProps): JSX.Element => {
+export const TermComponent = ({ term }: TermComponentProps) => {
   if (term === null) return <></>;
 
   const fieldSpec = term.subfield !== '' ? term.subfield : term.field;

@@ -19,7 +19,7 @@ const formatOptionLabel = (term: Term) => (
   </div>
 );
 
-export const SearchBar = (): JSX.Element => {
+export const SearchBar = () => {
   const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
 
@@ -69,7 +69,7 @@ export const SearchBar = (): JSX.Element => {
     );
   };
 
-  const SearchIcon = (): JSX.Element => (
+  const SearchIcon = () => (
     <div className="container mr-1">
       <span className="fa fa-search"></span>
     </div>

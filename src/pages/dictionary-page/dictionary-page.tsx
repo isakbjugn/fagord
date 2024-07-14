@@ -23,7 +23,7 @@ type TransFilterType = 'all' | 'translated' | 'incomplete';
 
 const AllSubjects: Subject = { field: 'Alle fagfelt', subfields: [] };
 
-export const DictionaryPage = (): JSX.Element => {
+export const DictionaryPage = () => {
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
   const [subjectFilter, setSubjectFilter] = useState<Subject | null>(AllSubjects);
 
@@ -55,7 +55,7 @@ export const DictionaryPage = (): JSX.Element => {
     return terms.filter((term) => term.field === subjectFilter.field);
   };
 
-  const subjectFilterComponent = (): JSX.Element => {
+  const subjectFilterComponent = () => {
     if (subjectQuery.isPending) return <Spinner />;
     if (subjectQuery.isError) return <p>Kunne ikke laste fagfelt.</p>;
     return (

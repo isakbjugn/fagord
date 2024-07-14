@@ -7,7 +7,7 @@ import type { Term } from '../../../../types/term';
 import { DropdownTableCell, TermTableCell } from '../styled-mui-components';
 import { TermDetails } from './term-details';
 
-export const TermEntry = (props: { term: Term; index: number }): JSX.Element => {
+export const TermEntry = (props: { term: Term; index: number }) => {
   const [open, setOpen] = useState(false);
   const { term, index } = props;
   const labelId = `enhanced-table-checkbox-${index}`;

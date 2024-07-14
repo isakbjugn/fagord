@@ -5,7 +5,7 @@ import { InfoMessage } from '../../components/info-message/info-message';
 import { Spinner } from '../../components/spinner/spinner';
 import { useArticles } from '../../utils/use-articles';
 
-export const ArticlePage = (): JSX.Element => {
+export const ArticlePage = () => {
   const { isPending, isError } = useArticles();
   const { articleKey } = useParams();
 

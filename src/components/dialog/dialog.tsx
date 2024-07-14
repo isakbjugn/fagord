@@ -1,7 +1,7 @@
 import './dialog.css';
 
 import type { ForwardedRef, ReactElement} from 'react';
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 export const Dialog = forwardRef(function Dialog(
   { children }: { children: ReactElement },

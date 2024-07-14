@@ -35,7 +35,7 @@ interface DictionaryHeaderProps {
   orderBy: string;
 }
 
-export const DictionaryHeader = (props: DictionaryHeaderProps): JSX.Element => {
+export const DictionaryHeader = (props: DictionaryHeaderProps) => {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property: keyof Language) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);

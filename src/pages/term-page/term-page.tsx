@@ -12,7 +12,7 @@ import { useDictionary } from '../../utils/use-dictionary';
 import { TermComponent } from './term-component/term-component';
 import { VariantCloud } from './variant-cloud/variant-cloud';
 
-export const TermPage = (): JSX.Element => {
+export const TermPage = () => {
   const { termId } = useParams();
 
   const dictionaryQuery = useDictionary();

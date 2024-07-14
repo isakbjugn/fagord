@@ -4,7 +4,7 @@ import { InfoMessage } from '../../../components/info-message/info-message';
 import { useArticles } from '../../../utils/use-articles';
 import { ArticleContent } from './article-content/article-content';
 
-export const Article = (): JSX.Element => {
+export const Article = () => {
   const { articleKey } = useParams();
   const { data: articles } = useArticles();
   if (articles === undefined) return <></>;

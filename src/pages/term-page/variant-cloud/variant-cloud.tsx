@@ -11,7 +11,7 @@ interface VariantCloudProps {
   mutate: UseMutateFunction<Variant, unknown, VoteForVariantArguments, unknown>;
 }
 
-export const VariantCloud = ({ termId, variants, mutate }: VariantCloudProps): JSX.Element => {
+export const VariantCloud = ({ termId, variants, mutate }: VariantCloudProps) => {
   const options = {
     luminosity: 'light',
     hue: 'red',

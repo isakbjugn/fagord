@@ -8,7 +8,7 @@ const fagordIssuesUrl = 'https://github.com/isakbjugn/fagord/issues';
 const contactEmailUrl = 'mailto:isakbjugn@gmail.com';
 const linkedInUrl = 'https://www.linkedin.com/in/isakbjugn';
 
-export const ContactPage = (): JSX.Element => (
+export const ContactPage = () => (
   <main className={style.container}>
     <h1>Ta gjerne kontakt!</h1>
     <p>

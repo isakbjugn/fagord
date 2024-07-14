@@ -1,6 +1,6 @@
 import './loader.css';
 
-export const Loader = (): JSX.Element => (
+export const Loader = () => (
   <div className="loader book">
     <div className="page"></div>
     <div className="page"></div>

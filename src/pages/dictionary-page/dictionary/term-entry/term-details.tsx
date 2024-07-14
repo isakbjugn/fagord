@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import type { Term } from '../../../../types/term';
 import style from './term-details.module.css';
 
-export const TermDetails = (props: { term: Term }): JSX.Element => {
+export const TermDetails = (props: { term: Term }) => {
   const { term } = props;
 
   return (

@@ -6,7 +6,7 @@ import { Spinner } from '../../../../components/spinner/spinner';
 import { fetchArticleHtml } from '../../../../lib/fetch';
 import style from './article-content.module.css';
 
-export const ArticleContent = ({ articleId }: { articleId: string }): JSX.Element => {
+export const ArticleContent = ({ articleId }: { articleId: string }) => {
   const {
     isPending: isPendingHtml,
     isError: isHtmlError,

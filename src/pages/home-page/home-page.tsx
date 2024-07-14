@@ -5,7 +5,7 @@ import { Jumbotron } from '../../components/jumbotron/jumbotron';
 import { featureToggles } from '../../utils/feature-toggles';
 import style from './home-page.module.css';
 
-export const HomePage = (): JSX.Element => (
+export const HomePage = () => (
   <main className={style.home}>
     <Jumbotron>
       <h1 className="display-4">Velkommen til Fagord!</h1>

@@ -5,7 +5,7 @@ import type { Person } from '../../types/person';
 import style from './about-page.module.css';
 import { team } from './team';
 
-export const AboutPage = (): JSX.Element => (
+export const AboutPage = () => (
   <main className={style.wrapper}>
     <article className={style.content}>
       <h1>Om oss</h1>

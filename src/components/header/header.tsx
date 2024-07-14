@@ -6,7 +6,7 @@ import { SearchBar } from '../search-bar/search-bar';
 import style from './header.module.css';
 import { NavLinks } from './nav-links';
 
-export const Header = (): JSX.Element => {
+export const Header = () => {
   const [isNavOpen, toggleNav, setIsNavOpen] = useToggle(false);
   const [isSearchOpen, toggleSearch] = useToggle(false);
 

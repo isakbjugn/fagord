@@ -13,7 +13,7 @@ import { useDictionary } from '../../utils/use-dictionary';
 import { useOrdbokene } from '../../utils/use-ordbokene';
 import style from './new-term-page.module.css';
 
-export const NewTermPage = (): JSX.Element => {
+export const NewTermPage = () => {
   const { term: termFromUrl } = useParams();
   const queryClient = useQueryClient();
   const { register, setValue, watch, reset, handleSubmit } = useForm();
