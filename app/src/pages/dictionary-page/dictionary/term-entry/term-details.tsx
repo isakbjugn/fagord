@@ -1,5 +1,5 @@
 import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link } from '@remix-run/react';
 
 import type { Term } from '../../../../types/term';
 import style from './term-details.module.css';

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from '@remix-run/react';
 
 import { InfoMessage } from '../../../components/info-message/info-message';
 import { useArticles } from '../../../utils/use-articles';

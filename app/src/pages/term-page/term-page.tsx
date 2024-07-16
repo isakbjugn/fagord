@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from '@remix-run/react';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
 import { Dialog } from '../../components/dialog/dialog';

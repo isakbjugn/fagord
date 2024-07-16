@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from '@remix-run/react';
 import { Button, Form, Label, Row } from 'reactstrap';
 
 import { Dialog } from '../../components/dialog/dialog';

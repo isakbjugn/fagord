@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@remix-run/react';
 
 import { ArticleGrid } from '../../components/article-grid/article-grid';
 import { Jumbotron } from '../../components/jumbotron/jumbotron';
-import { featureToggles } from '../../utils/feature-toggles';
+import { featureToggles } from '../../utils/feature-toggles.client';
 import style from './home-page.module.css';
 
 export const HomePage = () => (
