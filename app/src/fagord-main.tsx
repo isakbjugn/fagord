@@ -15,14 +15,17 @@ import { TermPage } from '~/src/pages/term-page/term-page';
 import { NewTermPage } from '~/src/pages/new-term-page/new-term-page';
 
 export default function App() {
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        staleTime: 30 * 1000,
-      },
-    },
-  }))
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+            staleTime: 30 * 1000,
+          },
+        },
+      }),
+  );
 
   return (
     <ClientOnly fallback={null}>
