@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchSuggestions } from '../lib/fetch-ordbokene';
-import type { Lookup, OrdbokeneResponse } from '../types/ordbokene';
+import type { Lookup, OrdbokeneResponse } from '~/types/ordbokene';
 
 const DictionaryName = {
   nb: 'Bokmålsordboka',

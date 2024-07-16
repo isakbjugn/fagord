@@ -7,7 +7,7 @@ import { Dialog } from '../../components/dialog/dialog';
 import { InfoMessage } from '../../components/info-message/info-message';
 import { Spinner } from '../../components/spinner/spinner';
 import { voteForVariant } from '../../lib/fetch';
-import type { Term } from '../../types/term';
+import type { Term } from '~/types/term';
 import { useDictionary } from '../../utils/use-dictionary';
 import { TermComponent } from './term-component/term-component';
 import { VariantCloud } from './variant-cloud/variant-cloud';

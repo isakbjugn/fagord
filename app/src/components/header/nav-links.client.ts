@@ -1,4 +1,4 @@
-import type { NavItem } from '../../types/nav-item';
+import type { NavItem } from '~/types/nav-item';
 import { featureToggles } from '../../utils/feature-toggles.client';
 
 const generateNavLinks = (): NavItem[] => {

@@ -1,8 +1,8 @@
 import type { QueryFunctionContext } from '@tanstack/react-query';
 
-import type { Article } from '../types/article';
-import type { Subject } from '../types/subject';
-import type { SubmitTerm, SubmitVariant, Term, Variant } from '../types/term';
+import type { Article } from '~/types/article';
+import type { Subject } from '~/types/subject';
+import type { SubmitTerm, SubmitVariant, Term, Variant } from '~/types/term';
 
 const baseApiUri = 'https://www.api.fagord.no';
 

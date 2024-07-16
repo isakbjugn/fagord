@@ -4,7 +4,7 @@ import type { SelectInstance, SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';
 
-import type { Term } from '../../types/term';
+import type { Term } from '~/types/term';
 import { useDictionary } from '../../utils/use-dictionary';
 import style from './search-bar.module.css';
 

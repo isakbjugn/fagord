@@ -1,7 +1,7 @@
 import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material';
 import { Link } from '@remix-run/react';
 
-import type { Term } from '../../../../types/term';
+import type { Term } from '~/types/term';
 import style from './term-details.module.css';
 
 export const TermDetails = (props: { term: Term }) => {

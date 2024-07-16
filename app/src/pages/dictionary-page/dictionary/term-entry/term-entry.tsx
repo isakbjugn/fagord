@@ -3,7 +3,7 @@ import { Collapse, IconButton, TableRow } from '@mui/material';
 import type { KeyboardEvent } from 'react';
 import { useState } from 'react';
 
-import type { Term } from '../../../../types/term';
+import type { Term } from '~/types/term';
 import { DropdownTableCell, TermTableCell } from '../styled-mui-components';
 import { TermDetails } from './term-details';
 

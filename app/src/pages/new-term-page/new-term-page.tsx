@@ -6,7 +6,7 @@ import { Button, Form, Label, Row } from 'reactstrap';
 
 import { Dialog } from '../../components/dialog/dialog';
 import { postTerm } from '../../lib/fetch';
-import type { SubmitTerm, Term } from '../../types/term';
+import type { SubmitTerm, Term } from '~/types/term';
 import { removeEmptyString } from '../../utils/pick-by';
 import { useDebounce } from '../../utils/use-debounce';
 import { useDictionary } from '../../utils/use-dictionary';

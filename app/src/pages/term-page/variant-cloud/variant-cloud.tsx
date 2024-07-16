@@ -2,7 +2,7 @@ import type { UseMutateFunction } from '@tanstack/react-query';
 import { TagCloud } from 'react-tagcloud';
 
 import type { VoteForVariantArguments } from '../../../lib/fetch';
-import type { Variant, VariantVote } from '../../../types/term';
+import type { Variant, VariantVote } from '~/types/term';
 import style from './variant-cloud.module.css';
 
 interface VariantCloudProps {
