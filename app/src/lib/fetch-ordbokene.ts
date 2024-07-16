@@ -1,4 +1,4 @@
-import type { OrdbokeneResponse } from '../types/ordbokene';
+import type { OrdbokeneResponse } from '~/types/ordbokene';
 
 const ordbokeneApiUrl = 'https://ord.uib.no/api/';
 

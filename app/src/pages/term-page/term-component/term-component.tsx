@@ -1,7 +1,7 @@
 import { IosShare } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
-import type { Term } from '../../../types/term';
+import type { Term } from '~/types/term';
 import { Definition } from './definition/definition';
 import style from './term-component.module.css';
 import { TranslationCard } from './translation-card/translation-card';

@@ -5,7 +5,7 @@ import { Button, Card, CardBody, CardText, CardTitle, Col, Form, Label, Row } fr
 import { Spinner } from '../../../../components/spinner/spinner';
 import { ToggleButton } from '../../../../components/toggle-button/toggle-button';
 import { addVariant } from '../../../../lib/fetch';
-import type { SubmitVariant, Term } from '../../../../types/term';
+import type { SubmitVariant, Term } from '~/types/term';
 import { useDebounce } from '../../../../utils/use-debounce';
 import { useOrdbokene } from '../../../../utils/use-ordbokene';
 import { useToggle } from '../../../../utils/use-toggle';

@@ -1,7 +1,7 @@
 import { Box, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
-import type { Language } from '../../../../types/term';
+import type { Language } from '~/types/term';
 import type { Order } from '../../../../utils/sorting';
 import { TermTableCell } from '../styled-mui-components';
 

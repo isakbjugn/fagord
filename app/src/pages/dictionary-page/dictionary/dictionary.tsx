@@ -1,7 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
 import { useState } from 'react';
 
-import type { Language, Term } from '../../../types/term';
+import type { Language, Term } from '~/types/term';
 import type { Order } from '../../../utils/sorting';
 import { getComparator } from '../../../utils/sorting';
 import style from './dictionary.module.css';
