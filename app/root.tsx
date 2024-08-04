@@ -1,5 +1,6 @@
-import type { LinksFunction, MetaFunction } from '@vercel/remix';
-import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
+import { json } from '@vercel/remix';
+import type { LinksFunction, LoaderFunction, MetaFunction } from '@vercel/remix';
+import { Links, Meta, Outlet, Scripts, useRouteLoaderData } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
 import { splashscreens } from '~/links/splashscreens';
 import fagordTheme from '~/theme/theme';
@@ -7,6 +8,19 @@ import fagordTheme from '~/theme/theme';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import appStylesHref from './app.css?url';
 import { Footer } from '~/src/components/footer/footer';
+import type { Term } from '~/types/term';
+import { Header } from '~/src/components/header/header';
+
+export const loader: LoaderFunction = async () => {
+  const termsUrl = 'https://api.fagord.no/termer/';
+  const termResponse = await fetch(termsUrl);
+  const terms: Term[] = await termResponse.json();
+  return json({ terms: terms });
+};
+
+export const useRootLoaderData = () => {
+  return useRouteLoaderData<typeof loader>('root');
+};
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: bootstrapStylesHref },
@@ -36,6 +50,7 @@ export default function Root() {
       </head>
       <body>
         <ThemeProvider theme={fagordTheme}>
+          <Header />
           <Outlet />
           <Footer />
         </ThemeProvider>

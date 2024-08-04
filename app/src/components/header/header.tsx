@@ -4,7 +4,7 @@ import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reac
 import { useToggle } from '../../utils/use-toggle';
 import { SearchBar } from '../search-bar/search-bar';
 import style from './header.module.css';
-import { NavLinks } from './nav-links.client';
+import { NavLinks } from './nav-links';
 
 export const Header = () => {
   const [isNavOpen, toggleNav, setIsNavOpen] = useToggle(false);

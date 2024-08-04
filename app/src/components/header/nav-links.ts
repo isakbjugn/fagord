@@ -1,5 +1,4 @@
 import type { NavItem } from '~/types/nav-item';
-import { featureToggles } from '../../utils/feature-toggles.client';
 
 const generateNavLinks = (): NavItem[] => {
   const baseLinks = [
@@ -29,14 +28,6 @@ const generateNavLinks = (): NavItem[] => {
       text: 'Kontakt',
     },
   ];
-
-  if (featureToggles('articles')) {
-    baseLinks.splice(1, 0, {
-      address: '/artikler',
-      icon: 'fa-newspaper',
-      text: 'Artikler',
-    });
-  }
 
   return baseLinks;
 };
