@@ -1,8 +1,6 @@
 import { Link } from '@remix-run/react';
 
-import { ArticleGrid } from '../../components/article-grid/article-grid';
 import { Jumbotron } from '../../components/jumbotron/jumbotron';
-import { featureToggles } from '../../utils/feature-toggles.client';
 import style from './home-page.module.css';
 
 export const HomePage = () => (
@@ -18,6 +16,5 @@ export const HomePage = () => (
         Til termliste!
       </Link>
     </Jumbotron>
-    {featureToggles('articles') && <ArticleGrid />}
   </main>
 );

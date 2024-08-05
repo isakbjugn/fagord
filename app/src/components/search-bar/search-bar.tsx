@@ -5,8 +5,8 @@ import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';
 
 import type { Term } from '~/types/term';
-import { useDictionary } from '../../utils/use-dictionary';
 import style from './search-bar.module.css';
+import { useRootLoaderData } from '~/root';
 
 const formatOptionLabel = (term: Term) => (
   <div>
@@ -22,21 +22,20 @@ const formatOptionLabel = (term: Term) => (
 export const SearchBar = () => {
   const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
-
-  const dictionaryQuery = useDictionary();
+  const { terms } = useRootLoaderData();
   const navigate = useNavigate();
 
-  const options = !dictionaryQuery.isPending && !dictionaryQuery.isError ? dictionaryQuery.data : [];
-
   const filterOptions = (input: string) =>
-    options
-      .filter(
-        (term) =>
-          term.en.toLowerCase().includes(input) ||
-          term.nb.toLowerCase().includes(input) ||
-          term.nn.toLowerCase().includes(input),
-      )
-      .slice(0, 5);
+    input === ''
+      ? []
+      : terms
+          .filter(
+            (term: Term) =>
+              term.en.toLowerCase().includes(input) ||
+              term.nb.toLowerCase().includes(input) ||
+              term.nn.toLowerCase().includes(input),
+          )
+          .slice(0, 5);
 
   const loadOptions = (input: string, callback: (options: Term[]) => void) => {
     setTimeout(() => {
@@ -52,8 +51,6 @@ export const SearchBar = () => {
   };
 
   const noOptionsMessage = () => {
-    if (dictionaryQuery.isPending) return <p>Laster termliste</p>;
-    if (dictionaryQuery.isError) return <p>Kunne ikke laste termliste</p>;
     if (input === '') return null;
     return (
       <Button
@@ -87,7 +84,7 @@ export const SearchBar = () => {
           IndicatorSeparator: null,
         }}
         maxMenuHeight={400}
-        options={options}
+        options={terms}
         getOptionValue={(option: Term) => option._id}
         value={null}
         inputValue={input}
