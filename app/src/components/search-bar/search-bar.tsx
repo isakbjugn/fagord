@@ -26,14 +26,16 @@ export const SearchBar = () => {
   const navigate = useNavigate();
 
   const filterOptions = (input: string) =>
-    terms
-      .filter(
-        (term: Term) =>
-          term.en.toLowerCase().includes(input) ||
-          term.nb.toLowerCase().includes(input) ||
-          term.nn.toLowerCase().includes(input),
-      )
-      .slice(0, 5);
+    input === ''
+      ? []
+      : terms
+          .filter(
+            (term: Term) =>
+              term.en.toLowerCase().includes(input) ||
+              term.nb.toLowerCase().includes(input) ||
+              term.nn.toLowerCase().includes(input),
+          )
+          .slice(0, 5);
 
   const loadOptions = (input: string, callback: (options: Term[]) => void) => {
     setTimeout(() => {
