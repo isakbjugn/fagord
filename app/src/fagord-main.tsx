@@ -5,7 +5,6 @@ import { DictionaryPage } from '~/src/pages/dictionary-page/dictionary-page';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ClientOnly } from 'remix-utils/client-only';
 import { useState } from 'react';
-import { HomePage } from '~/src/pages/home-page/home-page';
 import { PageAlert } from '~/src/components/page-alert/page-alert';
 import { TermPage } from '~/src/pages/term-page/term-page';
 import { NewTermPage } from '~/src/pages/new-term-page/new-term-page';
@@ -29,7 +28,6 @@ export default function App() {
         <QueryClientProvider client={queryClient}>
           <PageAlert />
           <Routes>
-            <Route path="/hjem" element={<HomePage />} />
             <Route path="/termliste" element={<DictionaryPage />} />
             <Route path="/term/:termId" element={<TermPage />} />
             <Route path="/ny-term" element={<NewTermPage />} />
