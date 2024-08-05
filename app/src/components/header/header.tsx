@@ -4,7 +4,7 @@ import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reac
 import { useToggle } from '../../utils/use-toggle';
 import { SearchBar } from '../search-bar/search-bar';
 import style from './header.module.css';
-import { NavLinks } from './nav-links';
+import { navLinks } from './nav-links';
 
 export const Header = () => {
   const [isNavOpen, toggleNav, setIsNavOpen] = useToggle(false);
@@ -27,7 +27,7 @@ export const Header = () => {
               setIsNavOpen(false);
             }}
           >
-            {NavLinks.map((navItem) => (
+            {navLinks.map((navItem) => (
               <NavItem key={navItem.address}>
                 <NavLink className="nav-link text-nowrap" to={navItem.address}>
                   <span className={'fa fa-lg ' + navItem.icon + ' ' + style.icon} /> {navItem.text}
