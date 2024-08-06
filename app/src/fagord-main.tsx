@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from '@remix-run/react';
-import { ContactPage } from '~/src/pages/contact-page/contact-page';
 import { DictionaryPage } from '~/src/pages/dictionary-page/dictionary-page';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ClientOnly } from 'remix-utils/client-only';
@@ -31,7 +30,6 @@ export default function App() {
             <Route path="/term/:termId" element={<TermPage />} />
             <Route path="/ny-term" element={<NewTermPage />} />
             <Route path="/ny-term/:term" element={<NewTermPage />} />
-            <Route path="/kontakt" element={<ContactPage />} />
             <Route path="*" element={<Navigate to="/hjem" replace />} />
           </Routes>
         </QueryClientProvider>
