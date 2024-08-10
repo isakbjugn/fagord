@@ -1,16 +1,13 @@
-import { PassThrough } from 'node:stream';
+import { PassThrough } from "node:stream";
 
-import type { EntryContext } from '@vercel/remix';
-import { createReadableStreamFromReadable } from '@remix-run/node';
-import * as isbotModule from 'isbot';
-import { renderToPipeableStream } from 'react-dom/server';
-import createCache from '@emotion/cache';
-import { CacheProvider } from '@emotion/react';
-import createEmotionServer from '@emotion/server/create-instance';
-import { RemixServer } from '@remix-run/react';
+import type { EntryContext } from "@vercel/remix";
+import { createReadableStreamFromReadable } from "@remix-run/node";
+import { RemixServer } from "@remix-run/react";
+import { isbot } from "isbot";
+import { renderToPipeableStream } from "react-dom/server";
+import { MuiProvider } from '~/mui/mui-provider';
 
 const ABORT_DELAY = 5_000;
-const EMOTION_CACHE_KEY = 'css';
 
 export default function handleRequest(
   request: Request,
@@ -18,65 +15,53 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const prohibitOutOfOrderStreaming = isBotRequest(request.headers.get('user-agent')) || remixContext.isSpaMode;
+  const prohibitOutOfOrderStreaming =
+    isbot(request.headers.get("user-agent")) || remixContext.isSpaMode;
 
   return prohibitOutOfOrderStreaming
-    ? handleBotRequest(request, responseStatusCode, responseHeaders, remixContext)
-    : handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext);
-}
-
-// We have some Remix apps in the wild already running with isbot@3 so we need
-// to maintain backwards compatibility even though we want new apps to use
-// isbot@4.  That way, we can ship this as a minor Semver update to @remix-run/dev.
-function isBotRequest(userAgent: string | null) {
-  if (!userAgent) {
-    return false;
-  }
-
-  // isbot >= 3.8.0, >4
-  if ('isbot' in isbotModule && typeof isbotModule.isbot === 'function') {
-    return isbotModule.isbot(userAgent);
-  }
-
-  // isbot < 3.8.0
-  if ('default' in isbotModule && typeof isbotModule.default === 'function') {
-    return isbotModule.default(userAgent);
-  }
-
-  return false;
+    ? handleBotRequest(
+        request,
+        responseStatusCode,
+        responseHeaders,
+        remixContext
+      )
+    : handleBrowserRequest(
+        request,
+        responseStatusCode,
+        responseHeaders,
+        remixContext
+      );
 }
 
 function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  remixContext: EntryContext
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
-    const emotionCache = createCache({ key: EMOTION_CACHE_KEY });
-
     const { pipe, abort } = renderToPipeableStream(
-      <CacheProvider value={emotionCache}>
-        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
-      </CacheProvider>,
+      <MuiProvider>
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />
+      </MuiProvider>,
       {
         onAllReady() {
           shellRendered = true;
           const body = new PassThrough();
-          const emotionServer = createEmotionServer(emotionCache);
-          const bodyWithStyles = emotionServer.renderStylesToNodeStream();
-          body.pipe(bodyWithStyles);
+          const stream = createReadableStreamFromReadable(body);
 
-          const stream = createReadableStreamFromReadable(bodyWithStyles);
-
-          responseHeaders.set('Content-Type', 'text/html');
+          responseHeaders.set("Content-Type", "text/html");
 
           resolve(
             new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
-            }),
+            })
           );
 
           pipe(body);
@@ -93,7 +78,7 @@ function handleBotRequest(
             console.error(error);
           }
         },
-      },
+      }
     );
 
     setTimeout(abort, ABORT_DELAY);
@@ -104,32 +89,31 @@ function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  remixContext: EntryContext
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
-    const emotionCache = createCache({ key: EMOTION_CACHE_KEY });
-
     const { pipe, abort } = renderToPipeableStream(
-      <CacheProvider value={emotionCache}>
-        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
-      </CacheProvider>,
+      <MuiProvider>
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />
+      </MuiProvider>,
       {
         onShellReady() {
           shellRendered = true;
           const body = new PassThrough();
-          const emotionServer = createEmotionServer(emotionCache);
-          const bodyWithStyles = emotionServer.renderStylesToNodeStream();
-          body.pipe(bodyWithStyles);
-          const stream = createReadableStreamFromReadable(bodyWithStyles);
+          const stream = createReadableStreamFromReadable(body);
 
-          responseHeaders.set('Content-Type', 'text/html');
+          responseHeaders.set("Content-Type", "text/html");
 
           resolve(
             new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
-            }),
+            })
           );
 
           pipe(body);
@@ -146,7 +130,7 @@ function handleBrowserRequest(
             console.error(error);
           }
         },
-      },
+      }
     );
 
     setTimeout(abort, ABORT_DELAY);

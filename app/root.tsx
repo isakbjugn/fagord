@@ -1,9 +1,11 @@
 import { defer } from '@vercel/remix';
 import type { LinksFunction, LoaderFunction, MetaFunction } from '@vercel/remix';
 import { Links, Meta, Outlet, Scripts, useRouteLoaderData } from '@remix-run/react';
-import { ThemeProvider } from '@mui/material';
 import { splashscreens } from '~/links/splashscreens';
-import fagordTheme from '~/theme/theme';
+
+import { getMuiLinks } from './mui/get-mui-links';
+import { MuiMeta } from './mui/mui-meta';
+import { MuiDocument } from './mui/mui-document';
 
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import appStylesHref from './app.css?url';
@@ -26,6 +28,7 @@ export const links: LinksFunction = () => [
   { rel: 'icon', href: '/fagord-favicon.ico' },
   { rel: 'apple-touch-icon', href: '/fagord-icon260.png' },
   ...splashscreens,
+  ...getMuiLinks(),
 ];
 
 export const meta: MetaFunction = () => [
@@ -41,15 +44,16 @@ export default function Root() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <Meta />
+        <MuiMeta />
         <Links />
         <script src="https://kit.fontawesome.com/aff1df517b.js" crossOrigin="anonymous"></script>
       </head>
       <body>
-        <ThemeProvider theme={fagordTheme}>
+        <MuiDocument>
           <Header />
           <Outlet />
           <Footer />
-        </ThemeProvider>
+        </MuiDocument>
         <Scripts />
       </body>
     </html>
