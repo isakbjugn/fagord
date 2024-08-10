@@ -1,4 +1,4 @@
-import { json } from '@vercel/remix';
+import { defer } from '@vercel/remix';
 import type { LinksFunction, LoaderFunction, MetaFunction } from '@vercel/remix';
 import { Links, Meta, Outlet, Scripts, useRouteLoaderData } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
@@ -8,14 +8,11 @@ import fagordTheme from '~/theme/theme';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import appStylesHref from './app.css?url';
 import { Footer } from '~/src/components/footer/footer';
-import type { Term } from '~/types/term';
 import { Header } from '~/src/components/header/header';
 
 export const loader: LoaderFunction = async () => {
   const termsUrl = 'https://api.fagord.no/termer/';
-  const termResponse = await fetch(termsUrl);
-  const terms: Term[] = await termResponse.json();
-  return json({ terms: terms });
+  return defer({ terms: fetch(termsUrl).then((res) => res.json()) });
 };
 
 export const useRootLoaderData = () => {
@@ -45,7 +42,6 @@ export default function Root() {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <Meta />
         <Links />
-        {typeof document === 'undefined' ? '__STYLES__' : null}
         <script src="https://kit.fontawesome.com/aff1df517b.js" crossOrigin="anonymous"></script>
       </head>
       <body>

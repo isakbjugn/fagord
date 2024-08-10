@@ -1,35 +1,154 @@
-import { renderToString } from 'react-dom/server';
+import { PassThrough } from 'node:stream';
+
+import type { AppLoadContext, EntryContext } from '@vercel/remix';
+import { createReadableStreamFromReadable } from '@remix-run/node';
+import * as isbotModule from 'isbot';
+import { renderToPipeableStream } from 'react-dom/server';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import createEmotionServer from '@emotion/server/create-instance';
-import type { EntryContext } from '@vercel/remix';
 import { RemixServer } from '@remix-run/react';
 
-const key = 'custom';
-const cache = createCache({ key });
-const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache);
+const ABORT_DELAY = 5_000;
+const EMOTION_CACHE_KEY = 'css';
 
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
+  loadContext: AppLoadContext,
 ) {
-  let markup = renderToString(
-    <CacheProvider value={cache}>
-      <RemixServer context={remixContext} url={request.url} />
-    </CacheProvider>,
-  );
+  const prohibitOutOfOrderStreaming = isBotRequest(request.headers.get('user-agent')) || remixContext.isSpaMode;
 
-  const chunks = extractCriticalToChunks(markup);
-  const styles = constructStyleTagsFromChunks(chunks);
+  return prohibitOutOfOrderStreaming
+    ? handleBotRequest(request, responseStatusCode, responseHeaders, remixContext)
+    : handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext);
+}
 
-  markup = markup.replace('__STYLES__', styles);
+// We have some Remix apps in the wild already running with isbot@3 so we need
+// to maintain backwards compatibility even though we want new apps to use
+// isbot@4.  That way, we can ship this as a minor Semver update to @remix-run/dev.
+function isBotRequest(userAgent: string | null) {
+  if (!userAgent) {
+    return false;
+  }
 
-  responseHeaders.set('Content-Type', 'text/html');
+  // isbot >= 3.8.0, >4
+  if ('isbot' in isbotModule && typeof isbotModule.isbot === 'function') {
+    return isbotModule.isbot(userAgent);
+  }
 
-  return new Response('<!DOCTYPE html>' + markup, {
-    status: responseStatusCode,
-    headers: responseHeaders,
+  // isbot < 3.8.0
+  if ('default' in isbotModule && typeof isbotModule.default === 'function') {
+    return isbotModule.default(userAgent);
+  }
+
+  return false;
+}
+
+function handleBotRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false;
+    const emotionCache = createCache({ key: EMOTION_CACHE_KEY });
+
+    const { pipe, abort } = renderToPipeableStream(
+      <CacheProvider value={emotionCache}>
+        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+      </CacheProvider>,
+      {
+        onAllReady() {
+          shellRendered = true;
+          const body = new PassThrough();
+          const emotionServer = createEmotionServer(emotionCache);
+          const bodyWithStyles = emotionServer.renderStylesToNodeStream();
+          body.pipe(bodyWithStyles);
+          const stream = createReadableStreamFromReadable(body);
+
+          responseHeaders.set('Content-Type', 'text/html');
+
+          resolve(
+            new Response(stream, {
+              headers: responseHeaders,
+              status: responseStatusCode,
+            }),
+          );
+
+          pipe(body);
+        },
+        onShellError(error: unknown) {
+          reject(error);
+        },
+        onError(error: unknown) {
+          responseStatusCode = 500;
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error);
+          }
+        },
+      },
+    );
+
+    setTimeout(abort, ABORT_DELAY);
+  });
+}
+
+function handleBrowserRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false;
+    const emotionCache = createCache({ key: EMOTION_CACHE_KEY });
+
+    const { pipe, abort } = renderToPipeableStream(
+      <CacheProvider value={emotionCache}>
+        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+      </CacheProvider>,
+      {
+        onShellReady() {
+          shellRendered = true;
+          const body = new PassThrough();
+          const emotionServer = createEmotionServer(emotionCache);
+          const bodyWithStyles = emotionServer.renderStylesToNodeStream();
+          body.pipe(bodyWithStyles);
+          const stream = createReadableStreamFromReadable(bodyWithStyles);
+
+          responseHeaders.set('Content-Type', 'text/html');
+
+          resolve(
+            new Response(stream, {
+              headers: responseHeaders,
+              status: responseStatusCode,
+            }),
+          );
+
+          pipe(body);
+        },
+        onShellError(error: unknown) {
+          reject(error);
+        },
+        onError(error: unknown) {
+          responseStatusCode = 500;
+          // Log streaming rendering errors from inside the shell.  Don't log
+          // errors encountered during initial shell rendering since they'll
+          // reject and get logged in handleDocumentRequest.
+          if (shellRendered) {
+            console.error(error);
+          }
+        },
+      },
+    );
+
+    setTimeout(abort, ABORT_DELAY);
   });
 }

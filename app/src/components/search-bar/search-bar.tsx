@@ -1,12 +1,13 @@
-import { useRef, useState } from 'react';
-import { useNavigate } from '@remix-run/react';
+import { Suspense, useRef, useState } from 'react';
+import { Await, useNavigate, useRouteLoaderData } from '@remix-run/react';
 import type { SelectInstance, SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';
 
 import type { Term } from '~/types/term';
 import style from './search-bar.module.css';
-import { useRootLoaderData } from '~/root';
+import { Spinner } from '../spinner/spinner';
+import type { loader } from '~/root';
 
 const formatOptionLabel = (term: Term) => (
   <div>
@@ -22,10 +23,10 @@ const formatOptionLabel = (term: Term) => (
 export const SearchBar = () => {
   const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
-  const { terms } = useRootLoaderData();
+  const { terms } = useRouteLoaderData<typeof loader>('root');
   const navigate = useNavigate();
 
-  const filterOptions = (input: string) =>
+  const filterOptions = (terms: Term[], input: string) =>
     input === ''
       ? []
       : terms
@@ -37,9 +38,9 @@ export const SearchBar = () => {
           )
           .slice(0, 5);
 
-  const loadOptions = (input: string, callback: (options: Term[]) => void) => {
+  const loadOptions = (input: string, callback: (options: Term[]) => void, terms: Term[]) => {
     setTimeout(() => {
-      callback(filterOptions(input.toLowerCase()));
+      callback(filterOptions(terms, input.toLowerCase()));
     }, 1000);
   };
 
@@ -74,30 +75,39 @@ export const SearchBar = () => {
 
   return (
     <div className={style.search}>
-      <AsyncSelect
-        ref={selectRef}
-        className={style.select}
-        placeholder="Søk etter term"
-        formatOptionLabel={formatOptionLabel}
-        components={{
-          DropdownIndicator: SearchIcon,
-          IndicatorSeparator: null,
-        }}
-        maxMenuHeight={400}
-        options={terms}
-        getOptionValue={(option: Term) => option._id}
-        value={null}
-        inputValue={input}
-        onInputChange={(value, action) => {
-          if (action.action === 'input-change') setInput(value);
-        }}
-        onChange={openTermPage}
-        noOptionsMessage={noOptionsMessage}
-        cacheOptions
-        defaultOptions
-        loadOptions={loadOptions}
-        loadingMessage={() => 'Laster...'}
-      />
+      <Suspense fallback={<Spinner />}>
+        <Await resolve={terms}>
+          {(terms) => (
+            <AsyncSelect
+              ref={selectRef}
+              className={style.select}
+              placeholder="Søk etter term"
+              formatOptionLabel={formatOptionLabel}
+              components={{
+                DropdownIndicator: SearchIcon,
+                IndicatorSeparator: null,
+              }}
+              maxMenuHeight={400}
+              options={terms}
+              getOptionValue={(option: Term) => option._id}
+              value={null}
+              inputValue={input}
+              onInputChange={(value, action) => {
+                console.log('AsyncSelect: ', value);
+                if (action.action === 'input-change') setInput(value);
+              }}
+              onChange={openTermPage}
+              noOptionsMessage={noOptionsMessage}
+              cacheOptions
+              defaultOptions
+              loadOptions={(input, callback) => {
+                loadOptions(input, callback, terms);
+              }}
+              loadingMessage={() => 'Laster...'}
+            />
+          )}
+        </Await>
+      </Suspense>
     </div>
   );
 };
