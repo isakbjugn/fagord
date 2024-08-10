@@ -1,6 +1,6 @@
 import { PassThrough } from 'node:stream';
 
-import type { AppLoadContext, EntryContext } from '@vercel/remix';
+import type { EntryContext } from '@vercel/remix';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import * as isbotModule from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
@@ -17,7 +17,6 @@ export default function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  loadContext: AppLoadContext,
 ) {
   const prohibitOutOfOrderStreaming = isBotRequest(request.headers.get('user-agent')) || remixContext.isSpaMode;
 
@@ -68,7 +67,8 @@ function handleBotRequest(
           const emotionServer = createEmotionServer(emotionCache);
           const bodyWithStyles = emotionServer.renderStylesToNodeStream();
           body.pipe(bodyWithStyles);
-          const stream = createReadableStreamFromReadable(body);
+
+          const stream = createReadableStreamFromReadable(bodyWithStyles);
 
           responseHeaders.set('Content-Type', 'text/html');
 
