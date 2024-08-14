@@ -1,13 +1,15 @@
-import { Suspense, useRef, useState } from 'react';
-import { Await, useNavigate, useRouteLoaderData } from '@remix-run/react';
-import type { SelectInstance, SingleValue } from 'react-select';
+import type { Term } from '~/types/term';
 import AsyncSelect from 'react-select/async';
+import style from './search-bar.module.css';
+import type { SelectInstance, SingleValue } from 'react-select';
+import { ClientOnly } from 'remix-utils/client-only';
+import { useRef, useState } from 'react';
+import { useNavigate } from '@remix-run/react';
 import { Button } from 'reactstrap';
 
-import type { Term } from '~/types/term';
-import style from './search-bar.module.css';
-import { Spinner } from '../spinner/spinner';
-import type { loader } from '~/root';
+interface Props {
+  terms: Term[];
+}
 
 const formatOptionLabel = (term: Term) => (
   <div>
@@ -20,13 +22,12 @@ const formatOptionLabel = (term: Term) => (
   </div>
 );
 
-export const SearchBar = () => {
+const SearchBar = ({ terms }: Props) => {
   const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
-  const { terms } = useRouteLoaderData<typeof loader>('root');
   const navigate = useNavigate();
 
-  const filterOptions = (terms: Term[], input: string) =>
+  const filterOptions = (input: string) =>
     input === ''
       ? []
       : terms
@@ -38,9 +39,9 @@ export const SearchBar = () => {
           )
           .slice(0, 5);
 
-  const loadOptions = (input: string, callback: (options: Term[]) => void, terms: Term[]) => {
+  const loadOptions = (input: string, callback: (options: Term[]) => void) => {
     setTimeout(() => {
-      callback(filterOptions(terms, input.toLowerCase()));
+      callback(filterOptions(input.toLowerCase()));
     }, 1000);
   };
 
@@ -75,39 +76,34 @@ export const SearchBar = () => {
 
   return (
     <div className={style.search}>
-      <Suspense fallback={<Spinner />}>
-        <Await resolve={terms}>
-          {(terms) => (
-            <AsyncSelect
-              ref={selectRef}
-              className={style.select}
-              placeholder="Søk etter term"
-              formatOptionLabel={formatOptionLabel}
-              components={{
-                DropdownIndicator: SearchIcon,
-                IndicatorSeparator: null,
-              }}
-              maxMenuHeight={400}
-              options={terms}
-              getOptionValue={(option: Term) => option._id}
-              value={null}
-              inputValue={input}
-              onInputChange={(value, action) => {
-                console.log('AsyncSelect: ', value);
-                if (action.action === 'input-change') setInput(value);
-              }}
-              onChange={openTermPage}
-              noOptionsMessage={noOptionsMessage}
-              cacheOptions
-              defaultOptions
-              loadOptions={(input, callback) => {
-                loadOptions(input, callback, terms);
-              }}
-              loadingMessage={() => 'Laster...'}
-            />
-          )}
-        </Await>
-      </Suspense>
+      <AsyncSelect
+        ref={selectRef}
+        className={style.select}
+        placeholder="Søk etter term"
+        formatOptionLabel={formatOptionLabel}
+        components={{
+          DropdownIndicator: SearchIcon,
+          IndicatorSeparator: null,
+        }}
+        maxMenuHeight={400}
+        options={terms}
+        getOptionValue={(option: Term) => option._id}
+        value={null}
+        inputValue={input}
+        onInputChange={(value, action) => {
+          if (action.action === 'input-change') setInput(value);
+        }}
+        onChange={openTermPage}
+        noOptionsMessage={noOptionsMessage}
+        cacheOptions
+        defaultOptions
+        loadOptions={loadOptions}
+        loadingMessage={() => 'Laster...'}
+      />
     </div>
   );
+};
+
+export const SearchBarClientOnly = ({ terms }: Props) => {
+  return <ClientOnly>{() => <SearchBar terms={terms} />}</ClientOnly>;
 };

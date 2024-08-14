@@ -2,15 +2,15 @@ import { PassThrough } from 'node:stream';
 
 import type { EntryContext } from '@vercel/remix';
 import { createReadableStreamFromReadable } from '@remix-run/node';
-import * as isbotModule from 'isbot';
+import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import createEmotionServer from '@emotion/server/create-instance';
 import { RemixServer } from '@remix-run/react';
+import { EMOTION_CACHE_KEY } from '~/lib/constants';
 
 const ABORT_DELAY = 5_000;
-const EMOTION_CACHE_KEY = 'css';
 
 export default function handleRequest(
   request: Request,
@@ -18,32 +18,11 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const prohibitOutOfOrderStreaming = isBotRequest(request.headers.get('user-agent')) || remixContext.isSpaMode;
+  const prohibitOutOfOrderStreaming = isbot(request.headers.get('user-agent')) || remixContext.isSpaMode;
 
   return prohibitOutOfOrderStreaming
     ? handleBotRequest(request, responseStatusCode, responseHeaders, remixContext)
     : handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext);
-}
-
-// We have some Remix apps in the wild already running with isbot@3 so we need
-// to maintain backwards compatibility even though we want new apps to use
-// isbot@4.  That way, we can ship this as a minor Semver update to @remix-run/dev.
-function isBotRequest(userAgent: string | null) {
-  if (!userAgent) {
-    return false;
-  }
-
-  // isbot >= 3.8.0, >4
-  if ('isbot' in isbotModule && typeof isbotModule.isbot === 'function') {
-    return isbotModule.isbot(userAgent);
-  }
-
-  // isbot < 3.8.0
-  if ('default' in isbotModule && typeof isbotModule.default === 'function') {
-    return isbotModule.default(userAgent);
-  }
-
-  return false;
 }
 
 function handleBotRequest(

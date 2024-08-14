@@ -2,7 +2,7 @@ import { NavLink } from '@remix-run/react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 
 import { useToggle } from '../../utils/use-toggle';
-import { SearchBar } from '../search-bar/search-bar';
+import { Search } from '../search-bar/search';
 import style from './header.module.css';
 import { navLinks } from './nav-links';
 
@@ -18,7 +18,7 @@ export const Header = () => {
           <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />
         </NavbarBrand>
         <NavbarToggler onClick={toggleSearch} className={style.search}>
-          <span className="fa fa-search" />
+          <span aria-hidden className="fa fa-search" />
         </NavbarToggler>
         <Collapse isOpen={isNavOpen} navbar>
           <Nav
@@ -30,18 +30,14 @@ export const Header = () => {
             {navLinks.map((navItem) => (
               <NavItem key={navItem.address}>
                 <NavLink className="nav-link text-nowrap" to={navItem.address}>
-                  <span className={'fa fa-lg ' + navItem.icon + ' ' + style.icon} /> {navItem.text}
+                  <span aria-hidden className={'fa fa-lg ' + navItem.icon + ' ' + style.icon} /> {navItem.text}
                 </NavLink>
               </NavItem>
             ))}
           </Nav>
         </Collapse>
         <Collapse isOpen={isSearchOpen} navbar className="ms-auto">
-          <Nav navbar>
-            <NavItem>
-              <SearchBar />
-            </NavItem>
-          </Nav>
+          <Search />
         </Collapse>
       </Navbar>
     </>

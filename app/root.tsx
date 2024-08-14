@@ -1,6 +1,6 @@
 import { defer } from '@vercel/remix';
 import type { LinksFunction, LoaderFunction, MetaFunction } from '@vercel/remix';
-import { Links, Meta, Outlet, Scripts, useRouteLoaderData } from '@remix-run/react';
+import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
 import { splashscreens } from '~/links/splashscreens';
 import fagordTheme from '~/theme/theme';
@@ -9,14 +9,15 @@ import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import appStylesHref from './app.css?url';
 import { Footer } from '~/src/components/footer/footer';
 import { Header } from '~/src/components/header/header';
+import type { Term } from '~/types/term';
 
 export const loader: LoaderFunction = async () => {
   const termsUrl = 'https://api.fagord.no/termer/';
-  return defer({ terms: fetch(termsUrl).then((res) => res.json()) });
-};
-
-export const useRootLoaderData = () => {
-  return useRouteLoaderData<typeof loader>('root');
+  return defer({
+    terms: fetch(termsUrl)
+      .then((res) => res.json())
+      .then((data) => data.sort((a: Term, b: Term) => a.en.localeCompare(b.en))),
+  });
 };
 
 export const links: LinksFunction = () => [
