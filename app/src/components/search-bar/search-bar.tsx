@@ -4,7 +4,7 @@ import style from './search-bar.module.css';
 import type { SelectInstance, SingleValue } from 'react-select';
 import { ClientOnly } from 'remix-utils/client-only';
 import { useRef, useState } from 'react';
-import { useNavigate } from '@remix-run/react';
+import { Link, useNavigate } from '@remix-run/react';
 import { Button } from 'reactstrap';
 
 interface Props {
@@ -55,16 +55,17 @@ const SearchBar = ({ terms }: Props) => {
   const noOptionsMessage = () => {
     if (input === '') return null;
     return (
-      <Button
-        outline
-        onClick={() => {
-          selectRef.current?.blur();
-          navigate('/ny-term/' + input);
-          setInput('');
-        }}
-      >
-        Opprett ny term
-      </Button>
+      <Link to={'/ny-term/' + input}>
+        <Button
+          outline
+          onClick={() => {
+            selectRef.current?.blur();
+            setInput('');
+          }}
+        >
+          Opprett ny term
+        </Button>
+      </Link>
     );
   };
 
