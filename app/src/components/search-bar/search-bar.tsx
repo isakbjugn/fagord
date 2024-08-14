@@ -1,12 +1,15 @@
+import type { Term } from '~/types/term';
+import AsyncSelect from 'react-select/async';
+import style from './search-bar.module.css';
+import type { SelectInstance, SingleValue } from 'react-select';
+import { ClientOnly } from 'remix-utils/client-only';
 import { useRef, useState } from 'react';
 import { useNavigate } from '@remix-run/react';
-import type { SelectInstance, SingleValue } from 'react-select';
-import AsyncSelect from 'react-select/async';
 import { Button } from 'reactstrap';
 
-import type { Term } from '~/types/term';
-import style from './search-bar.module.css';
-import { useRootLoaderData } from '~/root';
+interface Props {
+  terms: Term[];
+}
 
 const formatOptionLabel = (term: Term) => (
   <div>
@@ -19,10 +22,9 @@ const formatOptionLabel = (term: Term) => (
   </div>
 );
 
-export const SearchBar = () => {
+const SearchBar = ({ terms }: Props) => {
   const selectRef = useRef<SelectInstance<Term> | null>(null);
   const [input, setInput] = useState('');
-  const { terms } = useRootLoaderData();
   const navigate = useNavigate();
 
   const filterOptions = (input: string) =>
@@ -100,4 +102,8 @@ export const SearchBar = () => {
       />
     </div>
   );
+};
+
+export const SearchBarClientOnly = ({ terms }: Props) => {
+  return <ClientOnly>{() => <SearchBar terms={terms} />}</ClientOnly>;
 };

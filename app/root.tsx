@@ -1,6 +1,6 @@
-import { json } from '@vercel/remix';
+import { defer } from '@vercel/remix';
 import type { LinksFunction, LoaderFunction, MetaFunction } from '@vercel/remix';
-import { Links, Meta, Outlet, Scripts, useRouteLoaderData } from '@remix-run/react';
+import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
 import { splashscreens } from '~/links/splashscreens';
 import fagordTheme from '~/theme/theme';
@@ -8,18 +8,16 @@ import fagordTheme from '~/theme/theme';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import appStylesHref from './app.css?url';
 import { Footer } from '~/src/components/footer/footer';
-import type { Term } from '~/types/term';
 import { Header } from '~/src/components/header/header';
+import type { Term } from '~/types/term';
 
 export const loader: LoaderFunction = async () => {
   const termsUrl = 'https://api.fagord.no/termer/';
-  const termResponse = await fetch(termsUrl);
-  const terms: Term[] = await termResponse.json();
-  return json({ terms: terms });
-};
-
-export const useRootLoaderData = () => {
-  return useRouteLoaderData<typeof loader>('root');
+  return defer({
+    terms: fetch(termsUrl)
+      .then((res) => res.json())
+      .then((data) => data.sort((a: Term, b: Term) => a.en.localeCompare(b.en))),
+  });
 };
 
 export const links: LinksFunction = () => [
@@ -45,7 +43,6 @@ export default function Root() {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <Meta />
         <Links />
-        {typeof document === 'undefined' ? '__STYLES__' : null}
         <script src="https://kit.fontawesome.com/aff1df517b.js" crossOrigin="anonymous"></script>
       </head>
       <body>
