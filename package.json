@@ -7,7 +7,7 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "start": "remix-serve build/index.js",
+    "start": "remix-serve build/server/index.js",
     "typecheck": "tsc",
     "prettier": "prettier --write \"app/**/*.{ts,tsx,css}\"",
     "lint": "eslint ./app"
@@ -23,6 +23,7 @@
     "@mui/utils": "5.14.16",
     "@remix-run/node": "2.10.0",
     "@remix-run/react": "2.10.0",
+    "@remix-run/serve": "^2.11.2",
     "@tanstack/react-query": "5.4.3",
     "bootstrap": "5.3.3",
     "isbot": "^4",
