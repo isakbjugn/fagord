@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from '@remix-run/react';
+import { Navigate, Route, Routes, useLocation } from '@remix-run/react';
 import { DictionaryPage } from '~/src/pages/dictionary-page/dictionary-page';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ClientOnly } from 'remix-utils/client-only';
@@ -8,6 +8,7 @@ import { TermPage } from '~/src/pages/term-page/term-page';
 import { NewTermPage } from '~/src/pages/new-term-page/new-term-page';
 
 export default function App() {
+  const { search } = useLocation();
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -30,7 +31,7 @@ export default function App() {
             <Route path="/term/:termId" element={<TermPage />} />
             <Route path="/ny-term" element={<NewTermPage />} />
             <Route path="/ny-term/:term" element={<NewTermPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to={{ pathname: '/hjem', search: search }} />} />
           </Routes>
         </QueryClientProvider>
       )}

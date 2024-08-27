@@ -14,7 +14,7 @@ export const Header = () => {
   return (
     <Navbar dark expand="lg" className={style.navbar}>
       <NavbarToggler onClick={toggleNav} />
-      <NavbarBrand className="mr-auto" href="/">
+      <NavbarBrand className="mr-auto" href="/hjem">
         <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />
       </NavbarBrand>
       <NavbarToggler onClick={toggleSearch} className={style.search}>

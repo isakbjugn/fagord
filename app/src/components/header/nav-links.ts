@@ -2,7 +2,7 @@ import type { NavItem } from '~/types/nav-item';
 
 export const navLinks: NavItem[] = [
   {
-    address: '/',
+    address: '/hjem',
     icon: 'fa-home',
     text: 'Hjem',
   },
