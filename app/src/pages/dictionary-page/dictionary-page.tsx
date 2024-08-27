@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import Select from 'react-select';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 
 import { InfoMessage } from '../../components/info-message/info-message';
@@ -25,7 +24,7 @@ const AllSubjects: Subject = { field: 'Alle fagfelt', subfields: [] };
 
 export const DictionaryPage = () => {
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
-  const [subjectFilter, setSubjectFilter] = useState<Subject | null>(AllSubjects);
+  const [subjectFilter, setSubjectFilter] = useState<string | null>(AllSubjects.field);
 
   const dictionaryQuery = useDictionary();
   const subjectQuery = useQuery({ queryKey: ['fields'], queryFn: fetchFields });
@@ -51,25 +50,19 @@ export const DictionaryPage = () => {
 
   const applySubjectFilter = (terms: Term[]): Term[] => {
     if (subjectFilter === null) return terms;
-    if (subjectFilter.field === AllSubjects.field) return terms;
-    return terms.filter((term) => term.field === subjectFilter.field);
+    if (subjectFilter === AllSubjects.field) return terms;
+    return terms.filter((term) => term.field === subjectFilter);
   };
 
   const subjectFilterComponent = () => {
     if (subjectQuery.isPending) return <Spinner />;
     if (subjectQuery.isError) return <p>Kunne ikke laste fagfelt.</p>;
     return (
-      <Select
-        className={style.subjects}
-        value={subjectFilter}
-        placeholder="Filtrer fagfelt"
-        options={[{ field: 'Alle fagfelt', subfields: [] }, ...subjectQuery.data]}
-        onChange={(choice) => {
-          setSubjectFilter(choice);
-        }}
-        getOptionLabel={(subject: Subject) => subject.field}
-        getOptionValue={(subject: Subject) => subject.field}
-      />
+      <select className={style.subjects} onChange={(event) => setSubjectFilter(event.currentTarget.value)}>
+        {[AllSubjects, ...subjectQuery.data].map((subject) => (
+          <option key={subject.field}>{subject.field}</option>
+        ))}
+      </select>
     );
   };
 
