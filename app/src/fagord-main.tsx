@@ -30,7 +30,7 @@ export default function App() {
             <Route path="/term/:termId" element={<TermPage />} />
             <Route path="/ny-term" element={<NewTermPage />} />
             <Route path="/ny-term/:term" element={<NewTermPage />} />
-            <Route path="*" element={<Navigate to="/hjem" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </QueryClientProvider>
       )}

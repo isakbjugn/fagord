@@ -1,5 +1,5 @@
 import { defer } from '@remix-run/node';
-import type { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
 import { splashscreens } from '~/links/splashscreens';
@@ -11,12 +11,14 @@ import { Footer } from '~/src/components/footer/footer';
 import { Header } from '~/src/components/header/header';
 import type { Term } from '~/types/term';
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
   const termsUrl = 'https://api.fagord.no/termer/';
+  const q = new URL(request.url).searchParams.get('q');
   return defer({
     terms: fetch(termsUrl)
       .then((res) => res.json())
       .then((data) => data.sort((a: Term, b: Term) => a.en.localeCompare(b.en))),
+    q,
   });
 };
 
