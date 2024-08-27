@@ -10,15 +10,18 @@ import appStylesHref from './app.css?url';
 import { Footer } from '~/src/components/footer/footer';
 import { Header } from '~/src/components/header/header';
 import type { Term } from '~/types/term';
+import { filterTerms } from '~/lib/search';
 
 export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
   const termsUrl = 'https://api.fagord.no/termer/';
+  const terms = fetch(termsUrl).then((res) => res.json());
   const q = new URL(request.url).searchParams.get('q');
+  const searchResult = terms.then((terms) => filterTerms(terms, q));
+
   return defer({
-    terms: fetch(termsUrl)
-      .then((res) => res.json())
-      .then((data) => data.sort((a: Term, b: Term) => a.en.localeCompare(b.en))),
-    q,
+    terms: terms.then((data) => data.sort((a: Term, b: Term) => a.en.localeCompare(b.en))),
+    q: q,
+    searchResult: searchResult,
   });
 };
 

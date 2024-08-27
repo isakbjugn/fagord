@@ -6,7 +6,7 @@ import styles from './search.module.css';
 import { Button } from 'reactstrap';
 
 export function Search() {
-  const { terms, q } = useLoaderData<typeof rootLoader>();
+  const { q, searchResult } = useLoaderData<typeof rootLoader>();
   const [resultsOpen, setResultsOpen] = useState(false);
   const location = useLocation();
   const navigation = useNavigation();
@@ -27,31 +27,12 @@ export function Search() {
     return () => window.removeEventListener('click', handleClick);
   });
 
-  function filterTerms(terms: Term[], q: string) {
-    if (!q) return [];
-    return terms
-      .filter(
-        (term: Term) =>
-          term.en.toLowerCase().includes(q) || term.nb.toLowerCase().includes(q) || term.nn.toLowerCase().includes(q),
-      )
-      .slice(0, 5);
-  }
-
   useEffect(() => {
     const searchField = document.getElementById('q');
     if (searchField instanceof HTMLInputElement) {
       searchField.value = q || '';
     }
   }, [q]);
-
-  const NoOptionsMessage = () => {
-    if (!q) return null;
-    return (
-      <Link to={`/ny-term/${q}`} className={styles.addButton}>
-        <Button outline>Opprett ny term</Button>
-      </Link>
-    );
-  };
 
   return (
     <div className={styles.wrapper}>
@@ -77,15 +58,15 @@ export function Search() {
         <div className={styles.spinner} aria-hidden hidden={!searching} />
       </Form>
       <Suspense fallback={null}>
-        <Await resolve={terms}>
+        <Await resolve={searchResult}>
           {(terms) => (
             <nav className={styles.resultDropdown} hidden={!resultsOpen}>
               <ul className={styles.results}>
-                {filterTerms(terms, q).map((term: Term) => (
+                {terms.map((term: Term) => (
                   <SearchResult term={term} key={term._id} />
                 ))}
               </ul>
-              <NoOptionsMessage />
+              <NoOptionsMessage q={q} />
             </nav>
           )}
         </Await>
@@ -106,5 +87,14 @@ function SearchResult({ term }: { term: Term }) {
         </div>
       </Link>
     </li>
+  );
+}
+
+function NoOptionsMessage({ q }: { q: string | null }) {
+  if (!q) return null;
+  return (
+    <Link to={`/ny-term/${q}`} className={styles.addButton}>
+      <Button outline>Opprett ny term</Button>
+    </Link>
   );
 }
