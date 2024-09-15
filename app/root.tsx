@@ -37,6 +37,12 @@ export const links: LinksFunction = () => [
 export const meta: MetaFunction = () => [
   { title: 'Fagord' },
   { name: 'description', content: 'Fagord er din kilde til norske fagtermer.' },
+  { name: 'viewport', content:'width=device-width; initial-scale=1; viewport-fit=cover' },
+  { name: 'mobile-web-app-capable', content: 'yes' },
+  { name: 'apple-mobile-web-app-capable', content: 'yes' },
+  { name: 'apple-mobile-web-app-title', content: 'Fagord' },
+  { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+  { name: 'theme-color', content: '#ffffff' },
 ];
 
 export default function Root() {
@@ -44,9 +50,6 @@ export default function Root() {
     <html lang="nb">
     <head>
       <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width; initial-scale=1; viewport-fit=cover" />
-      <meta name="mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
       <Meta />
       <Links />
       <script src="https://kit.fontawesome.com/aff1df517b.js" crossOrigin="anonymous"></script>
