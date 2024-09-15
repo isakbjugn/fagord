@@ -29,8 +29,8 @@ export default function App() {
           <Routes>
             <Route path="/termliste" element={<DictionaryPage />} />
             <Route path="/term/:termId" element={<TermPage />} />
-            <Route path="/ny-term" element={<NewTermPage />} />
-            <Route path="/ny-term/:term" element={<NewTermPage />} />
+            <Route path="/gammel/ny-term" element={<NewTermPage />} />
+            <Route path="/gammel/ny-term/:term" element={<NewTermPage />} />
             <Route path="*" element={<Navigate to={{ pathname: '/hjem', search: search }} />} />
           </Routes>
         </QueryClientProvider>
