@@ -1,4 +1,5 @@
-import { Await, Form, Link, useLoaderData, useLocation, useNavigation, useSubmit } from '@remix-run/react';
+import { Await, Form, Link, useLoaderData, useLocation, useNavigation } from '@remix-run/react';
+import { useDebounceSubmit } from 'remix-utils/use-debounce-submit';
 import type { loader as rootLoader } from '~/root';
 import type { Term } from '~/types/term';
 import { Suspense, useEffect, useState } from 'react';
@@ -10,7 +11,7 @@ export function Search() {
   const [resultsOpen, setResultsOpen] = useState(false);
   const location = useLocation();
   const navigation = useNavigation();
-  const submit = useSubmit();
+  const submit = useDebounceSubmit();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export function Search() {
           const isFirstSearch = q === null;
           submit(event.currentTarget, {
             replace: !isFirstSearch,
+            debounceTimeout: 200,
           });
         }}
       >
