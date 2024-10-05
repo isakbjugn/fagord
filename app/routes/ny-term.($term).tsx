@@ -1,47 +1,20 @@
 import { Form, useLoaderData } from '@remix-run/react';
-import { json, redirect } from '@remix-run/node';
-import type { ActionFunction, ActionFunctionArgs, LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
-import type { Term } from '~/types/term';
+import { json } from '@remix-run/node';
+import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
-  return json({ termFromUrl: params.term })
-}
-
-export const action: ActionFunction = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const termsUrl = 'https://api.fagord.no/termer/';
-  const newTerm: Term = await fetch(termsUrl, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(Object.fromEntries(formData))
-  })
-    .then(res => {
-      if (!res.ok) {
-        throw Error(res.status.toString() + ' ' + res.statusText);
-      }
-      return res.json();
-    });
-  return redirect(`/ny-term/${newTerm._id}/opprettet`);
-}
+  return json({ termFromUrl: params.term });
+};
 
 export default function NyTerm() {
   const { termFromUrl } = useLoaderData<typeof loader>();
 
   return (
-    <Form method="post">
+    <Form method="post" action="legg-til">
       <h2>Legg til ny term</h2>
       <div>
-
         <label htmlFor="en">Engelsk term</label>
-        <input
-          name="en"
-          defaultValue={termFromUrl}
-          type="text"
-          autoCapitalize="none"
-        />
+        <input name="en" defaultValue={termFromUrl} type="text" autoCapitalize="none" />
 
         <label htmlFor="pos">Ordklasse</label>
         <select name="pos">
@@ -59,5 +32,5 @@ export default function NyTerm() {
       </div>
       <button>Legg til</button>
     </Form>
-  )
+  );
 }
