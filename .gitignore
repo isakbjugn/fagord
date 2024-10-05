@@ -30,3 +30,9 @@ build
 
 #remix
 .cache
+
+# environment
+.env
+
+# database
+db_persistent_storage
