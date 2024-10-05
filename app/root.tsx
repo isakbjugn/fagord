@@ -1,6 +1,7 @@
 import { defer } from '@remix-run/node';
 import type { LinksFunction, LoaderFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
+import type { ClientLoaderFunctionArgs } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
 import { splashscreens } from '~/links/splashscreens';
 import fagordTheme from '~/theme/theme';
@@ -12,6 +13,12 @@ import { Header } from '~/src/components/header/header';
 import type { Term } from '~/types/term';
 import { filterTerms } from '~/lib/search';
 import { ErrorMessage } from '~/src/components/error-message/error-message';
+
+interface ServerData {
+  terms: Promise<Term[]>;
+  q: string;
+  searchResult: Promise<Term[]>;
+}
 
 export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
   const termsUrl = 'https://api.fagord.no/termer/';
@@ -28,6 +35,38 @@ export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) =>
     searchResult: searchResult,
   });
 };
+
+let isInitialRequest = true;
+
+export async function clientLoader({ request, serverLoader }: ClientLoaderFunctionArgs) {
+  const q = new URL(request.url).searchParams.get('q');
+
+  if (isInitialRequest) {
+    isInitialRequest = false;
+    const serverData = (await serverLoader()) as ServerData;
+    const resolvedTerms = await serverData.terms;
+    localStorage.setItem('terms', JSON.stringify(resolvedTerms));
+    return serverData;
+  }
+
+  const cachedTerms = localStorage.getItem('terms');
+  if (cachedTerms) {
+    const terms = JSON.parse(cachedTerms) as Term[];
+
+    return {
+      terms: terms.sort((a: Term, b: Term) => a.en.localeCompare(b.en)),
+      q: q,
+      searchResult: filterTerms(terms, q),
+    };
+  }
+
+  const serverData = (await serverLoader()) as ServerData;
+  const resolvedTerms = await serverData.terms;
+  localStorage.setItem('terms', JSON.stringify(resolvedTerms));
+  return serverData;
+}
+
+clientLoader.hydrate = true;
 
 export function ErrorBoundary() {
   const error = useRouteError();
