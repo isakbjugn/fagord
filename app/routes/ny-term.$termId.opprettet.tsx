@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
-import style from '~/src/pages/new-term-page/new-term-page.module.css';
+import style from '~/styles/ny-term.module.css';
 import { Button } from 'reactstrap';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
