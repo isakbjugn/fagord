@@ -16,21 +16,27 @@ export default function NyTerm() {
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
   const bokmalFetcher = useDebounceFetcher<DictionaryResponse>();
+  const nynorskFetcher = useDebounceFetcher<DictionaryResponse>();
 
   function handleBokmalTermChange(event: ChangeEvent<HTMLInputElement>) {
-    const bokmalTerm = event.target.value;
-    if (bokmalTerm) {
-      const formData = new FormData();
-      formData.append('term', bokmalTerm);
-      formData.append('dialect', 'nb');
+    const formData = new FormData();
+    formData.append('term', event.target.value);
+    formData.append('dialect', 'nb');
 
-      bokmalFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
-    }
+    bokmalFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
   }
 
-  function onSuggestionClick(term: string | undefined, dialect: 'nb' | 'nn') {
+  function handleNynorskTermChange(event: ChangeEvent<HTMLInputElement>) {
+    const formData = new FormData();
+    formData.append('term', event.target.value);
+    formData.append('dialect', 'nn');
+
+    nynorskFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
+  }
+
+  function onBokmalSuggestionClick(term: string | undefined) {
     if (term !== undefined) {
-      const inputField = document.getElementById(dialect);
+      const inputField = document.getElementById('nb');
       if (inputField) {
         (inputField as HTMLInputElement).value = term;
         const formData = new FormData();
@@ -38,6 +44,20 @@ export default function NyTerm() {
         formData.append('dialect', 'nb');
 
         bokmalFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
+      }
+    }
+  }
+
+  function onNynorskSuggestionClick(term: string | undefined) {
+    if (term !== undefined) {
+      const inputField = document.getElementById('nn');
+      if (inputField) {
+        (inputField as HTMLInputElement).value = term;
+        const formData = new FormData();
+        formData.append('term', term);
+        formData.append('dialect', 'nn');
+
+        nynorskFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
       }
     }
   }
@@ -72,7 +92,7 @@ export default function NyTerm() {
                   <button
                     type="button"
                     className={style.inlineButton}
-                    onClick={() => onSuggestionClick(bokmalFetcher.data?.suggestion, 'nb')}
+                    onClick={() => onBokmalSuggestionClick(bokmalFetcher.data?.suggestion)}
                   >
                     {bokmalFetcher.data?.suggestion}
                   </button>
@@ -84,7 +104,28 @@ export default function NyTerm() {
           <div className="col-sm-6">
             <Label for="nn">
               Nynorsk
-              <input name="nn" className="form-control" type="text" autoCapitalize="none" />
+              <input
+                id="nn"
+                name="nn"
+                className={'form-control' + (nynorskFetcher.data?.isValid ? ' is-valid' : '')}
+                type="text"
+                autoCapitalize="none"
+                onChange={handleNynorskTermChange}
+              />
+              <div className="valid-feedback bright-feedback-text">{nynorskFetcher.data?.validationText}</div>
+              {nynorskFetcher.data?.suggestion && (
+                <div className={style.suggestionFeedback}>
+                  Mente du{' '}
+                  <button
+                    type="button"
+                    className={style.inlineButton}
+                    onClick={() => onNynorskSuggestionClick(nynorskFetcher.data?.suggestion)}
+                  >
+                    {nynorskFetcher.data?.suggestion}
+                  </button>
+                  ?
+                </div>
+              )}
             </Label>
           </div>
         </Row>
