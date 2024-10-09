@@ -3,6 +3,9 @@ import { Form, useLoaderData, useNavigation } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Button, Label, Row } from 'reactstrap';
+import type { ChangeEvent } from 'react';
+import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
+import type { DictionaryResponse } from '~/routes/api.ordbokene';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
   return json({ termFromUrl: params.term });
@@ -12,6 +15,32 @@ export default function NyTerm() {
   const { termFromUrl } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
+  const bokmalFetcher = useDebounceFetcher<DictionaryResponse>();
+
+  function handleBokmalTermChange(event: ChangeEvent<HTMLInputElement>) {
+    const bokmalTerm = event.target.value;
+    if (bokmalTerm) {
+      const formData = new FormData();
+      formData.append('term', bokmalTerm);
+      formData.append('dialect', 'nb');
+
+      bokmalFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
+    }
+  }
+
+  function onSuggestionClick(term: string | undefined, dialect: 'nb' | 'nn') {
+    if (term !== undefined) {
+      const inputField = document.getElementById(dialect);
+      if (inputField) {
+        (inputField as HTMLInputElement).value = term;
+        const formData = new FormData();
+        formData.append('term', term);
+        formData.append('dialect', 'nb');
+
+        bokmalFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
+      }
+    }
+  }
 
   return (
     <section className={style.form}>
@@ -28,7 +57,28 @@ export default function NyTerm() {
           <div className="col-sm-6">
             <Label for="nb">
               Bokmål
-              <input name="nb" className="form-control" type="text" autoCapitalize="none" />
+              <input
+                id="nb"
+                name="nb"
+                className={'form-control' + (bokmalFetcher.data?.isValid ? ' is-valid' : '')}
+                type="text"
+                autoCapitalize="none"
+                onChange={handleBokmalTermChange}
+              />
+              <div className="valid-feedback bright-feedback-text">{bokmalFetcher.data?.validationText}</div>
+              {bokmalFetcher.data?.suggestion && (
+                <div className={style.suggestionFeedback}>
+                  Mente du{' '}
+                  <button
+                    type="button"
+                    className={style.inlineButton}
+                    onClick={() => onSuggestionClick(bokmalFetcher.data?.suggestion, 'nb')}
+                  >
+                    {bokmalFetcher.data?.suggestion}
+                  </button>
+                  ?
+                </div>
+              )}
             </Label>
           </div>
           <div className="col-sm-6">
