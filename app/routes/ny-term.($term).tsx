@@ -3,6 +3,8 @@ import { Form, useLoaderData, useNavigation } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Button, Label, Row } from 'reactstrap';
+import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
+import type { DictionaryResponse } from '~/routes/api.ordbokene';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
   return json({ termFromUrl: params.term });
@@ -12,6 +14,30 @@ export default function NyTerm() {
   const { termFromUrl } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
+  const bokmalFetcher = useDebounceFetcher<DictionaryResponse>();
+  const nynorskFetcher = useDebounceFetcher<DictionaryResponse>();
+
+  function submitTerm(term: string, dialect: 'nb' | 'nn', fetcher: ReturnType<typeof useDebounceFetcher>) {
+    const formData = new FormData();
+    formData.append('term', term);
+    formData.append('dialect', dialect);
+
+    fetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
+  }
+
+  function handleSuggestionClick(
+    term: string | undefined,
+    dialect: 'nb' | 'nn',
+    fetcher: ReturnType<typeof useDebounceFetcher>,
+  ) {
+    if (term !== undefined) {
+      const inputField = document.getElementById(dialect) as HTMLInputElement | null;
+      if (inputField) {
+        inputField.value = term;
+        submitTerm(term, dialect, fetcher);
+      }
+    }
+  }
 
   return (
     <section className={style.form}>
@@ -28,13 +54,55 @@ export default function NyTerm() {
           <div className="col-sm-6">
             <Label for="nb">
               Bokmål
-              <input name="nb" className="form-control" type="text" autoCapitalize="none" />
+              <input
+                id="nb"
+                name="nb"
+                className={'form-control' + (bokmalFetcher.data?.isValid ? ' is-valid' : '')}
+                type="text"
+                autoCapitalize="none"
+                onChange={(event) => submitTerm(event.target.value, 'nb', bokmalFetcher)}
+              />
+              <div className="valid-feedback bright-feedback-text">{bokmalFetcher.data?.validationText}</div>
+              {bokmalFetcher.data?.suggestion && (
+                <div className={style.suggestionFeedback}>
+                  Mente du{' '}
+                  <button
+                    type="button"
+                    className={style.inlineButton}
+                    onClick={() => handleSuggestionClick(bokmalFetcher.data?.suggestion, 'nb', bokmalFetcher)}
+                  >
+                    {bokmalFetcher.data?.suggestion}
+                  </button>
+                  ?
+                </div>
+              )}
             </Label>
           </div>
           <div className="col-sm-6">
             <Label for="nn">
               Nynorsk
-              <input name="nn" className="form-control" type="text" autoCapitalize="none" />
+              <input
+                id="nn"
+                name="nn"
+                className={'form-control' + (nynorskFetcher.data?.isValid ? ' is-valid' : '')}
+                type="text"
+                autoCapitalize="none"
+                onChange={(event) => submitTerm(event.target.value, 'nn', nynorskFetcher)}
+              />
+              <div className="valid-feedback bright-feedback-text">{nynorskFetcher.data?.validationText}</div>
+              {nynorskFetcher.data?.suggestion && (
+                <div className={style.suggestionFeedback}>
+                  Mente du{' '}
+                  <button
+                    type="button"
+                    className={style.inlineButton}
+                    onClick={() => handleSuggestionClick(nynorskFetcher.data?.suggestion, 'nn', nynorskFetcher)}
+                  >
+                    {nynorskFetcher.data?.suggestion}
+                  </button>
+                  ?
+                </div>
+              )}
             </Label>
           </div>
         </Row>
