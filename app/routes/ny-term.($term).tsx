@@ -3,7 +3,6 @@ import { Form, useLoaderData, useNavigation } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Button, Label, Row } from 'reactstrap';
-import type { ChangeEvent } from 'react';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 import type { DictionaryResponse } from '~/routes/api.ordbokene';
 
@@ -18,46 +17,24 @@ export default function NyTerm() {
   const bokmalFetcher = useDebounceFetcher<DictionaryResponse>();
   const nynorskFetcher = useDebounceFetcher<DictionaryResponse>();
 
-  function handleBokmalTermChange(event: ChangeEvent<HTMLInputElement>) {
+  function submitTerm(term: string, dialect: 'nb' | 'nn', fetcher: ReturnType<typeof useDebounceFetcher>) {
     const formData = new FormData();
-    formData.append('term', event.target.value);
-    formData.append('dialect', 'nb');
+    formData.append('term', term);
+    formData.append('dialect', dialect);
 
-    bokmalFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
+    fetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
   }
 
-  function handleNynorskTermChange(event: ChangeEvent<HTMLInputElement>) {
-    const formData = new FormData();
-    formData.append('term', event.target.value);
-    formData.append('dialect', 'nn');
-
-    nynorskFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
-  }
-
-  function onBokmalSuggestionClick(term: string | undefined) {
+  function handleSuggestionClick(
+    term: string | undefined,
+    dialect: 'nb' | 'nn',
+    fetcher: ReturnType<typeof useDebounceFetcher>,
+  ) {
     if (term !== undefined) {
-      const inputField = document.getElementById('nb');
+      const inputField = document.getElementById(dialect) as HTMLInputElement | null;
       if (inputField) {
-        (inputField as HTMLInputElement).value = term;
-        const formData = new FormData();
-        formData.append('term', term);
-        formData.append('dialect', 'nb');
-
-        bokmalFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
-      }
-    }
-  }
-
-  function onNynorskSuggestionClick(term: string | undefined) {
-    if (term !== undefined) {
-      const inputField = document.getElementById('nn');
-      if (inputField) {
-        (inputField as HTMLInputElement).value = term;
-        const formData = new FormData();
-        formData.append('term', term);
-        formData.append('dialect', 'nn');
-
-        nynorskFetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
+        inputField.value = term;
+        submitTerm(term, dialect, fetcher);
       }
     }
   }
@@ -83,7 +60,7 @@ export default function NyTerm() {
                 className={'form-control' + (bokmalFetcher.data?.isValid ? ' is-valid' : '')}
                 type="text"
                 autoCapitalize="none"
-                onChange={handleBokmalTermChange}
+                onChange={(event) => submitTerm(event.target.value, 'nb', bokmalFetcher)}
               />
               <div className="valid-feedback bright-feedback-text">{bokmalFetcher.data?.validationText}</div>
               {bokmalFetcher.data?.suggestion && (
@@ -92,7 +69,7 @@ export default function NyTerm() {
                   <button
                     type="button"
                     className={style.inlineButton}
-                    onClick={() => onBokmalSuggestionClick(bokmalFetcher.data?.suggestion)}
+                    onClick={() => handleSuggestionClick(bokmalFetcher.data?.suggestion, 'nb', bokmalFetcher)}
                   >
                     {bokmalFetcher.data?.suggestion}
                   </button>
@@ -110,7 +87,7 @@ export default function NyTerm() {
                 className={'form-control' + (nynorskFetcher.data?.isValid ? ' is-valid' : '')}
                 type="text"
                 autoCapitalize="none"
-                onChange={handleNynorskTermChange}
+                onChange={(event) => submitTerm(event.target.value, 'nn', nynorskFetcher)}
               />
               <div className="valid-feedback bright-feedback-text">{nynorskFetcher.data?.validationText}</div>
               {nynorskFetcher.data?.suggestion && (
@@ -119,7 +96,7 @@ export default function NyTerm() {
                   <button
                     type="button"
                     className={style.inlineButton}
-                    onClick={() => onNynorskSuggestionClick(nynorskFetcher.data?.suggestion)}
+                    onClick={() => handleSuggestionClick(nynorskFetcher.data?.suggestion, 'nn', nynorskFetcher)}
                   >
                     {nynorskFetcher.data?.suggestion}
                   </button>
