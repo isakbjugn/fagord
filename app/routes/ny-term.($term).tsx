@@ -1,31 +1,22 @@
 import style from '~/styles/ny-term.module.css';
-import { Await, Form, useLoaderData, useNavigate, useNavigation, useRouteLoaderData } from '@remix-run/react';
+import { Await, Form, useLoaderData, useNavigation, useRouteLoaderData } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Button, Label, Row } from 'reactstrap';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 import type { DictionaryResponse } from '~/routes/api.ordbokene';
 import type { loader as rootLoader } from '~/root';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useState } from 'react';
 import type { Term } from '~/types/term';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
-  return json({ newTerm: params.term });
+  return json({ termFromUrl: params.term });
 };
 
 export default function NyTerm() {
-  const { newTerm } = useLoaderData<typeof loader>();
-  const { terms, q } = useRouteLoaderData<typeof rootLoader>('root');
+  const { termFromUrl } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
-  const navigate = useNavigate();
   const submitting = navigation.formAction === '/ny-term/legg-til';
-
-  useEffect(() => {
-    const enField = document.getElementById('en');
-    if (enField instanceof HTMLInputElement) {
-      enField.value = newTerm || '';
-    }
-  }, [newTerm]);
 
   return (
     <section className={style.form}>
@@ -34,61 +25,7 @@ export default function NyTerm() {
         <Row>
           <Label for="en">
             Engelsk term
-            <Suspense
-              fallback={
-                <input
-                  id="en"
-                  name="en"
-                  defaultValue={newTerm}
-                  className="form-control"
-                  type="text"
-                  autoCapitalize="none"
-                  onChange={(event) => {
-                    const isFirstInput = newTerm === null;
-                    if (q) {
-                      navigate(`/ny-term/${event.target.value}?q=${q}`, {
-                        replace: isFirstInput,
-                      });
-                    } else {
-                      navigate(`/ny-term/${event.target.value}`, {
-                        replace: isFirstInput,
-                      });
-                    }
-                  }}
-                />
-              }
-            >
-              <Await resolve={terms}>
-                {(terms) => {
-                  const existsInTermbase = terms.find((term: Term) => term.en === newTerm) !== undefined;
-                  return (
-                    <>
-                      <input
-                        id="en"
-                        name="en"
-                        defaultValue={newTerm}
-                        className={'form-control' + (existsInTermbase ? ' is-invalid' : '')}
-                        type="text"
-                        autoCapitalize="none"
-                        onChange={(event) => {
-                          const isFirstInput = newTerm === null;
-                          if (q) {
-                            navigate(`/ny-term/${event.target.value}?q=${q}`, {
-                              replace: isFirstInput,
-                            });
-                          } else {
-                            navigate(`/ny-term/${event.target.value}`, {
-                              replace: isFirstInput,
-                            });
-                          }
-                        }}
-                      />
-                      <div className="invalid-feedback bright-feedback-text">Termen finnes allerede i termlista.</div>
-                    </>
-                  );
-                }}
-              </Await>
-            </Suspense>
+            <TermInput defaultValue={termFromUrl} />
           </Label>
         </Row>
         <Label>Norske termer</Label>
@@ -153,6 +90,47 @@ export default function NyTerm() {
         </Button>
       </Form>
     </section>
+  );
+}
+
+function TermInput({ defaultValue }: { defaultValue: string }) {
+  const { terms } = useRouteLoaderData<typeof rootLoader>('root');
+  const [newTerm, setNewTerm] = useState(defaultValue);
+
+  return (
+    <Suspense
+      fallback={
+        <input
+          id="en"
+          name="en"
+          defaultValue={defaultValue}
+          className="form-control"
+          type="text"
+          autoCapitalize="none"
+          onChange={(event) => setNewTerm(event.target.value)}
+        />
+      }
+    >
+      <Await resolve={terms}>
+        {(terms) => {
+          const existsInTermbase = terms.find((term: Term) => term.en === newTerm) !== undefined;
+          return (
+            <>
+              <input
+                id="en"
+                name="en"
+                defaultValue={defaultValue}
+                className={'form-control' + (existsInTermbase ? ' is-invalid' : '')}
+                type="text"
+                autoCapitalize="none"
+                onChange={(event) => setNewTerm(event.target.value)}
+              />
+              <div className="invalid-feedback bright-feedback-text">Termen finnes allerede i termlista.</div>
+            </>
+          );
+        }}
+      </Await>
+    </Suspense>
   );
 }
 
