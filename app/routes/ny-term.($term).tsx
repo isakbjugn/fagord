@@ -1,13 +1,11 @@
 import style from '~/styles/ny-term.module.css';
-import { Await, Form, useLoaderData, useNavigation, useRouteLoaderData } from '@remix-run/react';
+import { Form, useLoaderData, useNavigation } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Button, Label, Row } from 'reactstrap';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 import type { DictionaryResponse } from '~/routes/api.ordbokene';
-import type { loader as rootLoader } from '~/root';
-import { Suspense, useState } from 'react';
-import type { Term } from '~/types/term';
+import type { ChangeEvent } from 'react';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
   return json({ termFromUrl: params.term });
@@ -94,43 +92,28 @@ export default function NyTerm() {
 }
 
 function TermInput({ defaultValue }: { defaultValue: string }) {
-  const { terms } = useRouteLoaderData<typeof rootLoader>('root');
-  const [newTerm, setNewTerm] = useState(defaultValue);
+  const fetcher = useDebounceFetcher<boolean>();
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const formData = new FormData();
+    formData.append('term', event.target.value);
+
+    fetcher.submit(formData, { method: 'post', action: '/api/termliste/finnes', debounceTimeout: 200 });
+  }
 
   return (
-    <Suspense
-      fallback={
-        <input
-          id="en"
-          name="en"
-          defaultValue={defaultValue}
-          className="form-control"
-          type="text"
-          autoCapitalize="none"
-          onChange={(event) => setNewTerm(event.target.value)}
-        />
-      }
-    >
-      <Await resolve={terms}>
-        {(terms) => {
-          const existsInTermbase = terms.find((term: Term) => term.en === newTerm) !== undefined;
-          return (
-            <>
-              <input
-                id="en"
-                name="en"
-                defaultValue={defaultValue}
-                className={'form-control' + (existsInTermbase ? ' is-invalid' : '')}
-                type="text"
-                autoCapitalize="none"
-                onChange={(event) => setNewTerm(event.target.value)}
-              />
-              <div className="invalid-feedback bright-feedback-text">Termen finnes allerede i termlista.</div>
-            </>
-          );
-        }}
-      </Await>
-    </Suspense>
+    <>
+      <input
+        id="en"
+        name="en"
+        defaultValue={defaultValue}
+        className={'form-control' + (fetcher.data ? ' is-invalid' : '')}
+        type="text"
+        autoCapitalize="none"
+        onChange={handleChange}
+      />
+      <div className="invalid-feedback bright-feedback-text">Termen finnes allerede i termlista.</div>
+    </>
   );
 }
 
