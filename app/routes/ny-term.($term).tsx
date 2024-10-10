@@ -5,6 +5,7 @@ import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Button, Label, Row } from 'reactstrap';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 import type { DictionaryResponse } from '~/routes/api.ordbokene';
+import type { ChangeEvent } from 'react';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
   return json({ termFromUrl: params.term });
@@ -22,7 +23,7 @@ export default function NyTerm() {
         <Row>
           <Label for="en">
             Engelsk term
-            <input name="en" defaultValue={termFromUrl} className="form-control" type="text" autoCapitalize="none" />
+            <TermInput defaultValue={termFromUrl} />
           </Label>
         </Row>
         <Label>Norske termer</Label>
@@ -87,6 +88,32 @@ export default function NyTerm() {
         </Button>
       </Form>
     </section>
+  );
+}
+
+function TermInput({ defaultValue }: { defaultValue: string }) {
+  const fetcher = useDebounceFetcher<boolean>();
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const formData = new FormData();
+    formData.append('term', event.target.value);
+
+    fetcher.submit(formData, { method: 'post', action: '/api/termliste/finnes', debounceTimeout: 200 });
+  }
+
+  return (
+    <>
+      <input
+        id="en"
+        name="en"
+        defaultValue={defaultValue}
+        className={'form-control' + (fetcher.data ? ' is-invalid' : '')}
+        type="text"
+        autoCapitalize="none"
+        onChange={handleChange}
+      />
+      <div className="invalid-feedback bright-feedback-text">Termen finnes allerede i termlista.</div>
+    </>
   );
 }
 
