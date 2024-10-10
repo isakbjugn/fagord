@@ -5,7 +5,6 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { useState } from 'react';
 import { PageAlert } from '~/src/components/page-alert/page-alert';
 import { TermPage } from '~/src/pages/term-page/term-page';
-import { NewTermPage } from '~/src/pages/new-term-page/new-term-page';
 
 export default function App() {
   const { search } = useLocation();
@@ -29,8 +28,6 @@ export default function App() {
           <Routes>
             <Route path="/termliste" element={<DictionaryPage />} />
             <Route path="/term/:termId" element={<TermPage />} />
-            <Route path="/gammel/ny-term" element={<NewTermPage />} />
-            <Route path="/gammel/ny-term/:term" element={<NewTermPage />} />
             <Route path="*" element={<Navigate to={{ pathname: '/hjem', search: search }} />} />
           </Routes>
         </QueryClientProvider>
