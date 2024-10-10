@@ -14,30 +14,6 @@ export default function NyTerm() {
   const { termFromUrl } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
-  const bokmalFetcher = useDebounceFetcher<DictionaryResponse>();
-  const nynorskFetcher = useDebounceFetcher<DictionaryResponse>();
-
-  function submitTerm(term: string, dialect: 'nb' | 'nn', fetcher: ReturnType<typeof useDebounceFetcher>) {
-    const formData = new FormData();
-    formData.append('term', term);
-    formData.append('dialect', dialect);
-
-    fetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
-  }
-
-  function handleSuggestionClick(
-    term: string | undefined,
-    dialect: 'nb' | 'nn',
-    fetcher: ReturnType<typeof useDebounceFetcher>,
-  ) {
-    if (term !== undefined) {
-      const inputField = document.getElementById(dialect) as HTMLInputElement | null;
-      if (inputField) {
-        inputField.value = term;
-        submitTerm(term, dialect, fetcher);
-      }
-    }
-  }
 
   return (
     <section className={style.form}>
@@ -54,55 +30,13 @@ export default function NyTerm() {
           <div className="col-sm-6">
             <Label for="nb">
               Bokmål
-              <input
-                id="nb"
-                name="nb"
-                className={'form-control' + (bokmalFetcher.data?.isValid ? ' is-valid' : '')}
-                type="text"
-                autoCapitalize="none"
-                onChange={(event) => submitTerm(event.target.value, 'nb', bokmalFetcher)}
-              />
-              <div className="valid-feedback bright-feedback-text">{bokmalFetcher.data?.validationText}</div>
-              {bokmalFetcher.data?.suggestion && (
-                <div className={style.suggestionFeedback}>
-                  Mente du{' '}
-                  <button
-                    type="button"
-                    className={style.inlineButton}
-                    onClick={() => handleSuggestionClick(bokmalFetcher.data?.suggestion, 'nb', bokmalFetcher)}
-                  >
-                    {bokmalFetcher.data?.suggestion}
-                  </button>
-                  ?
-                </div>
-              )}
+              <SuggestionInput dialect={'nb'} />
             </Label>
           </div>
           <div className="col-sm-6">
             <Label for="nn">
               Nynorsk
-              <input
-                id="nn"
-                name="nn"
-                className={'form-control' + (nynorskFetcher.data?.isValid ? ' is-valid' : '')}
-                type="text"
-                autoCapitalize="none"
-                onChange={(event) => submitTerm(event.target.value, 'nn', nynorskFetcher)}
-              />
-              <div className="valid-feedback bright-feedback-text">{nynorskFetcher.data?.validationText}</div>
-              {nynorskFetcher.data?.suggestion && (
-                <div className={style.suggestionFeedback}>
-                  Mente du{' '}
-                  <button
-                    type="button"
-                    className={style.inlineButton}
-                    onClick={() => handleSuggestionClick(nynorskFetcher.data?.suggestion, 'nn', nynorskFetcher)}
-                  >
-                    {nynorskFetcher.data?.suggestion}
-                  </button>
-                  ?
-                </div>
-              )}
+              <SuggestionInput dialect={'nn'} />
             </Label>
           </div>
         </Row>
@@ -153,5 +87,54 @@ export default function NyTerm() {
         </Button>
       </Form>
     </section>
+  );
+}
+
+function SuggestionInput({ dialect }: { dialect: 'nb' | 'nn' }) {
+  const fetcher = useDebounceFetcher<DictionaryResponse>();
+
+  function submitTerm(term: string) {
+    const formData = new FormData();
+    formData.append('term', term);
+    formData.append('dialect', dialect);
+
+    fetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
+  }
+
+  function handleSuggestionClick(term: string | undefined) {
+    if (term !== undefined) {
+      const inputField = document.getElementById(dialect) as HTMLInputElement | null;
+      if (inputField) {
+        inputField.value = term;
+        submitTerm(term);
+      }
+    }
+  }
+
+  return (
+    <>
+      <input
+        id={dialect}
+        name={dialect}
+        className={'form-control' + (fetcher.data?.isValid ? ' is-valid' : '')}
+        type="text"
+        autoCapitalize="none"
+        onChange={(event) => submitTerm(event.target.value)}
+      />
+      <div className="valid-feedback bright-feedback-text">{fetcher.data?.validationText}</div>
+      {fetcher.data?.suggestion && (
+        <div className={style.suggestionFeedback}>
+          Mente du{' '}
+          <button
+            type="button"
+            className={style.inlineButton}
+            onClick={() => handleSuggestionClick(fetcher.data?.suggestion)}
+          >
+            {fetcher.data?.suggestion}
+          </button>
+          ?
+        </div>
+      )}
+    </>
   );
 }
