@@ -1,12 +1,33 @@
-import { Await, useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import { Await, Link, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import { Suspense, useState } from 'react';
+import type { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 import type { loader as rootLoader } from '~/root';
 import type { Subject } from '~/types/subject';
 import { defer } from '@remix-run/node';
-import type { Term } from '~/types/term';
+import type { Language, Term } from '~/types/term';
 import style from '~/styles/termliste.module.css';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 import { Spinner } from '~/src/components/spinner/spinner';
+import {
+  Box,
+  Collapse,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+} from '@mui/material';
+import { getComparator } from '~/lib/sorting';
+import type { Order } from '~/src/utils/sorting';
+import { visuallyHidden } from '@mui/utils';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
+import { styled } from '@mui/system';
+import { Loader } from '~/src/components/loader/loader';
 
 interface TransFilter {
   text: string;
@@ -36,16 +57,19 @@ const transFilters: TransFilter[] = [
   },
 ];
 
-function loader() {
+export function loader() {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
   const subjects = fetch(subjectsUrl).then((res) => {
     if (res.ok) return res.json();
     else throw new Error(`${res.status} ${res.statusText}: Feil under henting av fagfelt!`);
   });
 
-  return defer({
-    subjects: subjects,
-  }, { headers: { 'Cache-Control': 'max-age=3600'}});
+  return defer(
+    {
+      subjects: subjects,
+    },
+    { headers: { 'Cache-Control': 'max-age=3600' } },
+  );
 }
 
 export default function Termliste() {
@@ -74,12 +98,12 @@ export default function Termliste() {
   const subjectFilterComponent = () => (
     <Suspense fallback={<Spinner />}>
       <Await resolve={subjects}>
-        {(subjects: Subject) => (
+        {(subjects: Subject[]) => (
           <select className={style.subjects} onChange={(event) => setSubjectFilter(event.currentTarget.value)}>
-          {[AllSubjects, subjects].map((subject) => (
-            <option key={subjects.field}>{subject.field}</option>
-          ))}
-        </select>
+            {[AllSubjects, ...subjects].map((subject) => (
+              <option key={subject.field}>{subject.field}</option>
+            ))}
+          </select>
         )}
       </Await>
     </Suspense>
@@ -106,8 +130,255 @@ export default function Termliste() {
           </Form>
           {subjectFilterComponent()}
         </div>
-        <Dictionary dictionary={applyTransFilter(applySubjectFilter(terms))}></Dictionary>
+        <Suspense fallback={<Loader />}>
+          <Await resolve={terms}>
+            {(terms) => <Dictionary dictionary={applyTransFilter(applySubjectFilter(terms))}></Dictionary>}
+          </Await>
+        </Suspense>
       </div>
     </main>
   );
 }
+
+export const Dictionary = (props: { dictionary: Term[] }) => {
+  const { dictionary } = props;
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<keyof Language>('en');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleRequestSort = (event: MouseEvent<unknown>, property: keyof Language): void => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleChangePage = (event: unknown, newPage: number): void => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>): void => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dictionary.length) : 0;
+
+  return (
+    <Paper sx={{ width: '100%', mb: 2, bgcolor: 'background.paper' }}>
+      <TableContainer>
+        <Table aria-labelledby="tableTitle" size="small">
+          <DictionaryHeader order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
+          <TableBody>
+            {dictionary
+              .slice()
+              .sort(getComparator(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((term: Term, index: number) => (
+                <TermEntry term={term} index={index} key={term._id} />
+              ))}
+            {emptyRows > 0 && (
+              <TableRow
+                style={{
+                  height: 33 * emptyRows,
+                }}
+              >
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        className={style.paginator}
+        rowsPerPageOptions={[10, 25, 50, 100]}
+        component="div"
+        labelRowsPerPage={'Antall ord:'}
+        count={dictionary.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
+  );
+};
+
+interface HeadCell {
+  id: keyof Language;
+  label: string;
+  numeric: boolean;
+}
+
+const headCells: readonly HeadCell[] = [
+  {
+    id: 'en',
+    numeric: false,
+    label: 'Engelsk',
+  },
+  {
+    id: 'nb',
+    numeric: false,
+    label: 'Bokmål',
+  },
+  {
+    id: 'nn',
+    numeric: false,
+    label: 'Nynorsk',
+  },
+];
+
+interface DictionaryHeaderProps {
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Language) => void;
+  order: Order;
+  orderBy: string;
+}
+
+export const DictionaryHeader = (props: DictionaryHeaderProps) => {
+  const { order, orderBy, onRequestSort } = props;
+  const createSortHandler = (property: keyof Language) => (event: React.MouseEvent<unknown>) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableHead>
+      <TableRow>
+        <TableCell />
+        {headCells.map((headCell) => (
+          <TermTableCell
+            key={headCell.id}
+            align={headCell.numeric ? 'right' : 'left'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
+            >
+              {headCell.label}
+              {orderBy === headCell.id ? (
+                <Box component="span" sx={visuallyHidden}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </Box>
+              ) : null}
+            </TableSortLabel>
+          </TermTableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+};
+
+export const TermEntry = (props: { term: Term; index: number }) => {
+  const [open, setOpen] = useState(false);
+  const { term, index } = props;
+  const labelId = `enhanced-table-checkbox-${index}`;
+  const handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.key === 'Enter') setOpen(!open);
+  };
+
+  return (
+    <>
+      <TableRow
+        hover
+        tabIndex={-1}
+        key={term._id}
+        sx={{ '& > *': { borderBottom: 'unset' } }}
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        <DropdownTableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => {
+              setOpen(!open);
+            }}
+          >
+            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
+        </DropdownTableCell>
+        <TermTableCell component="th" id={labelId} scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
+          {term.en}
+        </TermTableCell>
+        <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown}>
+          {term.nb}
+        </TermTableCell>
+        <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown}>
+          {term.nn}
+        </TermTableCell>
+      </TableRow>
+      <TableRow>
+        <TermTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <TermDetails term={term} />
+          </Collapse>
+        </TermTableCell>
+      </TableRow>
+    </>
+  );
+};
+
+export const DropdownTableCell = styled(TableCell)({
+  '@media (max-width: 768px)': {
+    paddingLeft: '8px',
+    paddingRight: '8px',
+  },
+  '@media (max-width: 480px)': {
+    paddingLeft: '2px',
+    paddingRight: '2px',
+  },
+});
+
+export const TermTableCell = styled(TableCell)({
+  '@media (max-width: 480px)': {
+    paddingLeft: '4px',
+    paddingRight: '4px',
+  },
+});
+
+export const TermDetails = (props: { term: Term }) => {
+  const { term } = props;
+
+  return (
+    <>
+      <Box sx={{ margin: 1 }}>
+        <Table size="small" aria-label="purchases">
+          <TableBody>
+            {term.field !== '' && (
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  Fagfelt
+                </TableCell>
+                <TableCell>{term.field}</TableCell>
+              </TableRow>
+            )}
+            {term.subfield !== '' && (
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  Underområde
+                </TableCell>
+                <TableCell>{term.subfield}</TableCell>
+              </TableRow>
+            )}
+            {term.definition !== '' && (
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  Definisjon
+                </TableCell>
+                <TableCell>{term.definition}</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </Box>
+      <div className={'col my-2 mx-4 ' + style.button}>
+        <Link className="btn btn-outline-dark btn-sm" to={'/term/' + term._id} role="button">
+          Til termside
+        </Link>
+      </div>
+    </>
+  );
+};
