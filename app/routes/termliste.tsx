@@ -23,7 +23,7 @@ import {
   TableSortLabel,
 } from '@mui/material';
 import { getComparator } from '~/lib/sorting';
-import type { Order } from '~/src/utils/sorting';
+import type { Order } from '~/lib/sorting';
 import { visuallyHidden } from '@mui/utils';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { styled } from '@mui/system';

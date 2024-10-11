@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes, useLocation } from '@remix-run/react';
-import { DictionaryPage } from '~/src/pages/dictionary-page/dictionary-page';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ClientOnly } from 'remix-utils/client-only';
 import { useState } from 'react';
@@ -26,7 +25,6 @@ export default function App() {
         <QueryClientProvider client={queryClient}>
           <PageAlert />
           <Routes>
-            <Route path="/gammel/termliste" element={<DictionaryPage />} />
             <Route path="/term/:termId" element={<TermPage />} />
             <Route path="*" element={<Navigate to={{ pathname: '/hjem', search: search }} />} />
           </Routes>
