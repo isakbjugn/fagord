@@ -2,8 +2,12 @@ import { Spinner as ReactstrapSpinner } from 'reactstrap';
 
 import style from './spinner.module.css';
 
-export const Spinner = () => (
+interface Props {
+  color?: 'blue' | 'light';
+}
+
+export const Spinner = ({ color = 'light' }: Props) => (
   <div className={style.spinner}>
-    <ReactstrapSpinner color="light" />
+    {color === 'blue' ? <ReactstrapSpinner className={style.blue} /> : <ReactstrapSpinner color="light" />}
   </div>
 );
