@@ -26,7 +26,6 @@ import { getComparator } from '~/lib/sorting';
 import type { Order } from '~/lib/sorting';
 import { visuallyHidden } from '@mui/utils';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { styled } from '@mui/system';
 import { Loader } from '~/src/components/loader/loader';
 
 interface TransFilter {
@@ -77,6 +76,10 @@ export default function Termliste() {
   const { subjects } = useLoaderData<typeof loader>();
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
   const [subjectFilter, setSubjectFilter] = useState<string | null>(AllSubjects.field);
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<keyof Language>('en');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const applyTransFilter = (terms: Term[]): Term[] => {
     switch (transFilter) {
@@ -93,6 +96,21 @@ export default function Termliste() {
     if (subjectFilter === null) return terms;
     if (subjectFilter === AllSubjects.field) return terms;
     return terms.filter((term) => term.field === subjectFilter);
+  };
+
+  const handleRequestSort = (event: MouseEvent<unknown>, property: keyof Language): void => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleChangePage = (event: unknown, newPage: number): void => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>): void => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const subjectFilterComponent = () => (
@@ -132,78 +150,55 @@ export default function Termliste() {
         </div>
         <Suspense fallback={<Loader />}>
           <Await resolve={terms}>
-            {(terms) => <Dictionary dictionary={applyTransFilter(applySubjectFilter(terms))}></Dictionary>}
+            {(terms) => {
+              // Avoid a layout jump when reaching the last page with empty rows.
+              const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - terms.length) : 0;
+
+              return (
+                <Paper sx={{ width: '100%', mb: 2, bgcolor: 'background.paper' }}>
+                  <TableContainer>
+                    <Table aria-labelledby="tableTitle" size="small">
+                      <DictionaryHeader order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
+                      <TableBody>
+                        {applyTransFilter(applySubjectFilter(terms))
+                          .slice()
+                          .sort(getComparator(order, orderBy))
+                          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                          .map((term: Term, index: number) => (
+                            <TermEntry term={term} index={index} key={term._id} />
+                          ))}
+                        {emptyRows > 0 && (
+                          <TableRow
+                            style={{
+                              height: 33 * emptyRows,
+                            }}
+                          >
+                            <TableCell colSpan={6} />
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  <TablePagination
+                    className={style.paginator}
+                    rowsPerPageOptions={[10, 25, 50, 100]}
+                    component="div"
+                    labelRowsPerPage={'Antall ord:'}
+                    count={terms.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </Paper>
+              );
+            }}
           </Await>
         </Suspense>
       </div>
     </main>
   );
 }
-
-export const Dictionary = (props: { dictionary: Term[] }) => {
-  const { dictionary } = props;
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof Language>('en');
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const handleRequestSort = (event: MouseEvent<unknown>, property: keyof Language): void => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  const handleChangePage = (event: unknown, newPage: number): void => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>): void => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dictionary.length) : 0;
-
-  return (
-    <Paper sx={{ width: '100%', mb: 2, bgcolor: 'background.paper' }}>
-      <TableContainer>
-        <Table aria-labelledby="tableTitle" size="small">
-          <DictionaryHeader order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
-          <TableBody>
-            {dictionary
-              .slice()
-              .sort(getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((term: Term, index: number) => (
-                <TermEntry term={term} index={index} key={term._id} />
-              ))}
-            {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: 33 * emptyRows,
-                }}
-              >
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        className={style.paginator}
-        rowsPerPageOptions={[10, 25, 50, 100]}
-        component="div"
-        labelRowsPerPage={'Antall ord:'}
-        count={dictionary.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
-  );
-};
 
 interface HeadCell {
   id: keyof Language;
@@ -246,7 +241,7 @@ export const DictionaryHeader = (props: DictionaryHeaderProps) => {
       <TableRow>
         <TableCell />
         {headCells.map((headCell) => (
-          <TermTableCell
+          <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -263,7 +258,7 @@ export const DictionaryHeader = (props: DictionaryHeaderProps) => {
                 </Box>
               ) : null}
             </TableSortLabel>
-          </TermTableCell>
+          </TableCell>
         ))}
       </TableRow>
     </TableHead>
@@ -289,7 +284,7 @@ export const TermEntry = (props: { term: Term; index: number }) => {
           setOpen(!open);
         }}
       >
-        <DropdownTableCell>
+        <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -299,45 +294,27 @@ export const TermEntry = (props: { term: Term; index: number }) => {
           >
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
-        </DropdownTableCell>
-        <TermTableCell component="th" id={labelId} scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
+        </TableCell>
+        <TableCell component="th" id={labelId} scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
           {term.en}
-        </TermTableCell>
-        <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown}>
+        </TableCell>
+        <TableCell tabIndex={0} onKeyDown={handleKeyDown}>
           {term.nb}
-        </TermTableCell>
-        <TermTableCell align="justify" tabIndex={0} onKeyDown={handleKeyDown}>
+        </TableCell>
+        <TableCell tabIndex={0} onKeyDown={handleKeyDown}>
           {term.nn}
-        </TermTableCell>
+        </TableCell>
       </TableRow>
       <TableRow>
-        <TermTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <TermDetails term={term} />
           </Collapse>
-        </TermTableCell>
+        </TableCell>
       </TableRow>
     </>
   );
 };
-
-export const DropdownTableCell = styled(TableCell)({
-  '@media (max-width: 768px)': {
-    paddingLeft: '8px',
-    paddingRight: '8px',
-  },
-  '@media (max-width: 480px)': {
-    paddingLeft: '2px',
-    paddingRight: '2px',
-  },
-});
-
-export const TermTableCell = styled(TableCell)({
-  '@media (max-width: 480px)': {
-    paddingLeft: '4px',
-    paddingRight: '4px',
-  },
-});
 
 export const TermDetails = (props: { term: Term }) => {
   const { term } = props;
