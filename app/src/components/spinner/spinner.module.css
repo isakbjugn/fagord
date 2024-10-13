@@ -4,3 +4,7 @@
   justify-content: center;
   align-items: center;
 }
+
+.blue {
+  color: var(--color-light-blue);
+}

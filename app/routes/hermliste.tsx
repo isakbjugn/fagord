@@ -6,20 +6,21 @@ import type { Language, Term } from '~/types/term';
 import style from '~/styles/termliste.module.css';
 import {
   Box,
-  Collapse, IconButton,
+  Collapse,
+  IconButton,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead, TablePagination,
+  TableHead,
+  TablePagination,
   TableRow,
-  TableSortLabel
+  TableSortLabel,
 } from '@mui/material';
 import { getComparator } from '~/lib/sorting';
 import type { Order } from '~/lib/sorting';
 import { visuallyHidden } from '@mui/utils';
-import { Loader } from '~/src/components/loader/loader';
 import { ClientOnly } from 'remix-utils/client-only';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import type { Subject } from '~/types/subject';
@@ -153,10 +154,10 @@ export default function Termliste() {
               <DictionaryHeader order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
               <Suspense
                 fallback={
-                  <TableBody>
+                  <TableBody color={'black'}>
                     <TableRow>
-                      <TableCell>
-                        <Loader />
+                      <TableCell colSpan={6}>
+                        <Spinner color="blue" />
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -178,7 +179,7 @@ export default function Termliste() {
                         {emptyRows > 0 && (
                           <TableRow
                             style={{
-                              height: 33 * emptyRows
+                              height: 33 * emptyRows,
                             }}
                           >
                             <TableCell colSpan={6} />
@@ -228,18 +229,18 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'en',
     numeric: false,
-    label: 'Engelsk'
+    label: 'Engelsk',
   },
   {
     id: 'nb',
     numeric: false,
-    label: 'Bokmål'
+    label: 'Bokmål',
   },
   {
     id: 'nn',
     numeric: false,
-    label: 'Nynorsk'
-  }
+    label: 'Nynorsk',
+  },
 ];
 
 interface DictionaryHeaderProps {
@@ -302,22 +303,28 @@ export const TermEntry = (props: { term: Term; index: number }) => {
         }}
       >
         <TableCell>
-          <ClientOnly fallback={
-            <button onClick={() => {
-              setOpen(!open);
-            }}>
-              ▼
-            </button>
-          }>
-            {() => (<IconButton
-              aria-label="expand row"
-              size="small"
-              onClick={() => {
-                setOpen(!open);
-              }}
-            >
-              {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-            </IconButton>)}
+          <ClientOnly
+            fallback={
+              <button
+                onClick={() => {
+                  setOpen(!open);
+                }}
+              >
+                ▼
+              </button>
+            }
+          >
+            {() => (
+              <IconButton
+                aria-label="expand row"
+                size="small"
+                onClick={() => {
+                  setOpen(!open);
+                }}
+              >
+                {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+              </IconButton>
+            )}
           </ClientOnly>
         </TableCell>
         <TableCell id={labelId} scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
