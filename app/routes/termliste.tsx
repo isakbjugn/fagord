@@ -26,7 +26,7 @@ import { getComparator } from '~/lib/sorting';
 import type { Order } from '~/lib/sorting';
 import { visuallyHidden } from '@mui/utils';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Loader } from '~/src/components/loader/loader';
+import { ClientOnly } from 'remix-utils/client-only';
 
 interface TransFilter {
   text: string;
@@ -148,17 +148,26 @@ export default function Termliste() {
           </Form>
           {subjectFilterComponent()}
         </div>
-        <Suspense fallback={<Loader />}>
-          <Await resolve={terms}>
-            {(terms) => {
-              // Avoid a layout jump when reaching the last page with empty rows.
-              const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - terms.length) : 0;
-
-              return (
-                <Paper sx={{ width: '100%', mb: 2, bgcolor: 'background.paper' }}>
-                  <TableContainer>
-                    <Table aria-labelledby="tableTitle" size="small">
-                      <DictionaryHeader order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
+        <Paper sx={{ width: '100%', mb: 2, bgcolor: 'background.paper' }}>
+          <TableContainer>
+            <Table aria-labelledby="tableTitle" size="small">
+              <DictionaryHeader order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
+              <Suspense
+                fallback={
+                  <TableBody color={'black'}>
+                    <TableRow>
+                      <TableCell colSpan={6}>
+                        <Spinner color="blue" />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                }
+              >
+                <Await resolve={terms}>
+                  {(terms) => {
+                    // Avoid a layout jump when reaching the last page with empty rows.
+                    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - terms.length) : 0;
+                    return (
                       <TableBody>
                         {applyTransFilter(applySubjectFilter(terms))
                           .slice()
@@ -177,24 +186,34 @@ export default function Termliste() {
                           </TableRow>
                         )}
                       </TableBody>
-                    </Table>
-                  </TableContainer>
-                  <TablePagination
-                    className={style.paginator}
-                    rowsPerPageOptions={[10, 25, 50, 100]}
-                    component="div"
-                    labelRowsPerPage={'Antall ord:'}
-                    count={terms.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </Paper>
-              );
-            }}
-          </Await>
-        </Suspense>
+                    );
+                  }}
+                </Await>
+              </Suspense>
+            </Table>
+          </TableContainer>
+          <ClientOnly fallback={null}>
+            {() => (
+              <Suspense fallback={null}>
+                <Await resolve={terms}>
+                  {(terms: Term[]) => (
+                    <TablePagination
+                      className={style.paginator}
+                      rowsPerPageOptions={[10, 25, 50, 100]}
+                      component="div"
+                      labelRowsPerPage={'Antall ord:'}
+                      count={terms.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  )}
+                </Await>
+              </Suspense>
+            )}
+          </ClientOnly>
+        </Paper>
       </div>
     </main>
   );
@@ -279,21 +298,34 @@ export const TermEntry = (props: { term: Term; index: number }) => {
         hover
         tabIndex={-1}
         key={term._id}
-        sx={{ '& > *': { borderBottom: 'unset' } }}
         onClick={() => {
           setOpen(!open);
         }}
       >
         <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => {
-              setOpen(!open);
-            }}
+          <ClientOnly
+            fallback={
+              <button
+                onClick={() => {
+                  setOpen(!open);
+                }}
+              >
+                ▼
+              </button>
+            }
           >
-            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
+            {() => (
+              <IconButton
+                aria-label="expand row"
+                size="small"
+                onClick={() => {
+                  setOpen(!open);
+                }}
+              >
+                {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+              </IconButton>
+            )}
+          </ClientOnly>
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
           {term.en}
