@@ -1,16 +1,13 @@
 import type { ActionFunctionArgs } from '@remix-run/node';
-import { Form, type ClientActionFunctionArgs, Link } from '@remix-run/react';
+import type { ClientActionFunctionArgs } from '@remix-run/react';
+import { Form, Link, redirect } from '@remix-run/react';
 import { Button, Label, Row } from 'reactstrap';
 import type { SubmitTerm } from '~/types/term';
 
-interface UpdateTermArguments {
-  termId: string;
-  term: SubmitTerm;
-}
-
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const { termId, term } = Object.fromEntries(formData) as unknown as UpdateTermArguments;
+  const { termId } = params;
+  const submitTerm = Object.fromEntries(formData) as unknown as SubmitTerm;
   const termsApiUrl = `https://www.api.fagord.no/termer/${termId}`;
 
   const res = await fetch(termsApiUrl, {
@@ -19,13 +16,14 @@ export async function action({ request }: ActionFunctionArgs) {
       'Content-Type': 'application/json',
     },
     method: 'PUT',
-    body: JSON.stringify(term),
+    body: JSON.stringify(submitTerm),
   });
 
   if (!res.ok) {
     throw Error(res.status.toString() + ' ' + res.statusText);
   }
-  return await res.json();
+  const responseBody = await res.json();
+  return redirect(`/term/${responseBody._id}`);
 }
 
 export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
