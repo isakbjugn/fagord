@@ -1,15 +1,16 @@
 import style from '~/styles/term.module.css';
-import { Await, Form, Link, Outlet, useLocation, useParams, useRouteLoaderData } from '@remix-run/react';
+import { Await, Form, Link, Outlet, useFetcher, useLocation, useParams, useRouteLoaderData } from '@remix-run/react';
 import type { loader as rootLoader } from '~/root';
 import { Suspense, useState } from 'react';
 import { Loader } from '~/src/components/loader/loader';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
-import type { Term } from '~/types/term';
+import type { Term, Variant, VariantVote } from '~/types/term';
 import { IconButton } from '@mui/material';
 import { IosShare } from '@mui/icons-material';
 import { ClientOnly } from 'remix-utils/client-only';
 import { useToggle } from '~/src/utils/use-toggle';
 import { DialectInput } from '~/lib/components/dialect-input';
+import { TagCloud } from 'react-tagcloud';
 
 export default function Term() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
@@ -33,6 +34,7 @@ export default function Term() {
                   </Breadcrumb>
                 </div>
                 <TermComponent term={term} />
+                <VariantCloud variants={term.variants} />
               </div>
             </main>
           );
@@ -209,3 +211,44 @@ export const ToggleButton = ({ leftLabel, rightLabel, name, handleChange }: Togg
     </label>
   </div>
 );
+
+interface VariantCloudProps {
+  variants: Variant[];
+}
+
+export const VariantCloud = ({ variants }: VariantCloudProps) => {
+  const fetcher = useFetcher();
+  const options = {
+    luminosity: 'light',
+    hue: 'red',
+  };
+
+  const renderTermNoDuplicates = (variant: Variant): string => {
+    if (variants.filter((v) => v.term === variant.term).length > 1) return variant.term + ' (' + variant.dialect + ')';
+    return variant.term;
+  };
+
+  return (
+    <TagCloud
+      className={style.cloud}
+      minSize={20}
+      maxSize={40}
+      colorOptions={options}
+      tags={variants.map((v) => {
+        return {
+          value: renderTermNoDuplicates(v),
+          term: v.term,
+          dialect: v.dialect,
+          count: v.votes,
+        };
+      })}
+      onClick={(tag: VariantVote) => {
+        const formData = new FormData();
+        formData.append('term', tag.term);
+        formData.append('dialect', tag.dialect);
+
+        fetcher.submit(formData, { method: 'post', action: 'varianter/stem' });
+      }}
+    />
+  );
+};
