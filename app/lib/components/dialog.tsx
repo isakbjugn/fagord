@@ -1,4 +1,4 @@
-import './dialog.css';
+import '../../styles/dialog.css';
 
 import type { ForwardedRef, ReactElement } from 'react';
 import { forwardRef, useImperativeHandle, useRef } from 'react';

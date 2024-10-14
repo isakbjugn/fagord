@@ -2,16 +2,16 @@ import style from '~/styles/term.module.css';
 import { Await, Form, Link, Outlet, useFetcher, useLocation, useParams, useRouteLoaderData } from '@remix-run/react';
 import type { loader as rootLoader } from '~/root';
 import { Suspense, useRef, useState } from 'react';
-import { Loader } from '~/src/components/loader/loader';
+import { Loader } from '~/lib/components/loader';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
 import type { Term, Variant, VariantVote } from '~/types/term';
 import { IconButton } from '@mui/material';
 import { IosShare } from '@mui/icons-material';
 import { ClientOnly } from 'remix-utils/client-only';
-import { useToggle } from '~/src/utils/use-toggle';
+import { useToggle } from '~/lib/use-toggle';
 import { DialectInput } from '~/lib/components/dialect-input';
 import { TagCloud } from 'react-tagcloud';
-import { Dialog } from '~/src/components/dialog/dialog';
+import { Dialog } from '~/lib/components/dialog';
 
 export default function Term() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
