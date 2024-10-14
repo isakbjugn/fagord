@@ -8,11 +8,11 @@ import fagordTheme from '~/theme/theme';
 
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import appStylesHref from './app.css?url';
-import { Footer } from '~/src/components/footer/footer';
-import { Header } from '~/src/components/header/header';
+import { Footer } from '~/lib/components/footer';
+import { Header } from '~/lib/components/header';
 import type { Term } from '~/types/term';
 import { filterTerms } from '~/lib/search';
-import { ErrorMessage } from '~/src/components/error-message/error-message';
+import { ErrorMessage } from '~/lib/components/error-message';
 
 interface ServerData {
   terms: Promise<Term[]>;

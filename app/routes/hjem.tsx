@@ -1,6 +1,6 @@
 import { Link } from '@remix-run/react';
 
-import { Jumbotron } from '~/src/components/jumbotron/jumbotron';
+import { Jumbotron } from '~/lib/components/jumbotron';
 import style from '~/styles/hjem.module.css';
 
 export default function Hjem() {

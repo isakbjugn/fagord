@@ -3,7 +3,7 @@ import { useDebounceSubmit } from 'remix-utils/use-debounce-submit';
 import type { loader as rootLoader } from '~/root';
 import type { Term } from '~/types/term';
 import { Suspense, useEffect, useState } from 'react';
-import styles from './search.module.css';
+import styles from '~/styles/search.module.css';
 import { Button } from 'reactstrap';
 
 export function Search() {

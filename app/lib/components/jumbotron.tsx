@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import style from './jumbotron.module.css';
+import style from '~/styles/jumbotron.module.css';
 
 interface JumbotronProps {
   children: ReactNode;
