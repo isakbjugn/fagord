@@ -1,6 +1,6 @@
 import { Spinner as ReactstrapSpinner } from 'reactstrap';
 
-import style from './spinner.module.css';
+import style from '~/styles/spinner.module.css';
 
 interface Props {
   color?: 'blue' | 'light';

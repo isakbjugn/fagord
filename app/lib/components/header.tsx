@@ -1,10 +1,10 @@
 import { NavLink, useLocation } from '@remix-run/react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 
-import { useToggle } from '../../../lib/use-toggle';
-import style from './header.module.css';
-import { navLinks } from './nav-links';
-import { Search } from '../search/search';
+import { useToggle } from '../use-toggle';
+import style from '~/styles/header.module.css';
+import { navLinks } from '../nav-links';
+import { Search } from './search';
 
 export const Header = () => {
   const [isNavOpen, toggleNav, setIsNavOpen] = useToggle(false);

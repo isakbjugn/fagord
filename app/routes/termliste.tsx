@@ -7,7 +7,7 @@ import { defer } from '@remix-run/node';
 import type { Language, Term } from '~/types/term';
 import style from '~/styles/termliste.module.css';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
-import { Spinner } from '~/src/components/spinner/spinner';
+import { Spinner } from '~/lib/components/spinner';
 import {
   Box,
   Collapse,
