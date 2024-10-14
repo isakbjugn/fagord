@@ -1,0 +1,13 @@
+.inlineButton {
+  border-style: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.suggestionFeedback {
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  filter: brightness(85%);
+}

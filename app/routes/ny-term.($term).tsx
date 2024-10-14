@@ -4,8 +4,8 @@ import { json } from '@remix-run/node';
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Button, Label, Row } from 'reactstrap';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
-import type { DictionaryResponse } from '~/routes/api.ordbokene';
 import type { ChangeEvent } from 'react';
+import { DialectInput } from '~/lib/components/dialect-input';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
   return json({ termFromUrl: params.term });
@@ -31,13 +31,13 @@ export default function NyTerm() {
           <div className="col-sm-6">
             <Label for="nb">
               Bokmål
-              <SuggestionInput dialect={'nb'} />
+              <DialectInput name="nb" dialect="nb" />
             </Label>
           </div>
           <div className="col-sm-6">
             <Label for="nn">
               Nynorsk
-              <SuggestionInput dialect={'nn'} />
+              <DialectInput name="nn" dialect="nn" />
             </Label>
           </div>
         </Row>
@@ -113,55 +113,6 @@ function TermInput({ defaultValue }: { defaultValue: string }) {
         onChange={handleChange}
       />
       <div className="invalid-feedback bright-feedback-text">Termen finnes allerede i termlista.</div>
-    </>
-  );
-}
-
-function SuggestionInput({ dialect }: { dialect: 'nb' | 'nn' }) {
-  const fetcher = useDebounceFetcher<DictionaryResponse>();
-
-  function submitTerm(term: string) {
-    const formData = new FormData();
-    formData.append('term', term);
-    formData.append('dialect', dialect);
-
-    fetcher.submit(formData, { method: 'post', action: '/api/ordbokene', debounceTimeout: 200 });
-  }
-
-  function handleSuggestionClick(term: string | undefined) {
-    if (term !== undefined) {
-      const inputField = document.getElementById(dialect) as HTMLInputElement | null;
-      if (inputField) {
-        inputField.value = term;
-        submitTerm(term);
-      }
-    }
-  }
-
-  return (
-    <>
-      <input
-        id={dialect}
-        name={dialect}
-        className={'form-control' + (fetcher.data?.isValid ? ' is-valid' : '')}
-        type="text"
-        autoCapitalize="none"
-        onChange={(event) => submitTerm(event.target.value)}
-      />
-      <div className="valid-feedback bright-feedback-text">{fetcher.data?.validationText}</div>
-      {fetcher.data?.suggestion && (
-        <div className={style.suggestionFeedback}>
-          Mente du{' '}
-          <button
-            type="button"
-            className={style.inlineButton}
-            onClick={() => handleSuggestionClick(fetcher.data?.suggestion)}
-          >
-            {fetcher.data?.suggestion}
-          </button>
-          ?
-        </div>
-      )}
     </>
   );
 }

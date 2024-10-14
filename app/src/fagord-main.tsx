@@ -25,7 +25,7 @@ export default function App() {
         <QueryClientProvider client={queryClient}>
           <PageAlert />
           <Routes>
-            <Route path="/term/:termId" element={<TermPage />} />
+            <Route path="/gammel/term/:termId" element={<TermPage />} />
             <Route path="*" element={<Navigate to={{ pathname: '/hjem', search: search }} />} />
           </Routes>
         </QueryClientProvider>
