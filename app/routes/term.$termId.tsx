@@ -1,7 +1,7 @@
 import style from '~/styles/term.module.css';
 import { Await, Form, Link, Outlet, useFetcher, useLocation, useParams, useRouteLoaderData } from '@remix-run/react';
 import type { loader as rootLoader } from '~/root';
-import { Suspense, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { Loader } from '~/src/components/loader/loader';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
 import type { Term, Variant, VariantVote } from '~/types/term';
@@ -11,6 +11,7 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { useToggle } from '~/src/utils/use-toggle';
 import { DialectInput } from '~/lib/components/dialect-input';
 import { TagCloud } from 'react-tagcloud';
+import { Dialog } from '~/src/components/dialog/dialog';
 
 export default function Term() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
@@ -217,7 +218,8 @@ interface VariantCloudProps {
 }
 
 export const VariantCloud = ({ variants }: VariantCloudProps) => {
-  const fetcher = useFetcher();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const fetcher = useFetcher<Variant>();
   const options = {
     luminosity: 'light',
     hue: 'red',
@@ -229,26 +231,38 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
   };
 
   return (
-    <TagCloud
-      className={style.cloud}
-      minSize={20}
-      maxSize={40}
-      colorOptions={options}
-      tags={variants.map((v) => {
-        return {
-          value: renderTermNoDuplicates(v),
-          term: v.term,
-          dialect: v.dialect,
-          count: v.votes,
-        };
-      })}
-      onClick={(tag: VariantVote) => {
-        const formData = new FormData();
-        formData.append('term', tag.term);
-        formData.append('dialect', tag.dialect);
+    <>
+      <TagCloud
+        className={style.cloud}
+        minSize={20}
+        maxSize={40}
+        colorOptions={options}
+        tags={variants.map((v) => {
+          return {
+            value: renderTermNoDuplicates(v),
+            term: v.term,
+            dialect: v.dialect,
+            count: v.votes,
+          };
+        })}
+        onClick={(tag: VariantVote) => {
+          const formData = new FormData();
+          formData.append('term', tag.term);
+          formData.append('dialect', tag.dialect);
 
-        fetcher.submit(formData, { method: 'post', action: 'varianter/stem' });
-      }}
-    />
+          fetcher.submit(formData, { method: 'post', action: 'varianter/stem' });
+          dialogRef.current?.showModal();
+        }}
+      />
+      <Dialog ref={dialogRef}>
+        {fetcher.state === 'submitting' ? (
+          <p>Stemmer...</p>
+        ) : (
+          <p>
+            Du har gitt én stemme til <em>«{fetcher.data?.term}»</em>.
+          </p>
+        )}
+      </Dialog>
+    </>
   );
 };

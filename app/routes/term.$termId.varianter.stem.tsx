@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs, redirect } from '@remix-run/node';
+import { type ActionFunctionArgs } from '@remix-run/node';
 import type { SubmitVariant } from '~/types/term';
 import type { ClientActionFunctionArgs } from '@remix-run/react';
 
@@ -20,11 +20,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   if (!res.ok) {
     throw Error(res.status.toString() + ' ' + res.statusText);
   }
-  await res.json();
-  return redirect(`/term/${termId}`);
+  return await res.json();
 }
 
 export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
   localStorage.removeItem('terms');
-  await serverAction();
+  return serverAction();
 }
