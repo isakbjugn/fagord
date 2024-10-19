@@ -103,7 +103,7 @@ export const meta: MetaFunction = () => [
   { name: 'apple-mobile-web-app-capable', content: 'yes' },
   { name: 'apple-mobile-web-app-title', content: 'Fagord' },
   { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
-  { name: 'theme-color', content: '#ffffff' },
+  { name: 'theme-color', content: '#29648a' },
 ];
 
 export default function Root() {
