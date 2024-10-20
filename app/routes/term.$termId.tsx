@@ -6,7 +6,6 @@ import { Loader } from '~/lib/components/loader';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
 import type { Term, Variant, VariantVote } from '~/types/term';
 import { IconButton } from '@mui/material';
-import { IosShare } from '@mui/icons-material';
 import { ClientOnly } from 'remix-utils/client-only';
 import { useToggle } from '~/lib/use-toggle';
 import { DialectInput } from '~/lib/components/dialect-input';
@@ -75,7 +74,7 @@ const TermComponent = ({ term }: { term: Term }) => {
                   }
                 }}
               >
-                <IosShare />
+                <i className="fa-solid fa-arrow-up-from-bracket fa-md" />
               </IconButton>
             )}
           </ClientOnly>

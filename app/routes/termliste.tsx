@@ -25,7 +25,6 @@ import {
 import { getComparator } from '~/lib/sorting';
 import type { Order } from '~/lib/sorting';
 import { visuallyHidden } from '@mui/utils';
-import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { ClientOnly } from 'remix-utils/client-only';
 
 interface TransFilter {
@@ -322,7 +321,7 @@ export const TermEntry = (props: { term: Term; index: number }) => {
                   setOpen(!open);
                 }}
               >
-                {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                <i aria-hidden className={`fa-solid fa-chevron-${open ? 'up' : 'down'} fa-xs ${style.chevron}`} />
               </IconButton>
             )}
           </ClientOnly>

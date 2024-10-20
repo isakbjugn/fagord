@@ -2,7 +2,6 @@ import style from '~/styles/om-oss.module.css';
 import { team } from '~/lib/team';
 import type { Person } from '~/types/person';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
-import { Email, LinkedIn } from '@mui/icons-material';
 
 export default function OmOss() {
   return (
@@ -53,14 +52,14 @@ export default function OmOss() {
                 href={'mailto:' + member.email}
                 sx={{ '&:hover': { color: '#2e9cca' } }}
               >
-                <Email />
+                <i aria-hidden className="fa-solid fa-envelope fa-md" />
               </IconButton>
               <IconButton
                 aria-label="visit LinkedIn profile"
                 href={'https://www.linkedin.com/in/' + member.linkedin}
                 sx={{ '&:hover': { color: '#2e9cca' } }}
               >
-                <LinkedIn />
+                <i aria-hidden className="fa-brands fa-linkedin fa-md" />
               </IconButton>
             </CardActions>
           </Card>
