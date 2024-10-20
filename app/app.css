@@ -15,8 +15,8 @@ body {
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-light-blue);
-  min-height: 100vh;
+  background-color: var(--color-dark-blue);
+  height: 100vh;
   color: white;
   display: flex;
   flex-direction: column;
@@ -48,4 +48,13 @@ code {
 
 .bright-feedback-text {
   filter: brightness(130%);
+}
+
+main {
+  background-color: var(--color-light-blue);
+  min-height: 90%;
+  height: min-content;
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 64px;
 }

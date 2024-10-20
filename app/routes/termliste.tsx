@@ -126,7 +126,7 @@ export default function Termliste() {
   );
 
   return (
-    <main className="container-sm my-2">
+    <div className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
         <div className={style.header}>
           <Form className={style.form}>
@@ -213,7 +213,7 @@ export default function Termliste() {
           </ClientOnly>
         </Paper>
       </div>
-    </main>
+    </div>
   );
 }
 

@@ -1,11 +1,10 @@
 import { Link } from '@remix-run/react';
 
 import { Jumbotron } from '~/lib/components/jumbotron';
-import style from '~/styles/hjem.module.css';
 
 export default function Hjem() {
   return (
-    <main className={style.home}>
+    <section style={{ maxWidth: '1024px', margin: 'auto' }}>
       <Jumbotron>
         <h1 className="display-4">Velkommen til Fagord!</h1>
         <p className="lead">
@@ -17,6 +16,6 @@ export default function Hjem() {
           Til termliste!
         </Link>
       </Jumbotron>
-    </main>
+    </section>
   );
 }

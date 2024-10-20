@@ -1,7 +1,9 @@
 .footer {
-  margin-top: auto;
+  position: fixed;
+  bottom: 0;
   background-color: var(--color-dark-blue);
   padding: 15px;
+  width: 100%;
 }
 
 .link {
