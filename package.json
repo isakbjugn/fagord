@@ -17,7 +17,6 @@
     "@emotion/react": "^11.11.4",
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "11.11.0",
-    "@mui/icons-material": "5.14.16",
     "@mui/material": "5.14.16",
     "@mui/system": "5.14.16",
     "@mui/utils": "5.14.16",
