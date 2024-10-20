@@ -31,9 +31,15 @@
   margin: auto;
 }
 
+.card-header > :global(i) {
+  line-height: 1;
+  color: var(--color-light-blue);
+}
+
 .card {
   display: grid;
   align-content: space-between;
   padding-bottom: 8px;
   background-color: var(--color-dark-blue) !important;
+  color: white !important;
 }

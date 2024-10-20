@@ -3,3 +3,12 @@
   background-color: var(--color-dark-blue);
   padding: 15px;
 }
+
+.link {
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.15s ease-in-out;
+}
+
+.link:hover {
+  color: rgba(255, 255, 255, 0.75);
+}

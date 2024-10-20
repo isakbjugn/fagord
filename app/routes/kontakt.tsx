@@ -1,6 +1,5 @@
 import style from '~/styles/kontakt.module.css';
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
-import { AddCircle, GitHub, Mail } from '@mui/icons-material';
 import { Link } from '@remix-run/react';
 import { contactEmailUrl, fagordIssuesUrl, linkedInUrl } from '~/lib/constants';
 
@@ -16,17 +15,15 @@ export default function Kontakt() {
         <Card className={style.card}>
           <CardContent>
             <div className={style['card-header']}>
-              <AddCircle color="primary" fontSize="large" />
+              <i aria-hidden className="fa-solid fa-circle-plus fa-2xl" />
             </div>
             <Typography gutterBottom variant="h5" color="white">
               Bidra til ordboken
             </Typography>
             <ul style={{ textAlign: 'start' }}>
-              <Typography variant="body2" color="white">
-                <li>Legg ord inn i termbasen</li>
-                <li>Foreslå oversettelser til eksisterende termer</li>
-                <li>Legg inn definisjoner på termer</li>
-              </Typography>
+              <li>Legg ord inn i termbasen</li>
+              <li>Foreslå oversettelser til eksisterende termer</li>
+              <li>Legg inn definisjoner på termer</li>
             </ul>
           </CardContent>
           <CardActions style={{ justifyContent: 'center' }}>
@@ -38,17 +35,15 @@ export default function Kontakt() {
         <Card className={style.card}>
           <CardContent>
             <div className={style['card-header']}>
-              <GitHub color="primary" fontSize="large" />
+              <i aria-hidden className="fa-brands fa-github fa-2xl" />
             </div>
             <Typography gutterBottom variant="h5" color="white">
               Vær med og utvikle
             </Typography>
             <ul style={{ textAlign: 'start' }}>
-              <Typography variant="body2" color="white">
-                <li>Legg inn oppgaver til utvikling på GitHub</li>
-                <li>Opplever du feil? Dette kan også legges inn på GitHub</li>
-                <li>Vi tar også imot kodeforslag!</li>
-              </Typography>
+              <li>Legg inn oppgaver til utvikling på GitHub</li>
+              <li>Opplever du feil? Dette kan også legges inn på GitHub</li>
+              <li>Vi tar også imot kodeforslag!</li>
             </ul>
           </CardContent>
           <CardActions style={{ justifyContent: 'center' }}>
@@ -60,7 +55,7 @@ export default function Kontakt() {
         <Card className={style.card}>
           <CardContent>
             <div className={style['card-header']}>
-              <Mail color="primary" fontSize="large" />
+              <i aria-hidden className="fa-solid fa-envelope fa-2xl" />
             </div>
             <Typography gutterBottom variant="h5" color="white">
               Kom i kontakt med oss
