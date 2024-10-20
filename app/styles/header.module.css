@@ -1,5 +1,9 @@
-.navbar {
+:global(nav.navbar) {
+  position: fixed;
   background-color: var(--color-dark-blue);
+  width: 100%;
+  top: 0;
+  z-index: 1;
 }
 
 @media only screen and (max-width: 768px) {

@@ -12,7 +12,7 @@ export const Header = () => {
   const { search } = useLocation();
 
   return (
-    <Navbar dark expand="lg" className={style.navbar}>
+    <Navbar dark expand="lg">
       <NavbarToggler onClick={toggleNav} />
       <NavbarBrand className="mr-auto" href="/hjem">
         <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />

@@ -3,7 +3,7 @@ import style from '~/styles/footer.module.css';
 const fagordGitHubUrl = 'https://github.com/isakbjugn/fagord';
 
 export const Footer = () => (
-  <footer className={style.footer}>
+  <footer>
     <div className="row justify-content-center">
       <div className="col-auto">
         <a href={fagordGitHubUrl} className={style.link}>
