@@ -11,7 +11,6 @@ import { Spinner } from '~/lib/components/spinner';
 import {
   Box,
   Collapse,
-  IconButton,
   Paper,
   Table,
   TableBody,
@@ -302,29 +301,15 @@ export const TermEntry = (props: { term: Term; index: number }) => {
         }}
       >
         <TableCell>
-          <ClientOnly
-            fallback={
-              <button
-                onClick={() => {
-                  setOpen(!open);
-                }}
-              >
-                ▼
-              </button>
-            }
+          <button
+            aria-label="expand row"
+            className={style.expandButton}
+            onClick={() => {
+              setOpen(!open);
+            }}
           >
-            {() => (
-              <IconButton
-                aria-label="expand row"
-                size="small"
-                onClick={() => {
-                  setOpen(!open);
-                }}
-              >
-                <i aria-hidden className={`fa-solid fa-chevron-${open ? 'up' : 'down'} fa-xs ${style.chevron}`} />
-              </IconButton>
-            )}
-          </ClientOnly>
+            <i aria-hidden className={`fa-solid fa-chevron-${open ? 'up' : 'down'} fa-xs ${style.chevron}`} />
+          </button>
         </TableCell>
         <TableCell component="th" id={labelId} scope="row" tabIndex={0} onKeyDown={handleKeyDown}>
           {term.en}
