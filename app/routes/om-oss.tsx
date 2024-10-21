@@ -5,7 +5,7 @@ import { Card, CardActions, CardContent, CardMedia, IconButton, Typography } fro
 
 export default function OmOss() {
   return (
-    <main className={style.wrapper}>
+    <>
       <article className={style.content}>
         <h1>Om oss</h1>
         <section>
@@ -65,6 +65,6 @@ export default function OmOss() {
           </Card>
         ))}
       </section>
-    </main>
+    </>
   );
 }

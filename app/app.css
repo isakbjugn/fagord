@@ -9,19 +9,23 @@
   --bs-form-invalid-border-color: #e57316;
 }
 
+header {
+  position: fixed;
+  top: 0;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-light-blue);
-  min-height: 100vh;
+  background-color: var(--color-dark-blue);
+  height: 100vh;
   color: white;
   display: flex;
   flex-direction: column;
-  padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 20px)
-    env(safe-area-inset-left, 20px);
+  padding-top: env(safe-area-inset-top, 20px);
 }
 
 code {
@@ -48,4 +52,12 @@ code {
 
 .bright-feedback-text {
   filter: brightness(130%);
+}
+
+main {
+  background-color: var(--color-light-blue);
+  flex-grow: 1;
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }

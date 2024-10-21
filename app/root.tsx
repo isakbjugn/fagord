@@ -122,7 +122,9 @@ export default function Root() {
       <body>
         <ThemeProvider theme={fagordTheme}>
           <Header />
-          <Outlet />
+          <main>
+            <Outlet />
+          </main>
           <Footer />
         </ThemeProvider>
         <Scripts />

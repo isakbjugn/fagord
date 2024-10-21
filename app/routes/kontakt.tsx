@@ -5,7 +5,7 @@ import { contactEmailUrl, fagordIssuesUrl, linkedInUrl } from '~/lib/constants';
 
 export default function Kontakt() {
   return (
-    <main className={style.container}>
+    <div className={style.container}>
       <h1>Ta gjerne kontakt!</h1>
       <p>
         Fagord.no er under kontinuerlig utvikling, og vi tar mer enn gjerne imot tilbakemeldinger og bidrag, både til
@@ -89,6 +89,6 @@ export default function Kontakt() {
           .
         </p>
       </section>
-    </main>
+    </div>
   );
 }
