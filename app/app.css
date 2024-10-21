@@ -58,6 +58,6 @@ main {
   background-color: var(--color-light-blue);
   flex-grow: 1;
   width: 100%;
-  padding-top: 96px;
-  padding-bottom: 64px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
