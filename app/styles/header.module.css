@@ -1,6 +1,6 @@
 @media only screen and (max-width: 991px) {
-  :global(.navbar-nav) {
-    justify-self: center;
+  ul:global(.navbar-nav) {
+    justify-content: center;
     flex-direction: row;
     column-gap: 16px;
     flex-wrap: wrap;
