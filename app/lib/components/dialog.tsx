@@ -13,9 +13,7 @@ export const Dialog = forwardRef(function Dialog(
   return (
     <dialog ref={ref}>
       {children}
-      <button autoFocus onClick={() => ref?.current?.close()}>
-        Lukk
-      </button>
+      <button onClick={() => ref?.current?.close()}>Lukk</button>
     </dialog>
   );
 });

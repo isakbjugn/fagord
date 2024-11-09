@@ -4,12 +4,13 @@ import type { loader as rootLoader } from '~/root';
 import { Suspense, useRef, useState } from 'react';
 import { Loader } from '~/lib/components/loader';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
-import type { Term, Variant, VariantVote } from '~/types/term';
+import type { Term, Variant } from '~/types/term';
 import { IconButton } from '@mui/material';
 import { ClientOnly } from 'remix-utils/client-only';
 import { useToggle } from '~/lib/use-toggle';
 import { DialectInput } from '~/lib/components/dialect-input';
 import { TagCloud } from 'react-tagcloud';
+import type { ColorOptions, Tag } from 'react-tagcloud';
 import { Dialog } from '~/lib/components/dialog';
 
 export default function Term() {
@@ -219,7 +220,7 @@ interface VariantCloudProps {
 export const VariantCloud = ({ variants }: VariantCloudProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const fetcher = useFetcher<Variant>();
-  const options = {
+  const options: ColorOptions = {
     luminosity: 'light',
     hue: 'red',
   };
@@ -237,20 +238,27 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
         maxSize={40}
         colorOptions={options}
         tags={variants.map((v) => {
+          const displayed_variant = renderTermNoDuplicates(v);
           return {
-            value: renderTermNoDuplicates(v),
-            term: v.term,
-            dialect: v.dialect,
+            value: displayed_variant,
+            key: displayed_variant,
+            props: {
+              term: v.term,
+              dialect: v.dialect,
+            },
             count: v.votes,
-          };
+          } as Tag;
         })}
-        onClick={(tag: VariantVote) => {
+        onClick={(tag: Tag) => {
           const formData = new FormData();
-          formData.append('term', tag.term);
-          formData.append('dialect', tag.dialect);
+          if (tag.props) {
+            const { term, dialect } = tag.props as { term: string; dialect: 'nb' | 'nn' };
+            formData.append('term', term);
+            formData.append('dialect', dialect);
 
-          fetcher.submit(formData, { method: 'post', action: 'varianter/stem' });
-          dialogRef.current?.showModal();
+            fetcher.submit(formData, { method: 'post', action: 'varianter/stem' });
+            dialogRef.current?.showModal();
+          }
         }}
       />
       <Dialog ref={dialogRef}>
