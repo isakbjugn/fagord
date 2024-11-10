@@ -5,13 +5,14 @@ import { Suspense, useRef, useState } from 'react';
 import { Loader } from '~/lib/components/loader';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
 import type { Term, Variant } from '~/types/term';
-import { IconButton } from '@mui/material';
 import { ClientOnly } from 'remix-utils/client-only';
 import { useToggle } from '~/lib/use-toggle';
 import { DialectInput } from '~/lib/components/dialect-input';
-import { TagCloud } from 'react-tagcloud';
 import type { ColorOptions, Tag } from 'react-tagcloud';
+import { TagCloud } from 'react-tagcloud';
 import { Dialog } from '~/lib/components/dialog';
+import { ToggleButton } from '~/lib/components/toggle-button';
+import { ShareTermButton } from '~/lib/components/share-term-button.client';
 
 export default function Term() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
@@ -48,11 +49,6 @@ export default function Term() {
 const TermComponent = ({ term }: { term: Term }) => {
   const fieldSpec = term.subfield !== '' ? term.subfield : term.field;
   const fieldSpecStr = fieldSpec !== '' ? ' (' + fieldSpec + ')' : '';
-  const termShareData = {
-    title: 'Fagord',
-    text: term.en + fieldSpecStr,
-    url: 'https://www.fagord.no/term/' + term._id,
-  };
 
   return (
     <article>
@@ -62,23 +58,7 @@ const TermComponent = ({ term }: { term: Term }) => {
             <h1>{term.en}</h1>
             <h3>{fieldSpecStr}</h3>
           </div>
-          <ClientOnly fallback={null}>
-            {() => (
-              <IconButton
-                className={style.share}
-                sx={{ color: '#ffffff' }}
-                onClick={() => {
-                  try {
-                    navigator.share(termShareData);
-                  } catch {
-                    navigator.clipboard.writeText(termShareData.url);
-                  }
-                }}
-              >
-                <i className="fa-solid fa-arrow-up-from-bracket fa-md" />
-              </IconButton>
-            )}
-          </ClientOnly>
+          <ClientOnly fallback={null}>{() => <ShareTermButton term={term} />}</ClientOnly>
         </div>
         <hr />
       </div>
@@ -170,48 +150,6 @@ export const TranslationCard = ({ term }: TranslationCardProps) => {
     </Card>
   );
 };
-
-interface ToggleButtonProps {
-  leftLabel: string;
-  rightLabel: string;
-  name: string;
-  handleChange: (value: string) => void;
-}
-
-export const ToggleButton = ({ leftLabel, rightLabel, name, handleChange }: ToggleButtonProps) => (
-  <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-    <input
-      value={leftLabel}
-      defaultChecked={true}
-      type="radio"
-      className="btn-check"
-      id="btncheck1"
-      autoComplete="off"
-      name={name}
-      onChange={() => {
-        handleChange(leftLabel);
-      }}
-    />
-    <label className="btn btn-outline-light" htmlFor="btncheck1">
-      {leftLabel}
-    </label>
-
-    <input
-      value={rightLabel}
-      type="radio"
-      className="btn-check"
-      id="btncheck2"
-      autoComplete="off"
-      name={name}
-      onChange={() => {
-        handleChange(rightLabel);
-      }}
-    />
-    <label className="btn btn-outline-light" htmlFor="btncheck2">
-      {rightLabel}
-    </label>
-  </div>
-);
 
 interface VariantCloudProps {
   variants: Variant[];
