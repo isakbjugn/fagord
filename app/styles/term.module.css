@@ -49,3 +49,31 @@
   text-align: center;
   cursor: pointer;
 }
+
+.openDetails {
+  padding: 0;
+  margin: 0;
+}
+
+.closeDetails {
+  padding: 0;
+  margin: 0;
+}
+
+details[open] > :global(summary) > .openDetails {
+  display: none;
+}
+
+details:not([open]) > :global(summary) > .closeDetails {
+  display: none;
+}
+
+:global(summary) {
+  list-style: none;
+  min-width: 132px;
+  margin-bottom: 4px;
+}
+
+:global(summary > p) {
+  padding: 0;
+}

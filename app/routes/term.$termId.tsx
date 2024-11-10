@@ -6,7 +6,6 @@ import { Loader } from '~/lib/components/loader';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
 import type { Term, Variant } from '~/types/term';
 import { ClientOnly } from 'remix-utils/client-only';
-import { useToggle } from '~/lib/use-toggle';
 import { DialectInput } from '~/lib/components/dialect-input';
 import type { ColorOptions, Tag } from 'react-tagcloud';
 import { TagCloud } from 'react-tagcloud';
@@ -104,7 +103,6 @@ interface TranslationCardProps {
 }
 
 export const TranslationCard = ({ term }: TranslationCardProps) => {
-  const [isWriting, toggleWriting] = useToggle(false);
   const [dialect, setDialect] = useState('nb');
 
   const buttonText = term.nb !== '' || term.nn !== '' ? 'Legg til forslag' : 'Legg til oversettelse';
@@ -122,8 +120,12 @@ export const TranslationCard = ({ term }: TranslationCardProps) => {
         <CardText>
           Nynorsk: <em>{term.nn}</em>
         </CardText>
-        {isWriting ? (
-          <Form method="post" action="varianter/legg-til" onSubmit={toggleWriting}>
+        <details>
+          <summary className="btn btn-outline-light">
+            <p className={style.openDetails}>{buttonText}</p>
+            <p className={style.closeDetails}>Lukk</p>
+          </summary>
+          <Form method="post" action="varianter/legg-til">
             <Row>
               <Col>
                 <Label htmlFor="term">
@@ -134,18 +136,9 @@ export const TranslationCard = ({ term }: TranslationCardProps) => {
                 <ToggleButton leftLabel="nb" rightLabel="nn" name="dialect" handleChange={setDialect} />
               </Col>
             </Row>
-            <span className={style.buttons}>
-              <Button color="success">Send inn</Button>
-              <Button type="button" color="light" outline onClick={toggleWriting}>
-                Lukk
-              </Button>
-            </span>
+            <Button color="success">Send inn</Button>
           </Form>
-        ) : (
-          <Button color="light" outline onClick={toggleWriting}>
-            {buttonText}
-          </Button>
-        )}
+        </details>
       </CardBody>
     </Card>
   );
