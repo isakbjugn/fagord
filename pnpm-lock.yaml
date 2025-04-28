@@ -36,8 +36,8 @@ dependencies:
     specifier: 2.16.5
     version: 2.16.5(typescript@5.8.3)
   bootstrap:
-    specifier: 5.3.3
-    version: 5.3.3(@popperjs/core@2.11.8)
+    specifier: 5.3.5
+    version: 5.3.5(@popperjs/core@2.11.8)
   isbot:
     specifier: 5.1.17
     version: 5.1.17
@@ -51,8 +51,8 @@ dependencies:
     specifier: 2.3.3
     version: 2.3.3(react@18.2.0)
   reactstrap:
-    specifier: 9.2.2
-    version: 9.2.2(react-dom@18.2.0)(react@18.2.0)
+    specifier: 9.2.3
+    version: 9.2.3(react-dom@18.2.0)(react@18.2.0)
   remix-utils:
     specifier: 7.6.0
     version: 7.6.0(@remix-run/node@2.16.5)(@remix-run/react@2.16.5)(react@18.2.0)
@@ -434,13 +434,6 @@ packages:
 
   /@babel/runtime@7.22.10:
     resolution: {integrity: sha512-21t/fkKLMZI4pqP2wlmsQAWnYW1PDyKyyUV4vCi+B25ydmdaYTKXPwCj0BzSUnZf4seIiYvSA3jcZ3gdsMFkLQ==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.14.0
-    dev: false
-
-  /@babel/runtime@7.23.2:
-    resolution: {integrity: sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==}
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.0
@@ -2745,8 +2738,8 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /bootstrap@5.3.3(@popperjs/core@2.11.8):
-    resolution: {integrity: sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==}
+  /bootstrap@5.3.5(@popperjs/core@2.11.8):
+    resolution: {integrity: sha512-ct1CHKtiobRimyGzmsSldEtM03E8fcEX4Tb3dGXz1V8faRwM50+vfHwTzOxB3IlKO7m+9vTH3s/3C6T2EAPeTA==}
     peerDependencies:
       '@popperjs/core': ^2.11.8
     dependencies:
@@ -6228,13 +6221,13 @@ packages:
     dependencies:
       loose-envify: 1.4.0
 
-  /reactstrap@9.2.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-4KroiGOdqZLAnMGzHjpErW3G7bLB+QbKzzMLIDXydPIV0y74lpdL7WtXHkLWAGInd97WCPNx4+R0NQDPyzIfhw==}
+  /reactstrap@9.2.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-1nXy7FIBIoOgXr3AIHOpgzcZXdj6rZE5YvNSPd1hYgwv8X64m6TAJsU0ExlieJdlRXhaRfTYRSZoTWa127b0gw==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.25.7
       '@popperjs/core': 2.11.8
       classnames: 2.3.2
       prop-types: 15.8.1
@@ -6394,7 +6387,7 @@ packages:
       '@remix-run/node': 2.16.5(typescript@5.8.3)
       '@remix-run/react': 2.16.5(react-dom@18.2.0)(react@18.2.0)(typescript@5.8.3)
       react: 18.2.0
-      type-fest: 4.20.1
+      type-fest: 4.40.1
     dev: false
 
   /require-like@0.1.2:
@@ -7041,8 +7034,8 @@ packages:
       prelude-ls: 1.2.1
     dev: true
 
-  /type-fest@4.20.1:
-    resolution: {integrity: sha512-R6wDsVsoS9xYOpy8vgeBlqpdOyzJ12HNfQhC/aAKWM3YoCV9TtunJzh/QpkMgeDhkoynDcw5f1y+qF9yc/HHyg==}
+  /type-fest@4.40.1:
+    resolution: {integrity: sha512-9YvLNnORDpI+vghLU/Nf+zSv0kL47KbVJ1o3sKgoTefl6i+zebxbiDQWoe/oWWqPhIgQdRZRT1KA9sCPL810SA==}
     engines: {node: '>=16'}
     dev: false
 
