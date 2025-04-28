@@ -1,18 +1,19 @@
-import style from '~/styles/term.module.css';
 import { Await, Form, Link, Outlet, useFetcher, useLocation, useParams, useRouteLoaderData } from '@remix-run/react';
-import type { loader as rootLoader } from '~/root';
 import { Suspense, useRef, useState } from 'react';
-import { Loader } from '~/lib/components/loader';
-import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
-import type { Term, Variant } from '~/types/term';
-import { ClientOnly } from 'remix-utils/client-only';
-import { useToggle } from '~/lib/use-toggle';
-import { DialectInput } from '~/lib/components/dialect-input';
 import type { ColorOptions, Tag } from 'react-tagcloud';
 import { TagCloud } from 'react-tagcloud';
+import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
+import { ClientOnly } from 'remix-utils/client-only';
+
+import { DialectInput } from '~/lib/components/dialect-input';
 import { Dialog } from '~/lib/components/dialog';
-import { ToggleButton } from '~/lib/components/toggle-button';
+import { Loader } from '~/lib/components/loader';
 import { ShareTermButton } from '~/lib/components/share-term-button.client';
+import { ToggleButton } from '~/lib/components/toggle-button';
+import { useToggle } from '~/lib/use-toggle';
+import type { loader as rootLoader } from '~/root';
+import style from '~/styles/term.module.css';
+import type { Term, Variant } from '~/types/term';
 
 export default function Term() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');

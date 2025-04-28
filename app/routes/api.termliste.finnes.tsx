@@ -1,4 +1,5 @@
 import type { ClientActionFunctionArgs } from '@remix-run/react';
+
 import type { Term } from '~/types/term';
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {

@@ -1,7 +1,8 @@
-import style from '~/styles/om-oss.module.css';
-import { team } from '~/lib/team';
-import type { Person } from '~/types/person';
 import { Card, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
+
+import { team } from '~/lib/team';
+import style from '~/styles/om-oss.module.css';
+import type { Person } from '~/types/person';
 
 export default function OmOss() {
   return (

@@ -1,4 +1,5 @@
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
+
 import type { DictionaryResponse } from '~/routes/api.ordbokene';
 import style from '~/styles/dialect-input.module.css';
 

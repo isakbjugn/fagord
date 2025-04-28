@@ -2,6 +2,7 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 import type { ClientActionFunctionArgs } from '@remix-run/react';
 import { Form, Link, redirect } from '@remix-run/react';
 import { Button, Label, Row } from 'reactstrap';
+
 import type { SubmitTerm } from '~/types/term';
 
 export async function action({ request, params }: ActionFunctionArgs) {

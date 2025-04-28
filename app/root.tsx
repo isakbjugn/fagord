@@ -1,18 +1,19 @@
-import { defer } from '@remix-run/node';
-import type { LinksFunction, LoaderFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
-import type { ClientLoaderFunctionArgs } from '@remix-run/react';
 import { ThemeProvider } from '@mui/material';
-import { splashscreens } from '~/links/splashscreens';
-import fagordTheme from '~/theme/theme';
-
+import type { LinksFunction, LoaderFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { defer } from '@remix-run/node';
+import type { ClientLoaderFunctionArgs } from '@remix-run/react';
+import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
-import appStylesHref from './app.css?url';
+
+import { ErrorMessage } from '~/lib/components/error-message';
 import { Footer } from '~/lib/components/footer';
 import { Header } from '~/lib/components/header';
-import type { Term } from '~/types/term';
 import { filterTerms } from '~/lib/search';
-import { ErrorMessage } from '~/lib/components/error-message';
+import { splashscreens } from '~/links/splashscreens';
+import fagordTheme from '~/theme/theme';
+import type { Term } from '~/types/term';
+
+import appStylesHref from './app.css?url';
 
 interface ServerData {
   terms: Promise<Term[]>;
