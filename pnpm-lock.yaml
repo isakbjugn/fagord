@@ -59,7 +59,7 @@ dependencies:
 
 devDependencies:
   '@eslint/js':
-    specifier: ^9.25.1
+    specifier: 9.25.1
     version: 9.25.1
   '@remix-run/dev':
     specifier: 2.16.5
@@ -83,13 +83,16 @@ devDependencies:
     specifier: 10.4.19
     version: 10.4.19(postcss@8.4.38)
   eslint:
-    specifier: ^9.25.1
+    specifier: 9.25.1
     version: 9.25.1
+  eslint-config-prettier:
+    specifier: 10.1.2
+    version: 10.1.2(eslint@9.25.1)
   eslint-plugin-react:
-    specifier: ^7.37.5
+    specifier: 7.37.5
     version: 7.37.5(eslint@9.25.1)
   globals:
-    specifier: ^16.0.0
+    specifier: 16.0.0
     version: 16.0.0
   postcss:
     specifier: 8.4.38
@@ -101,7 +104,7 @@ devDependencies:
     specifier: 5.2.2
     version: 5.2.2
   typescript-eslint:
-    specifier: ^8.31.1
+    specifier: 8.31.1
     version: 8.31.1(eslint@9.25.1)(typescript@5.2.2)
   vite:
     specifier: 6.3.3
@@ -3539,6 +3542,15 @@ packages:
   /escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
+
+  /eslint-config-prettier@10.1.2(eslint@9.25.1):
+    resolution: {integrity: sha512-Epgp/EofAUeEpIdZkW60MHKvPyru1ruQJxPL+WIycnaPApuseK0Zpkrh/FwL9oIpQvIhJwV7ptOy0DWUjTlCiA==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
+    dependencies:
+      eslint: 9.25.1
+    dev: true
 
   /eslint-plugin-react@7.37.5(eslint@9.25.1):
     resolution: {integrity: sha512-Qteup0SqU15kdocexFNAJMvCJEfa2xUKNV4CC1xsVMrIIqEy3SQ/rqyxCWNzfrd3/ldy6HMlD2e0JDVpDg2qIA==}
