@@ -1,7 +1,8 @@
 import type { ActionFunction, ActionFunctionArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import type { Term } from '~/types/term';
 import type { ClientActionFunctionArgs } from '@remix-run/react';
+
+import type { Term } from '~/types/term';
 
 export const action: ActionFunction = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();

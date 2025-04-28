@@ -1,5 +1,6 @@
-import style from '~/styles/term.module.css';
 import { IconButton } from '@mui/material';
+
+import style from '~/styles/term.module.css';
 import type { Term } from '~/types/term';
 
 interface Props {

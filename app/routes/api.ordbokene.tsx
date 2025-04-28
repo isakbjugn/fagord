@@ -1,6 +1,7 @@
 import type { ClientActionFunctionArgs } from '@remix-run/react';
-import type { OrdbokeneResponse } from '~/types/ordbokene';
+
 import { DictionaryName, getLookupFromOrdbokene, getSuggestion, getValidationText, isTermValid } from '~/lib/ordbokene';
+import type { OrdbokeneResponse } from '~/types/ordbokene';
 
 const DictionaryKey = {
   nb: 'bm',

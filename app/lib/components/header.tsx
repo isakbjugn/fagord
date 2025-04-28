@@ -1,9 +1,10 @@
 import { NavLink, useLocation } from '@remix-run/react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 
-import { useToggle } from '../use-toggle';
 import style from '~/styles/header.module.css';
+
 import { navLinks } from '../nav-links';
+import { useToggle } from '../use-toggle';
 import { Search } from './search';
 
 export const Header = () => {

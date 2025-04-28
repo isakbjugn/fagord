@@ -1,10 +1,11 @@
 import { Await, Form, Link, useLoaderData, useLocation, useNavigation } from '@remix-run/react';
-import { useDebounceSubmit } from 'remix-utils/use-debounce-submit';
-import type { loader as rootLoader } from '~/root';
-import type { Term } from '~/types/term';
 import { Suspense, useEffect, useState } from 'react';
-import styles from '~/styles/search.module.css';
 import { Button } from 'reactstrap';
+import { useDebounceSubmit } from 'remix-utils/use-debounce-submit';
+
+import type { loader as rootLoader } from '~/root';
+import styles from '~/styles/search.module.css';
+import type { Term } from '~/types/term';
 
 export function Search() {
   const { q, searchResult } = useLoaderData<typeof rootLoader>();

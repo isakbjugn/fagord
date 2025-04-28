@@ -1,13 +1,3 @@
-import { Await, Link, useLoaderData, useRouteLoaderData } from '@remix-run/react';
-import { Suspense, useState } from 'react';
-import type { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
-import type { loader as rootLoader } from '~/root';
-import type { Subject } from '~/types/subject';
-import { defer } from '@remix-run/node';
-import type { Language, Term } from '~/types/term';
-import style from '~/styles/termliste.module.css';
-import { Form, FormGroup, Input, Label } from 'reactstrap';
-import { Spinner } from '~/lib/components/spinner';
 import {
   Box,
   Collapse,
@@ -21,10 +11,21 @@ import {
   TableRow,
   TableSortLabel,
 } from '@mui/material';
-import { getComparator } from '~/lib/sorting';
-import type { Order } from '~/lib/sorting';
 import { visuallyHidden } from '@mui/utils';
+import { defer } from '@remix-run/node';
+import { Await, Link, useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import type { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
+import { Suspense, useState } from 'react';
+import { Form, FormGroup, Input, Label } from 'reactstrap';
 import { ClientOnly } from 'remix-utils/client-only';
+
+import { Spinner } from '~/lib/components/spinner';
+import type { Order } from '~/lib/sorting';
+import { getComparator } from '~/lib/sorting';
+import type { loader as rootLoader } from '~/root';
+import style from '~/styles/termliste.module.css';
+import type { Subject } from '~/types/subject';
+import type { Language, Term } from '~/types/term';
 
 interface TransFilter {
   text: string;

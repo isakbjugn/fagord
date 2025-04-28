@@ -1,7 +1,8 @@
-import style from '~/styles/kontakt.module.css';
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 import { Link } from '@remix-run/react';
+
 import { contactEmailUrl, fagordIssuesUrl, linkedInUrl } from '~/lib/constants';
+import style from '~/styles/kontakt.module.css';
 
 export default function Kontakt() {
   return (

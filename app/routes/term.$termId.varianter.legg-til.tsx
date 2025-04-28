@@ -1,6 +1,7 @@
 import { type ActionFunctionArgs, redirect } from '@remix-run/node';
-import type { SubmitVariant } from '~/types/term';
 import type { ClientActionFunctionArgs } from '@remix-run/react';
+
+import type { SubmitVariant } from '~/types/term';
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
