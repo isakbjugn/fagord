@@ -13,6 +13,14 @@
   margin: 0 16px 16px;
 }
 
+.contactInfo {
+  color: #122e3f;
+
+  &:hover {
+    color: var(--color-light-blue);
+  }
+}
+
 @media screen and (max-width: 346px) {
   .grid {
     grid-template-columns: 1fr;
@@ -22,3 +30,4 @@
 .wrapper {
   display: inline-grid;
 }
+
