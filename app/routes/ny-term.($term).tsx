@@ -1,5 +1,4 @@
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { Form, useLoaderData, useNavigation } from '@remix-run/react';
 import type { ChangeEvent } from 'react';
 import { Button, Label, Row } from 'reactstrap';
@@ -9,7 +8,7 @@ import { DialectInput } from '~/lib/components/dialect-input';
 import style from '~/styles/ny-term.module.css';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
-  return json({ termFromUrl: params.term });
+  return { termFromUrl: params.term };
 };
 
 export default function NyTerm() {

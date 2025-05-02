@@ -1,6 +1,5 @@
 import { ThemeProvider } from '@mui/material';
 import type { LinksFunction, LoaderFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { defer } from '@remix-run/node';
 import type { ClientLoaderFunctionArgs } from '@remix-run/react';
 import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
@@ -30,11 +29,11 @@ export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) =>
   const q = new URL(request.url).searchParams.get('q');
   const searchResult = terms.then((terms) => filterTerms(terms, q));
 
-  return defer({
+  return {
     terms: terms.then((data) => data.sort((a: Term, b: Term) => a.en.localeCompare(b.en))),
     q: q,
     searchResult: searchResult,
-  });
+  };
 };
 
 let isInitialRequest = true;
