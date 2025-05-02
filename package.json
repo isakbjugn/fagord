@@ -19,7 +19,7 @@
     "@emotion/styled": "11.14.0",
     "@mui/material": "6.1.4",
     "@mui/system": "6.1.4",
-    "@mui/utils": "6.1.4",
+    "@mui/utils": "7.0.2",
     "@remix-run/node": "2.16.5",
     "@remix-run/react": "2.16.5",
     "@remix-run/serve": "2.16.5",
