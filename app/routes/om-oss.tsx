@@ -1,5 +1,3 @@
-import { Card, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
-
 import { team } from '~/lib/team';
 import style from '~/styles/om-oss.module.css';
 import type { Person } from '~/types/person';
@@ -34,36 +32,26 @@ export default function OmOss() {
       </article>
       <section className={style.grid}>
         {team.map((member: Person) => (
-          <Card sx={{ backgroundColor: '#29648a' }} key={member.key}>
-            <CardMedia component="img" image={member.image} />
-            <CardContent>
-              <Typography gutterBottom variant="h5" color="white">
-                {member.name}
-              </Typography>
-              <Typography variant="subtitle1" color="white">
-                {member.title}
-              </Typography>
-              <Typography variant="body2" color="white">
-                {member.description}
-              </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              <IconButton
-                aria-label="write email"
-                href={'mailto:' + member.email}
-                sx={{ '&:hover': { color: '#2e9cca' } }}
-              >
-                <i aria-hidden className="fa-solid fa-envelope fa-md" />
-              </IconButton>
-              <IconButton
-                aria-label="visit LinkedIn profile"
-                href={'https://www.linkedin.com/in/' + member.linkedin}
-                sx={{ '&:hover': { color: '#2e9cca' } }}
-              >
-                <i aria-hidden className="fa-brands fa-linkedin fa-md" />
-              </IconButton>
-            </CardActions>
-          </Card>
+          <div style={{ backgroundColor: '#29648a' }} key={member.key}>
+            <img src={member.image} alt={member.name} style={{ width: '100%' }} />
+            <div style={{ padding: '16px' }}>
+              <h4>{member.name}</h4>
+              <p>{member.title}</p>
+              <p>{member.description}</p>
+              <span style={{ display: 'inline-flex', gap: '16px' }}>
+                <a className={style.contactInfo} href={'mailto:' + member.email} style={{ textDecoration: 'none' }}>
+                  <i aria-hidden className="fa-solid fa-envelope fa-xl" />
+                </a>
+                <a
+                  className={style.contactInfo}
+                  href={'https://www.linkedin.com/in/' + member.linkedin}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <i aria-hidden className="fa-brands fa-linkedin fa-xl" />
+                </a>
+              </span>
+            </div>
+          </div>
         ))}
       </section>
     </>
