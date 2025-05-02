@@ -11,7 +11,7 @@ import { renderToPipeableStream } from 'react-dom/server';
 
 import { EMOTION_CACHE_KEY } from '~/lib/constants';
 
-const ABORT_DELAY = 5_000;
+export const streamTimeout = 5000;
 
 export default function handleRequest(
   request: Request,
@@ -38,7 +38,7 @@ function handleBotRequest(
 
     const { pipe, abort } = renderToPipeableStream(
       <CacheProvider value={emotionCache}>
-        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+        <RemixServer context={remixContext} url={request.url} />
       </CacheProvider>,
       {
         onAllReady() {
@@ -76,7 +76,7 @@ function handleBotRequest(
       },
     );
 
-    setTimeout(abort, ABORT_DELAY);
+    setTimeout(abort, streamTimeout + 1000);
   });
 }
 
@@ -92,7 +92,7 @@ function handleBrowserRequest(
 
     const { pipe, abort } = renderToPipeableStream(
       <CacheProvider value={emotionCache}>
-        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+        <RemixServer context={remixContext} url={request.url} />
       </CacheProvider>,
       {
         onShellReady() {
@@ -129,6 +129,6 @@ function handleBrowserRequest(
       },
     );
 
-    setTimeout(abort, ABORT_DELAY);
+    setTimeout(abort, streamTimeout + 1000);
   });
 }

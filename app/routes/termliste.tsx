@@ -12,7 +12,7 @@ import {
   TableSortLabel,
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { defer } from '@remix-run/node';
+import { data } from '@remix-run/node';
 import { Await, Link, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 import { Suspense, useState } from 'react';
@@ -62,12 +62,7 @@ export function loader() {
     else throw new Error(`${res.status} ${res.statusText}: Feil under henting av fagfelt!`);
   });
 
-  return defer(
-    {
-      subjects: subjects,
-    },
-    { headers: { 'Cache-Control': 'max-age=3600' } },
-  );
+  return data({ subjects: subjects }, { headers: { 'Cache-Control': 'max-age=3600' } });
 }
 
 export default function Termliste() {

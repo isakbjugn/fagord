@@ -1,12 +1,11 @@
 import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { Button } from 'reactstrap';
 
 import style from '~/styles/ny-term.module.css';
 
 export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
-  return json({ termId: params.termId });
+  return { termId: params.termId };
 };
 
 export default function NyTermOpprettet() {
