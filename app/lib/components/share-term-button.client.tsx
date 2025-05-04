@@ -1,5 +1,3 @@
-import { IconButton } from '@mui/material';
-
 import style from '~/styles/term.module.css';
 import type { Term } from '~/types/term';
 
@@ -17,9 +15,8 @@ export const ShareTermButton = ({ term }: Props) => {
   };
 
   return (
-    <IconButton
+    <button
       className={style.share}
-      sx={{ color: '#ffffff' }}
       onClick={() => {
         try {
           navigator.share(termShareData);
@@ -28,7 +25,7 @@ export const ShareTermButton = ({ term }: Props) => {
         }
       }}
     >
-      <i className="fa-solid fa-arrow-up-from-bracket fa-md" />
-    </IconButton>
+      <i className="fa-solid fa-arrow-up-from-bracket fa-lg" />
+    </button>
   );
 };
