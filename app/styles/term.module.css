@@ -13,6 +13,11 @@
 
 .share {
   align-self: end;
+  background-color: transparent;
+
+  &:hover {
+    background-color: var(--color-dark-blue);
+  }
 }
 
 .card {
