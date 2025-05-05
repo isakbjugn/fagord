@@ -43,7 +43,7 @@
   margin: auto;
 }
 
-.cardHeader > :global(i) {
+.cardHeader > i {
   line-height: 1;
   color: var(--color-light-blue);
 }
