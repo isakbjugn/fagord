@@ -1,5 +1,6 @@
 :root {
   --color-light-blue: #2e9cca;
+  --color-light-blue-rgb: 46, 156, 202;
   --color-dark-blue: #29648a;
   --breakpoint-sm: 480px;
   --breakpoint-md: 768px;
@@ -7,6 +8,21 @@
   --breakpoint-xl: 1280px;
   --bs-form-invalid-color: #e57316;
   --bs-form-invalid-border-color: #e57316;
+}
+
+.btn-fagord-blue {
+  --bs-btn-font-weight: 400;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--color-light-blue);
+  --bs-btn-border-color: var(--color-light-blue);
+  --bs-btn-border-radius: .5rem;
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg: rgba(var(--color-light-blue-rgb), 0.5);
+  --bs-btn-hover-border-color: rgba(var(--color-light-blue-rgb), 0.25);
+  --bs-btn-focus-shadow-rgb: var(--color-light-blue-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgba(var(--color-light-blue-rgb), 0.375);
+  --bs-btn-active-border-color: rgba(var(--color-light-blue-rgb), 0.2);
 }
 
 header {

@@ -24,22 +24,30 @@
   margin-bottom: 16px;
 }
 
-.card-header {
+.card {
+  padding: 16px;
+  background-color: var(--color-dark-blue);
+  display: inline-grid;
+  align-content: space-between;
+
+  > a {
+    margin-bottom: 16px;
+    justify-self: center;
+  }
+}
+
+.cardHeader {
   display: flex;
   align-items: center;
   flex-direction: column;
   margin: auto;
 }
 
-.card-header > :global(i) {
+.cardHeader > i {
   line-height: 1;
   color: var(--color-light-blue);
 }
 
-.card {
-  display: grid;
-  align-content: space-between;
-  padding-bottom: 8px;
-  background-color: var(--color-dark-blue) !important;
-  color: white !important;
+.smallParagraph {
+  font-size: 0.875em;
 }
