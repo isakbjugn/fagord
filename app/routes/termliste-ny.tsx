@@ -6,6 +6,8 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
+  PaginationState,
   useReactTable,
 } from '@tanstack/react-table';
 import '~/styles/termliste-ny.module.css';
@@ -14,8 +16,9 @@ import { Suspense, useState } from 'react';
 import { Spinner } from '~/lib/components/spinner';
 import { Await, useLoaderData } from '@remix-run/react';
 import type { Subject } from '~/types/subject';
-import style from '~/styles/termliste.module.css';
+import style from '~/styles/termliste-ny.module.css';
 import { data } from '@remix-run/node';
+import { Paginator } from '~/lib/components/paginator';
 
 declare module '@tanstack/react-table' {
   // inkluder egentilpassede filterfunksjoner
@@ -119,10 +122,15 @@ export default function Termliste() {
   const { subjects } = useLoaderData<typeof loader>();
   const [transFilter, setTransFilter] = useState<any>(['all']);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const table = useReactTable({
     data: defaultData,
     columns,
     state: {
+      pagination,
       columnFilters: columnFilters,
       columnVisibility: {
         en: true,
@@ -135,10 +143,12 @@ export default function Termliste() {
     filterFns: {
       subject: subjectFilter,
     },
+    onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     globalFilterFn: translatedFilter,
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const subjectFilterComponent = () => (
@@ -198,6 +208,7 @@ export default function Termliste() {
             ))}
           </tfoot>
         </table>
+        <Paginator table={table} />
       </div>
     </div>
   );

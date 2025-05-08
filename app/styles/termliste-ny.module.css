@@ -1,7 +1,47 @@
-table {
-  background: white;
-  color: black;
+.subjects {
+  width: 250px;
+  max-width: 95vw;
+  font-size: 1rem;
+  font-family: inherit;
+  border: none;
+  border-radius: 8px;
+  box-shadow:
+          0 0 1px hsla(0, 0%, 0%, 0.2),
+          0 1px 2px hsla(0, 0%, 0%, 0.2);
+  background-color: white;
+  line-height: 1.5;
+  margin: 0;
+  padding: 8px;
+}
 
+.header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.table {
+  background-color: var(--color-paper);
+  color: black;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+}
+
+.paginator {
+  padding: 8px;
+  color: black;
+  display: flex;
+  justify-content: end;
+  gap: 8px;
+  border-radius: 0 0 16px 16px;
+  background-color: var(--color-paper);
+  border-top: 1px solid lightgray;
+}
+
+.paginatorButton {
+  background-color: transparent;
+  border: none;
 }
 
 th {
