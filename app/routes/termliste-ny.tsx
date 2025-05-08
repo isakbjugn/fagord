@@ -165,7 +165,7 @@ export default function Termliste() {
           <TranslationFilter setTransFilter={setTransFilter} />
           {subjectFilterComponent()}
         </div>
-        <table style={{ borderRadius: '16px', width: '100%' }}>
+        <table className={style.table}>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>

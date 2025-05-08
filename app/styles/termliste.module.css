@@ -37,6 +37,12 @@
   margin-bottom: 8px;
 }
 
+.table {
+  background-color: var(--color-paper);
+  border-radius: 16px;
+  width: 100%;
+}
+
 .form {
   display: flex;
   align-items: center;
