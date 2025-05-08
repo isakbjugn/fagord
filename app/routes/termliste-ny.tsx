@@ -14,11 +14,12 @@ import '~/styles/termliste-ny.module.css';
 import { TranslationFilter } from '~/lib/components/translation-filter';
 import { Suspense, useState } from 'react';
 import { Spinner } from '~/lib/components/spinner';
-import { Await, useLoaderData } from '@remix-run/react';
+import { Await, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import type { Subject } from '~/types/subject';
 import style from '~/styles/termliste-ny.module.css';
 import { data } from '@remix-run/node';
 import { Paginator } from '~/lib/components/paginator';
+import type { loader as rootLoader } from '~/root';
 
 declare module '@tanstack/react-table' {
   // inkluder egentilpassede filterfunksjoner
@@ -26,48 +27,6 @@ declare module '@tanstack/react-table' {
     subject: FilterFn<unknown>;
   }
 }
-
-const defaultData: Term[] = [
-  {
-    _id: 'embedding_1',
-    definition: '',
-    en: 'embedding',
-    nb: '',
-    nn: '',
-    variants: [],
-    field: 'IT',
-    subfield: 'Maskinlæring',
-    pos: 'substantiv',
-  },
-  {
-    _id: 'embody_ver',
-    definition: '',
-    en: 'embody',
-    nb: 'legemliggjøre',
-    nn: 'lekamleggjere',
-    variants: [
-      { term: 'legemliggjøre', dialect: 'nb', votes: 1 },
-      { term: 'lekamleggjere', dialect: 'nn', votes: 1 },
-    ],
-    field: '',
-    subfield: '',
-    pos: 'verb',
-  },
-  {
-    _id: 'enable_adv',
-    definition: '',
-    en: 'enable',
-    nb: 'muliggjøre',
-    nn: 'gjere mogleg',
-    variants: [
-      { term: 'muliggjøre', dialect: 'nb', votes: 1 },
-      { term: 'gjere mogleg', dialect: 'nn', votes: 1 },
-    ],
-    field: 'Markedsføring',
-    subfield: 'Strategi',
-    pos: 'verb',
-  },
-];
 
 const columnHelper = createColumnHelper<Term>();
 
@@ -119,6 +78,7 @@ export function loader() {
 }
 
 export default function Termliste() {
+  const { terms } = useRouteLoaderData<typeof rootLoader>('root');
   const { subjects } = useLoaderData<typeof loader>();
   const [transFilter, setTransFilter] = useState<any>(['all']);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -127,7 +87,7 @@ export default function Termliste() {
     pageSize: 10,
   });
   const table = useReactTable({
-    data: defaultData,
+    data: terms,
     columns,
     state: {
       pagination,
