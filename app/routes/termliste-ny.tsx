@@ -1,8 +1,15 @@
 import type { Term } from '~/types/term';
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  createColumnHelper,
+  FilterFn,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import '~/styles/termliste-ny.module.css';
-import { useTransFilter } from '~/lib/use-trans-filter';
 import { TranslationFilter } from '~/lib/components/translation-filter';
+import { useState } from 'react';
 
 const defaultData: Term[] = [
   {
@@ -63,13 +70,28 @@ const columns = [
   }),
 ];
 
+const translatedFilter: FilterFn<Term> = (row, columnId, filterValue) => {
+  if (filterValue === 'translated') {
+    return row.original.nb !== '' && row.original.nn !== '';
+  } else if (filterValue === 'incomplete') {
+    return row.original.nb === '' || row.original.nn === '';
+  }
+  return true;
+};
+
 export default function Termliste() {
+  const [transFilter, setTransFilter] = useState<any>(['all']);
   const table = useReactTable({
     data: defaultData,
     columns,
+    state: {
+      globalFilter: transFilter,
+    },
+    onColumnFiltersChange: setTransFilter,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: translatedFilter,
   });
-  const [setTransFilter, applyTransFilter] = useTransFilter();
 
   return (
     <div className="container-sm my-2">
