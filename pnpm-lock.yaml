@@ -27,8 +27,8 @@ importers:
         specifier: 6.1.4
         version: 6.1.4(@emotion/react@11.14.0(@types/react@18.2.33)(react@18.2.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.2.33)(react@18.2.0))(@types/react@18.2.33)(react@18.2.0))(@types/react@18.2.33)(react@18.2.0)
       '@mui/utils':
-        specifier: 6.1.4
-        version: 6.1.4(@types/react@18.2.33)(react@18.2.0)
+        specifier: 6.4.9
+        version: 6.4.9(@types/react@18.2.33)(react@18.2.0)
       '@remix-run/node':
         specifier: 2.16.5
         version: 2.16.5(typescript@5.8.3)
@@ -249,12 +249,12 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  '@babel/runtime@7.22.10':
-    resolution: {integrity: sha512-21t/fkKLMZI4pqP2wlmsQAWnYW1PDyKyyUV4vCi+B25ydmdaYTKXPwCj0BzSUnZf4seIiYvSA3jcZ3gdsMFkLQ==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/runtime@7.25.7':
     resolution: {integrity: sha512-FjoyLe754PMiYsFaN5C94ttGiOmBNYTf6pLr4xXHAT5uctHb092PBszndLDR5XA/jghQvn4n7JMHl7dmTgbm9w==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.27.1':
+    resolution: {integrity: sha512-1x3D2xEk2fRo3PAhwQwu5UubzgiVWSXTBfWpVd2Mx2AzRqJuDJCsgaDVZ7HB5iGzDW1Hl1sWN2mFyKjmR9uAog==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.24.7':
@@ -855,8 +855,16 @@ packages:
       '@types/react':
         optional: true
 
-  '@mui/utils@6.1.4':
-    resolution: {integrity: sha512-v0wXkyh3/Hpw48ivlNvgs4ZT6M8BIEAMdLgvct59rQBggYFhoAVKyliKDzdj37CnIlYau3DYIn7x5bHlRYFBow==}
+  '@mui/types@7.2.24':
+    resolution: {integrity: sha512-3c8tRt/CbWZ+pEg7QpSwbdxOk36EfmhbKf6AGZsD1EcLDLTSZoxxJ86FVtcjxvjuhdyBiWKSTGZFaXCnidO2kw==}
+    peerDependencies:
+      '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@mui/utils@6.4.9':
+    resolution: {integrity: sha512-Y12Q9hbK9g+ZY0T3Rxrx9m2m10gaphDuUMgWxyV5kNJevVxXYCLclYUCC9vXaIk1/NdNDTcW2Yfr2OGvNFNmHg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1230,8 +1238,8 @@ packages:
   '@types/parse-json@4.0.0':
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
 
-  '@types/prop-types@15.7.13':
-    resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
+  '@types/prop-types@15.7.14':
+    resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
 
   '@types/prop-types@15.7.5':
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
@@ -2787,6 +2795,9 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
+  react-is@19.1.0:
+    resolution: {integrity: sha512-Oe56aUPnkHyyDxxkvqtd7KkdQP5uIUfHxd5XTb3wE9d/kRnZLmKbDB0GWk919tdQ+mxxPtG6EAs6RMT6i1qtHg==}
+
   react-popper@2.3.0:
     resolution: {integrity: sha512-e1hj8lL3uM+sgSR4Lxzn5h1GxBlpa4CQz0XLF8kx4MDrDRWY0Ena4c97PUeSX9i5W3UAfDP0z0FXCTQkoXUl3Q==}
     peerDependencies:
@@ -3677,13 +3688,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/runtime@7.22.10':
-    dependencies:
-      regenerator-runtime: 0.14.0
-
   '@babel/runtime@7.25.7':
     dependencies:
       regenerator-runtime: 0.14.0
+
+  '@babel/runtime@7.27.1': {}
 
   '@babel/template@7.24.7':
     dependencies:
@@ -4080,7 +4089,7 @@ snapshots:
       '@mui/core-downloads-tracker': 6.1.4
       '@mui/system': 6.1.4(@emotion/react@11.14.0(@types/react@18.2.33)(react@18.2.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.2.33)(react@18.2.0))(@types/react@18.2.33)(react@18.2.0))(@types/react@18.2.33)(react@18.2.0)
       '@mui/types': 7.2.18(@types/react@18.2.33)
-      '@mui/utils': 6.1.4(@types/react@18.2.33)(react@18.2.0)
+      '@mui/utils': 6.4.9(@types/react@18.2.33)(react@18.2.0)
       '@popperjs/core': 2.11.8
       '@types/react-transition-group': 4.4.11
       clsx: 2.1.1
@@ -4098,7 +4107,7 @@ snapshots:
   '@mui/private-theming@6.1.4(@types/react@18.2.33)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.25.7
-      '@mui/utils': 6.1.4(@types/react@18.2.33)(react@18.2.0)
+      '@mui/utils': 6.4.9(@types/react@18.2.33)(react@18.2.0)
       prop-types: 15.8.1
       react: 18.2.0
     optionalDependencies:
@@ -4123,7 +4132,7 @@ snapshots:
       '@mui/private-theming': 6.1.4(@types/react@18.2.33)(react@18.2.0)
       '@mui/styled-engine': 6.1.4(@emotion/react@11.14.0(@types/react@18.2.33)(react@18.2.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.2.33)(react@18.2.0))(@types/react@18.2.33)(react@18.2.0))(react@18.2.0)
       '@mui/types': 7.2.18(@types/react@18.2.33)
-      '@mui/utils': 6.1.4(@types/react@18.2.33)(react@18.2.0)
+      '@mui/utils': 6.4.9(@types/react@18.2.33)(react@18.2.0)
       clsx: 2.1.1
       csstype: 3.1.3
       prop-types: 15.8.1
@@ -4137,15 +4146,19 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.2.33
 
-  '@mui/utils@6.1.4(@types/react@18.2.33)(react@18.2.0)':
+  '@mui/types@7.2.24(@types/react@18.2.33)':
+    optionalDependencies:
+      '@types/react': 18.2.33
+
+  '@mui/utils@6.4.9(@types/react@18.2.33)(react@18.2.0)':
     dependencies:
-      '@babel/runtime': 7.25.7
-      '@mui/types': 7.2.18(@types/react@18.2.33)
-      '@types/prop-types': 15.7.13
+      '@babel/runtime': 7.27.1
+      '@mui/types': 7.2.24(@types/react@18.2.33)
+      '@types/prop-types': 15.7.14
       clsx: 2.1.1
       prop-types: 15.8.1
       react: 18.2.0
-      react-is: 18.3.1
+      react-is: 19.1.0
     optionalDependencies:
       '@types/react': 18.2.33
 
@@ -4538,7 +4551,7 @@ snapshots:
 
   '@types/parse-json@4.0.0': {}
 
-  '@types/prop-types@15.7.13': {}
+  '@types/prop-types@15.7.14': {}
 
   '@types/prop-types@15.7.5': {}
 
@@ -4690,7 +4703,7 @@ snapshots:
 
   babel-plugin-macros@3.1.0:
     dependencies:
-      '@babel/runtime': 7.25.7
+      '@babel/runtime': 7.27.1
       cosmiconfig: 7.1.0
       resolve: 1.22.4
 
@@ -4984,7 +4997,7 @@ snapshots:
 
   dom-helpers@5.2.1:
     dependencies:
-      '@babel/runtime': 7.22.10
+      '@babel/runtime': 7.27.1
       csstype: 3.1.2
 
   dotenv@16.4.5: {}
@@ -5719,7 +5732,7 @@ snapshots:
 
   media-query-parser@2.0.2:
     dependencies:
-      '@babel/runtime': 7.25.7
+      '@babel/runtime': 7.27.1
 
   media-typer@0.3.0: {}
 
@@ -6340,6 +6353,8 @@ snapshots:
 
   react-is@18.3.1: {}
 
+  react-is@19.1.0: {}
+
   react-popper@2.3.0(@popperjs/core@2.11.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@popperjs/core': 2.11.8
@@ -6372,7 +6387,7 @@ snapshots:
 
   react-transition-group@4.4.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      '@babel/runtime': 7.22.10
+      '@babel/runtime': 7.25.7
       dom-helpers: 5.2.1
       loose-envify: 1.4.0
       prop-types: 15.8.1
