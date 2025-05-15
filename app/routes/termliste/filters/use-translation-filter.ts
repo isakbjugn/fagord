@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { TransFilterType } from '~/types/filters';
 import type { Term } from '~/types/term';
 
-export const useTransFilter = () => {
+export const useTranslationFilter = () => {
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
 
   const applyTransFilter = (terms: Term[]): Term[] => {

@@ -25,10 +25,10 @@ import type { loader as rootLoader } from '~/root';
 import style from '~/styles/termliste.module.css';
 import type { Subject, SubjectsLoaderData } from '~/types/subject';
 import type { Language, Term } from '~/types/term';
-import { TranslationFilter } from '~/lib/components/translation-filter';
-import { useTransFilter } from '~/lib/use-trans-filter';
-import { SubjectFilter } from '~/routes/termliste/subject-filter';
-import { useSubjectFilter } from '~/routes/termliste/use-subject-filter';
+import { TranslationFilter } from '~/routes/termliste/filters/translation-filter';
+import { useTranslationFilter } from '~/routes/termliste/filters/use-translation-filter';
+import { SubjectFilter } from '~/routes/termliste/filters/subject-filter';
+import { useSubjectFilter } from '~/routes/termliste/filters/use-subject-filter';
 
 export function loader() {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
@@ -58,7 +58,7 @@ export function loader() {
 export default function Route() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
   const subjectsData = useLoaderData<typeof loader>() as unknown as SubjectsLoaderData;
-  const [setTransFilter, applyTransFilter] = useTransFilter();
+  const [setTransFilter, applyTransFilter] = useTranslationFilter();
   const [setSubjectFilter, applySubjectFilter] = useSubjectFilter();
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Language>('en');

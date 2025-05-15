@@ -11,15 +11,15 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import '~/styles/termliste-ny.module.css';
-import { TranslationFilter } from '~/lib/components/translation-filter';
+import { TranslationFilter } from '~/routes/termliste/filters/translation-filter';
 import { Suspense, useState } from 'react';
 import { Await, useLoaderData } from '@remix-run/react';
 import type { SubjectsLoaderData } from '~/types/subject';
 import style from '~/styles/termliste-ny.module.css';
 import { Paginator } from '~/routes/termliste-ny/paginator/paginator';
-import { SubjectFilter } from '~/routes/termliste/subject-filter';
+import { SubjectFilter } from '~/routes/termliste/filters/subject-filter';
 import { loader } from '~/routes/termliste-ny/route';
-import { subjectFilter } from '~/routes/termliste-ny/subject-filter';
+import { subjectFilter } from '~/routes/termliste-ny/filters/subject-filter';
 
 declare module '@tanstack/react-table' {
   // inkluder egentilpassede filterfunksjoner
