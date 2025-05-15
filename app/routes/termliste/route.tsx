@@ -55,7 +55,7 @@ export function loader() {
     });
 }
 
-export default function Route() {
+export default function Termliste() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
   const subjectsData = useLoaderData<typeof loader>() as unknown as SubjectsLoaderData;
   const [setTransFilter, applyTransFilter] = useTranslationFilter();
