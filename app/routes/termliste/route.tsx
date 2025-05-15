@@ -16,7 +16,6 @@ import { data } from '@remix-run/node';
 import { Await, Link, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 import { Suspense, useState } from 'react';
-import { Form, FormGroup, Input, Label } from 'reactstrap';
 import { ClientOnly } from 'remix-utils/client-only';
 
 import { Spinner } from '~/lib/components/spinner';
@@ -24,42 +23,12 @@ import type { Order } from '~/lib/sorting';
 import { getComparator } from '~/lib/sorting';
 import type { loader as rootLoader } from '~/root';
 import style from '~/styles/termliste.module.css';
-import type { Subject } from '~/types/subject';
+import type { Subject, SubjectsLoaderData } from '~/types/subject';
 import type { Language, Term } from '~/types/term';
-
-interface TransFilter {
-  text: string;
-  filter: TransFilterType;
-  defaultChecked: boolean;
-}
-
-type TransFilterType = 'all' | 'translated' | 'incomplete';
-
-const AllSubjects: Subject = { field: 'Alle fagfelt', subfields: [] };
-
-const transFilters: TransFilter[] = [
-  {
-    text: 'Alle',
-    filter: 'all',
-    defaultChecked: true,
-  },
-  {
-    text: 'Oversatt',
-    filter: 'translated',
-    defaultChecked: false,
-  },
-  {
-    text: 'Ufullstendig',
-    filter: 'incomplete',
-    defaultChecked: false,
-  },
-];
-
-type ServerData = Promise<{
-  success: boolean;
-  subjects: Promise<Subject[]>;
-  message: string | undefined;
-}>;
+import { TranslationFilter } from '~/routes/termliste/filters/translation-filter';
+import { useTranslationFilter } from '~/routes/termliste/filters/use-translation-filter';
+import { SubjectFilter } from '~/routes/termliste/filters/subject-filter';
+import { useSubjectFilter } from '~/routes/termliste/filters/use-subject-filter';
 
 export function loader() {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
@@ -88,30 +57,13 @@ export function loader() {
 
 export default function Termliste() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
-  const subjectsData = useLoaderData<typeof loader>() as unknown as ServerData;
-  const [transFilter, setTransFilter] = useState<TransFilterType>('all');
-  const [subjectFilter, setSubjectFilter] = useState<string | null>(AllSubjects.field);
+  const subjectsData = useLoaderData<typeof loader>() as unknown as SubjectsLoaderData;
+  const [setTransFilter, applyTransFilter] = useTranslationFilter();
+  const [setSubjectFilter, applySubjectFilter] = useSubjectFilter();
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Language>('en');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const applyTransFilter = (terms: Term[]): Term[] => {
-    switch (transFilter) {
-      case 'translated':
-        return terms.filter((term) => term.nb !== '' || term.nn !== '');
-      case 'incomplete':
-        return terms.filter((term) => term.nb === '' || term.nn === '');
-      default:
-        return terms;
-    }
-  };
-
-  const applySubjectFilter = (terms: Term[]): Term[] => {
-    if (subjectFilter === null) return terms;
-    if (subjectFilter === AllSubjects.field) return terms;
-    return terms.filter((term) => term.field === subjectFilter);
-  };
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: keyof Language): void => {
     const isAsc = orderBy === property && order === 'asc';
@@ -128,53 +80,12 @@ export default function Termliste() {
     setPage(0);
   };
 
-  const subjectFilterComponent = () => (
-    <Suspense fallback={<Spinner />}>
-      <Await resolve={subjectsData}>
-        {(subjectsData) =>
-          subjectsData.success ? (
-            <Suspense fallback={<Spinner />}>
-              <Await resolve={subjectsData.subjects}>
-                {(subjects) => (
-                  <select className={style.subjects} onChange={(event) => setSubjectFilter(event.currentTarget.value)}>
-                    {[AllSubjects, ...subjects].map((subject) => (
-                      <option key={subject.field}>{subject.field}</option>
-                    ))}
-                  </select>
-                )}
-              </Await>
-            </Suspense>
-          ) : (
-            <p className={style.inlineErrorMessage}>
-              <i className="fa-solid fa-triangle-exclamation"></i>
-              {subjectsData.message}
-            </p>
-          )
-        }
-      </Await>
-    </Suspense>
-  );
-
   return (
     <div className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
         <div className={style.header}>
-          <Form className={style.form}>
-            {transFilters.map((filter) => (
-              <FormGroup check inline key={filter.filter}>
-                <Input
-                  name="dictionaryView"
-                  type="radio"
-                  onChange={() => {
-                    setTransFilter(filter.filter);
-                  }}
-                  defaultChecked={filter.defaultChecked}
-                />
-                <Label check>{filter.text}</Label>
-              </FormGroup>
-            ))}
-          </Form>
-          {subjectFilterComponent()}
+          <TranslationFilter setTransFilter={setTransFilter} />
+          <SubjectFilter onChange={setSubjectFilter} subjectsData={subjectsData} />
         </div>
         <Paper sx={{ width: '100%', mb: 2, bgcolor: 'background.paper' }}>
           <TableContainer>

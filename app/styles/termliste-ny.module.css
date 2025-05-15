@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.table {
+  background-color: var(--color-paper);
+  color: black;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+}
+
+th {
+  border-bottom: 1px solid lightgray;
+  padding: 4px 16px;
+}
+
+tr:not(:last-child) {
+  border-bottom: 1px solid lightgray;
+}
+
+td {
+  padding: 4px 16px;
+}
