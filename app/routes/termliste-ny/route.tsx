@@ -157,17 +157,6 @@ export default function Termliste() {
               </tr>
             ))}
           </tbody>
-          <tfoot>
-            {table.getFooterGroups().map((footerGroup) => (
-              <tr key={footerGroup.id}>
-                {footerGroup.headers.map((header) => (
-                  <td key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tfoot>
         </table>
         <Paginator table={table} />
       </div>
