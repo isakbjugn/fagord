@@ -1,5 +1,5 @@
 import { Table } from '@tanstack/react-table';
-import style from '~/styles/termliste-ny.module.css';
+import style from './paginator.module.css';
 
 type Props = {
   table: Table<any>;
@@ -15,7 +15,6 @@ export const Paginator = ({ table }: Props) => {
         </strong>
       </span>
       <select
-        className="border p-1 rounded"
         value={table.getState().pagination.pageSize}
         onChange={(e) => {
           table.setPageSize(Number(e.target.value));

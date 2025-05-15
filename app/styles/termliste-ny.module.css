@@ -12,25 +12,9 @@
   width: 100%;
 }
 
-.paginator {
-  padding: 8px;
-  color: black;
-  display: flex;
-  justify-content: end;
-  gap: 8px;
-  border-radius: 0 0 16px 16px;
-  background-color: var(--color-paper);
-  border-top: 1px solid lightgray;
-}
-
-.paginatorButton {
-  background-color: transparent;
-  border: none;
-}
-
 th {
   border-bottom: 1px solid lightgray;
-  padding: 4px 8px;
+  padding: 4px 16px;
 }
 
 tr:not(:last-child) {
@@ -38,13 +22,5 @@ tr:not(:last-child) {
 }
 
 td {
-  padding: 4px 8px;
-}
-
-tfoot {
-  color: gray;
-}
-
-tfoot th {
-  font-weight: normal;
+  padding: 4px 16px;
 }

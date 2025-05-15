@@ -16,7 +16,7 @@ import { Suspense, useState } from 'react';
 import { Await, useLoaderData } from '@remix-run/react';
 import type { SubjectsLoaderData } from '~/types/subject';
 import style from '~/styles/termliste-ny.module.css';
-import { Paginator } from '~/lib/components/paginator';
+import { Paginator } from '~/routes/termliste-ny/paginator/paginator';
 import { SubjectFilter } from '~/routes/termliste/subject-filter';
 import { loader } from '~/routes/termliste-ny/route';
 import { subjectFilter } from '~/routes/termliste-ny/subject-filter';

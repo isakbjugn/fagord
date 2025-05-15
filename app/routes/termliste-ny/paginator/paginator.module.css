@@ -1,0 +1,15 @@
+.paginator {
+    padding: 8px;
+    color: black;
+    display: flex;
+    justify-content: end;
+    gap: 8px;
+    border-radius: 0 0 16px 16px;
+    background-color: var(--color-paper);
+    border-top: 1px solid lightgray;
+}
+
+.paginatorButton {
+    background-color: transparent;
+    border: none;
+}
