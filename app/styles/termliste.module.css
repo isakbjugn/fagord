@@ -14,6 +14,22 @@
   padding: 8px;
 }
 
+.inlineErrorMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 0;
+  text-wrap: nowrap;
+}
+
+.inlineErrorMessage > i {
+  color: var(--bs-warning);
+}
+
 .header {
   display: flex;
   flex-flow: row wrap;
