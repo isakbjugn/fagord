@@ -20,6 +20,7 @@ import { Paginator } from '~/routes/termliste-ny/paginator/paginator';
 import { SubjectFilter } from '~/routes/termliste/filters/subject-filter';
 import { loader } from '~/routes/termliste-ny/route';
 import { subjectFilter } from '~/routes/termliste-ny/filters/subject-filter';
+import { translationFilter } from '~/routes/termliste-ny/filters/translation-filter';
 
 declare module '@tanstack/react-table' {
   // inkluder egentilpassede filterfunksjoner
@@ -49,15 +50,6 @@ const columns = [
     filterFn: 'subject',
   }),
 ];
-
-const translatedFilter: FilterFn<Term> = (row, columnId, filterValue) => {
-  if (filterValue === 'translated') {
-    return row.original.nb !== '' && row.original.nn !== '';
-  } else if (filterValue === 'incomplete') {
-    return row.original.nb === '' || row.original.nn === '';
-  }
-  return true;
-};
 
 type Props = {
   terms: Term[];
@@ -92,7 +84,7 @@ export default function Table({ terms }: Props) {
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: translatedFilter,
+    globalFilterFn: translationFilter,
     getPaginationRowModel: getPaginationRowModel(),
   });
 
