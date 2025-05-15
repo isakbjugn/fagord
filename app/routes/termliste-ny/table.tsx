@@ -12,8 +12,8 @@ import {
 } from '@tanstack/react-table';
 import '~/styles/termliste-ny.module.css';
 import { TranslationFilter } from '~/routes/termliste/filters/translation-filter';
-import { Suspense, useState } from 'react';
-import { Await, useLoaderData } from '@remix-run/react';
+import { useState } from 'react';
+import { useLoaderData } from '@remix-run/react';
 import type { SubjectsLoaderData } from '~/types/subject';
 import style from '~/styles/termliste-ny.module.css';
 import { Paginator } from '~/routes/termliste-ny/paginator/paginator';
@@ -118,19 +118,15 @@ export default function Table({ terms }: Props) {
               </tr>
             ))}
           </thead>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Await resolve={terms}>
-              <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                    ))}
-                  </tr>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                 ))}
-              </tbody>
-            </Await>
-          </Suspense>
+              </tr>
+            ))}
+          </tbody>
         </table>
         <Paginator table={table} />
       </div>
