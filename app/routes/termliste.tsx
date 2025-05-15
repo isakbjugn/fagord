@@ -55,19 +55,40 @@ const transFilters: TransFilter[] = [
   },
 ];
 
+type ServerData = Promise<{
+  success: boolean;
+  subjects: Promise<Subject[]>;
+  message: string | undefined;
+}>;
+
 export function loader() {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
-  const subjects = fetch(subjectsUrl).then((res) => {
-    if (res.ok) return res.json();
-    else throw new Error(`${res.status} ${res.statusText}: Feil under henting av fagfelt!`);
-  });
 
-  return data({ subjects: subjects }, { headers: { 'Cache-Control': 'max-age=3600' } });
+  return fetch(subjectsUrl)
+    .then(async (res) => {
+      if (!res.ok) {
+        throw new Error('Kunne ikke hente fagfelt');
+      }
+      return data(
+        { success: true, subjects: res.json() as Promise<Subject[]>, message: undefined },
+        { headers: { 'Cache-Control': 'max-age=3600' } },
+      );
+    })
+    .catch((error) => {
+      return data(
+        {
+          success: false,
+          subjects: [],
+          message: 'Kunne ikke laste fagfelt',
+        },
+        { status: 500 },
+      );
+    });
 }
 
 export default function Termliste() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
-  const { subjects } = useLoaderData<typeof loader>();
+  const subjectsData = useLoaderData<typeof loader>() as unknown as ServerData;
   const [transFilter, setTransFilter] = useState<TransFilterType>('all');
   const [subjectFilter, setSubjectFilter] = useState<string | null>(AllSubjects.field);
   const [order, setOrder] = useState<Order>('asc');
@@ -109,14 +130,27 @@ export default function Termliste() {
 
   const subjectFilterComponent = () => (
     <Suspense fallback={<Spinner />}>
-      <Await resolve={subjects}>
-        {(subjects: Subject[]) => (
-          <select className={style.subjects} onChange={(event) => setSubjectFilter(event.currentTarget.value)}>
-            {[AllSubjects, ...subjects].map((subject) => (
-              <option key={subject.field}>{subject.field}</option>
-            ))}
-          </select>
-        )}
+      <Await resolve={subjectsData}>
+        {(subjectsData) =>
+          subjectsData.success ? (
+            <Suspense fallback={<Spinner />}>
+              <Await resolve={subjectsData.subjects}>
+                {(subjects) => (
+                  <select className={style.subjects} onChange={(event) => setSubjectFilter(event.currentTarget.value)}>
+                    {[AllSubjects, ...subjects].map((subject) => (
+                      <option key={subject.field}>{subject.field}</option>
+                    ))}
+                  </select>
+                )}
+              </Await>
+            </Suspense>
+          ) : (
+            <p className={style.inlineErrorMessage}>
+              <i className="fa-solid fa-triangle-exclamation"></i>
+              {subjectsData.message}
+            </p>
+          )
+        }
       </Await>
     </Suspense>
   );
