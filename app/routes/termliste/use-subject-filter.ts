@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import type { Term } from '~/types/term';
-import { Subject } from '~/types/subject';
-
-export const AllSubjects: Subject = { field: 'Alle fagfelt', subfields: [] };
+import { AllSubjects } from '~/types/subject';
 
 export const useSubjectFilter = () => {
   const [subjectFilter, setSubjectFilter] = useState<string | null>(AllSubjects.field);

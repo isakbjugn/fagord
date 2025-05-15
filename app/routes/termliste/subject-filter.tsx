@@ -2,8 +2,7 @@ import { Suspense } from 'react';
 import { Spinner } from '~/lib/components/spinner';
 import { Await } from '@remix-run/react';
 import style from './subject-filter.module.css';
-import { SubjectsLoaderData } from '~/types/subject';
-import { AllSubjects } from '~/routes/termliste/use-subject-filter';
+import { AllSubjects, type SubjectsLoaderData } from '~/types/subject';
 
 type Props = {
   onChange: (subject: string) => void;

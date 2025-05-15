@@ -8,3 +8,5 @@ export interface Subject {
   field: string;
   subfields: string[];
 }
+
+export const AllSubjects: Subject = { field: 'Alle fagfelt', subfields: [] };

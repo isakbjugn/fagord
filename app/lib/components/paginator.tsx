@@ -46,20 +46,20 @@ export const Paginator = ({ table }: Props) => {
         onClick={() => table.firstPage()}
         disabled={!table.getCanPreviousPage()}
       >
-        <span className="fa-solid fa-backward-fast"></span>
+        <i aria-hidden className="fa-solid fa-backward-fast" />
       </button>
       <button
         className={style.paginatorButton}
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
-        <span className="fa-solid fa-play fa-flip-horizontal"></span>
+        <i aria-hidden className="fa-solid fa-play fa-flip-horizontal" />
       </button>
       <button className={style.paginatorButton} onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-        <span className="fa-solid fa-play"></span>
+        <i aria-hidden className="fa-solid fa-play" />
       </button>
       <button className={style.paginatorButton} onClick={() => table.lastPage()} disabled={!table.getCanNextPage()}>
-        <span className="fa-solid fa-forward-fast"></span>
+        <i aria-hidden className="fa-solid fa-forward-fast" />
       </button>
     </div>
   );
