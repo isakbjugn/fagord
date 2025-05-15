@@ -12,14 +12,14 @@ import {
 } from '@tanstack/react-table';
 import '~/styles/termliste-ny.module.css';
 import { TranslationFilter } from '~/lib/components/translation-filter';
-import { Suspense, useState } from 'react';
-import { Spinner } from '~/lib/components/spinner';
-import { Await, useLoaderData, useRouteLoaderData } from '@remix-run/react';
-import type { Subject } from '~/types/subject';
+import { useState } from 'react';
+import { useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import type { Subject, SubjectsLoaderData } from '~/types/subject';
 import style from '~/styles/termliste-ny.module.css';
 import { data } from '@remix-run/node';
 import { Paginator } from '~/lib/components/paginator';
 import type { loader as rootLoader } from '~/root';
+import { SubjectFilter } from '~/routes/termliste/subject-filter';
 
 declare module '@tanstack/react-table' {
   // inkluder egentilpassede filterfunksjoner
@@ -69,17 +69,32 @@ const AllSubjects: Subject = { field: 'Alle fagfelt', subfields: [] };
 
 export function loader() {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
-  const subjects = fetch(subjectsUrl).then((res) => {
-    if (res.ok) return res.json();
-    else throw new Error(`${res.status} ${res.statusText}: Feil under henting av fagfelt!`);
-  });
 
-  return data({ subjects: subjects }, { headers: { 'Cache-Control': 'max-age=3600' } });
+  return fetch(subjectsUrl)
+    .then(async (res) => {
+      if (!res.ok) {
+        throw new Error('Kunne ikke hente fagfelt');
+      }
+      return data(
+        { success: true, subjects: res.json() as Promise<Subject[]>, message: undefined },
+        { headers: { 'Cache-Control': 'max-age=3600' } },
+      );
+    })
+    .catch((error) => {
+      return data(
+        {
+          success: false,
+          subjects: [],
+          message: 'Kunne ikke laste fagfelt',
+        },
+        { status: 500 },
+      );
+    });
 }
 
 export default function Termliste() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
-  const { subjects } = useLoaderData<typeof loader>();
+  const subjectsData = useLoaderData<typeof loader>() as unknown as SubjectsLoaderData;
   const [transFilter, setTransFilter] = useState<any>(['all']);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -111,29 +126,15 @@ export default function Termliste() {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const subjectFilterComponent = () => (
-    <Suspense fallback={<Spinner />}>
-      <Await resolve={subjects}>
-        {(subjects: Subject[]) => (
-          <select
-            className={style.subjects}
-            onChange={(event) => table.getColumn('field')?.setFilterValue(event.currentTarget.value)}
-          >
-            {[AllSubjects, ...subjects].map((subject) => (
-              <option key={subject.field}>{subject.field}</option>
-            ))}
-          </select>
-        )}
-      </Await>
-    </Suspense>
-  );
-
   return (
     <div className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
         <div className={style.header}>
           <TranslationFilter setTransFilter={setTransFilter} />
-          {subjectFilterComponent()}
+          <SubjectFilter
+            onChange={(subject) => table.getColumn('field')?.setFilterValue(subject)}
+            subjectsData={subjectsData}
+          />
         </div>
         <table className={style.table}>
           <thead>

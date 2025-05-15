@@ -23,18 +23,12 @@ import type { Order } from '~/lib/sorting';
 import { getComparator } from '~/lib/sorting';
 import type { loader as rootLoader } from '~/root';
 import style from '~/styles/termliste.module.css';
-import type { Subject } from '~/types/subject';
+import type { Subject, SubjectsLoaderData } from '~/types/subject';
 import type { Language, Term } from '~/types/term';
 import { TranslationFilter } from '~/lib/components/translation-filter';
 import { useTransFilter } from '~/lib/use-trans-filter';
-
-const AllSubjects: Subject = { field: 'Alle fagfelt', subfields: [] };
-
-type ServerData = Promise<{
-  success: boolean;
-  subjects: Promise<Subject[]>;
-  message: string | undefined;
-}>;
+import { SubjectFilter } from '~/routes/termliste/subject-filter';
+import { useSubjectFilter } from '~/routes/termliste/use-subject-filter';
 
 export function loader() {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
@@ -61,21 +55,15 @@ export function loader() {
     });
 }
 
-export default function Termliste() {
+export default function Route() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');
-  const subjectsData = useLoaderData<typeof loader>() as unknown as ServerData;
+  const subjectsData = useLoaderData<typeof loader>() as unknown as SubjectsLoaderData;
   const [setTransFilter, applyTransFilter] = useTransFilter();
-  const [subjectFilter, setSubjectFilter] = useState<string | null>(AllSubjects.field);
+  const [setSubjectFilter, applySubjectFilter] = useSubjectFilter();
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Language>('en');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const applySubjectFilter = (terms: Term[]): Term[] => {
-    if (subjectFilter === null) return terms;
-    if (subjectFilter === AllSubjects.field) return terms;
-    return terms.filter((term) => term.field === subjectFilter);
-  };
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: keyof Language): void => {
     const isAsc = orderBy === property && order === 'asc';
@@ -92,39 +80,12 @@ export default function Termliste() {
     setPage(0);
   };
 
-  const subjectFilterComponent = () => (
-    <Suspense fallback={<Spinner />}>
-      <Await resolve={subjectsData}>
-        {(subjectsData) =>
-          subjectsData.success ? (
-            <Suspense fallback={<Spinner />}>
-              <Await resolve={subjectsData.subjects}>
-                {(subjects) => (
-                  <select className={style.subjects} onChange={(event) => setSubjectFilter(event.currentTarget.value)}>
-                    {[AllSubjects, ...subjects].map((subject) => (
-                      <option key={subject.field}>{subject.field}</option>
-                    ))}
-                  </select>
-                )}
-              </Await>
-            </Suspense>
-          ) : (
-            <p className={style.inlineErrorMessage}>
-              <i className="fa-solid fa-triangle-exclamation"></i>
-              {subjectsData.message}
-            </p>
-          )
-        }
-      </Await>
-    </Suspense>
-  );
-
   return (
     <div className="container-sm my-2">
       <div className="col-12 col-lg-10 mx-auto">
         <div className={style.header}>
           <TranslationFilter setTransFilter={setTransFilter} />
-          {subjectFilterComponent()}
+          <SubjectFilter onChange={setSubjectFilter} subjectsData={subjectsData} />
         </div>
         <Paper sx={{ width: '100%', mb: 2, bgcolor: 'background.paper' }}>
           <TableContainer>
