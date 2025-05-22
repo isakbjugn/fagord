@@ -17,16 +17,16 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import '~/styles/termliste-ny.module.css';
-import { TranslationFilter } from '~/routes/termliste-gammel/filters/translation-filter';
+import { TranslationFilter } from './filters/translation-filter';
 import { Fragment, useState } from 'react';
 import { useLoaderData } from '@remix-run/react';
 import type { SubjectsLoaderData } from '~/types/subject';
 import style from '~/styles/termliste-ny.module.css';
 import { Paginator } from '~/routes/termliste/paginator/paginator';
-import { SubjectFilter } from '~/routes/termliste-gammel/filters/subject-filter';
+import { SubjectFilter } from './filters/subject-filter';
 import { loader } from '~/routes/termliste/route';
-import { subjectFilter } from '~/routes/termliste/filters/subject-filter';
-import { translationFilter } from '~/routes/termliste/filters/translation-filter';
+import { filterSubjects } from '~/routes/termliste/filters/filter-subjects';
+import { filterTranslations } from '~/routes/termliste/filters/filter-translations';
 import { TermDetaljer } from './term-detaljer/term-detaljer';
 
 declare module '@tanstack/react-table' {
@@ -122,7 +122,7 @@ export default function Table({ terms }: Props) {
       sorting,
     },
     filterFns: {
-      subject: subjectFilter,
+      subject: filterSubjects,
     },
     sortingFns: {
       textEmptyLast,
@@ -133,7 +133,7 @@ export default function Table({ terms }: Props) {
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: translationFilter,
+    globalFilterFn: filterTranslations,
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
