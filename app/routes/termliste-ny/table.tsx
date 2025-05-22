@@ -5,14 +5,16 @@ import {
   FilterFn,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   PaginationState,
+  Row,
   useReactTable,
 } from '@tanstack/react-table';
 import '~/styles/termliste-ny.module.css';
 import { TranslationFilter } from '~/routes/termliste/filters/translation-filter';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useLoaderData } from '@remix-run/react';
 import type { SubjectsLoaderData } from '~/types/subject';
 import style from '~/styles/termliste-ny.module.css';
@@ -21,6 +23,7 @@ import { SubjectFilter } from '~/routes/termliste/filters/subject-filter';
 import { loader } from '~/routes/termliste-ny/route';
 import { subjectFilter } from '~/routes/termliste-ny/filters/subject-filter';
 import { translationFilter } from '~/routes/termliste-ny/filters/translation-filter';
+import { TermDetaljer } from './term-detaljer/term-detaljer';
 
 declare module '@tanstack/react-table' {
   // inkluder egentilpassede filterfunksjoner
@@ -32,6 +35,24 @@ declare module '@tanstack/react-table' {
 const columnHelper = createColumnHelper<Term>();
 
 const columns = [
+  {
+    id: 'detaljer',
+    header: () => null,
+    cell: ({ row }: { row: Row<Term> }) => (
+      <button
+        {...{
+          onClick: row.getToggleExpandedHandler(),
+          className: style.expandButton,
+        }}
+      >
+        {row.getIsExpanded() ? (
+          <i aria-hidden className="fa-solid fa-angle-up" />
+        ) : (
+          <i aria-hidden className="fa-solid fa-angle-down" />
+        )}
+      </button>
+    ),
+  },
   columnHelper.accessor('en', {
     header: 'Engelsk',
     cell: (info) => info.getValue(),
@@ -82,7 +103,9 @@ export default function Table({ terms }: Props) {
     },
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
+    getRowCanExpand: (row) => true,
     getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     globalFilterFn: translationFilter,
     getPaginationRowModel: getPaginationRowModel(),
@@ -112,11 +135,21 @@ export default function Table({ terms }: Props) {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                ))}
-              </tr>
+              <Fragment key={row.id}>
+                <tr>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                  ))}
+                </tr>
+                {row.getIsExpanded() ? (
+                  <tr>
+                    <td colSpan={1} />
+                    <td colSpan={columns.length}>
+                      <TermDetaljer term={row.original} />
+                    </td>
+                  </tr>
+                ) : null}
+              </Fragment>
             ))}
           </tbody>
         </table>

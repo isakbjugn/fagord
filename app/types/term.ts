@@ -8,6 +8,7 @@ export interface Term {
   field: string;
   subfield: string;
   pos: string;
+  reference: string;
 }
 
 export interface Variant {
