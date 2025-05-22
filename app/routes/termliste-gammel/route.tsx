@@ -22,7 +22,7 @@ import { Spinner } from '~/lib/components/spinner';
 import type { Order } from '~/lib/sorting';
 import { getComparator } from '~/lib/sorting';
 import type { loader as rootLoader } from '~/root';
-import style from '~/styles/termliste.module.css';
+import style from '~/routes/termliste-gammel/termliste-gammel.module.css';
 import type { Subject, SubjectsLoaderData } from '~/types/subject';
 import type { Language, Term } from '~/types/term';
 import { TranslationFilter } from '~/routes/termliste/filters/translation-filter';

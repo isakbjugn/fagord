@@ -16,12 +16,12 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import '~/styles/termliste-ny.module.css';
 import { TranslationFilter } from './filters/translation-filter';
 import { Fragment, useState } from 'react';
 import { useLoaderData } from '@remix-run/react';
 import type { SubjectsLoaderData } from '~/types/subject';
-import style from '~/styles/termliste-ny.module.css';
+import style from '~/routes/termliste/termliste.module.css';
+import '~/routes/termliste/termliste.module.css';
 import { Paginator } from '~/routes/termliste/paginator/paginator';
 import { SubjectFilter } from './filters/subject-filter';
 import { loader } from '~/routes/termliste/route';

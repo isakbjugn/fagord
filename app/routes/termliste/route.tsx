@@ -1,4 +1,4 @@
-import '~/styles/termliste-ny.module.css';
+import '~/routes/termliste/termliste.module.css';
 import { Suspense } from 'react';
 import { Await, useRouteLoaderData } from '@remix-run/react';
 import type { loader as rootLoader } from '~/root';

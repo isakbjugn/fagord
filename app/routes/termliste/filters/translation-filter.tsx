@@ -1,4 +1,4 @@
-import style from '~/styles/termliste.module.css';
+import style from './translation-filter.module.css';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 import { TransFilter, TransFilterType } from '~/types/filters';
 
