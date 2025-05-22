@@ -8,8 +8,12 @@ import {
   getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   PaginationState,
   Row,
+  SortDirection,
+  SortingFn,
+  SortingState,
   useReactTable,
 } from '@tanstack/react-table';
 import '~/styles/termliste-ny.module.css';
@@ -30,9 +34,23 @@ declare module '@tanstack/react-table' {
   interface FilterFns {
     subject: FilterFn<unknown>;
   }
+  interface SortingFns {
+    textEmptyLast: SortingFn<unknown>;
+  }
 }
 
 const columnHelper = createColumnHelper<Term>();
+
+const textEmptyLast: SortingFn<Term> = (rowA, rowB, columnId) => {
+  const a = rowA.getValue(columnId) as string;
+  const b = rowB.getValue(columnId) as string;
+
+  if (a === undefined && b === undefined) return 0;
+  if (a === undefined || a === '') return 1;
+  if (b === undefined || b === '') return -1;
+
+  return a.localeCompare(b);
+};
 
 const columns = [
   {
@@ -60,15 +78,18 @@ const columns = [
   columnHelper.accessor('nb', {
     header: 'Bokmål',
     cell: (info) => info.getValue(),
+    sortingFn: 'textEmptyLast',
   }),
   columnHelper.accessor('nn', {
     header: 'Nynorsk',
     cell: (info) => info.getValue(),
+    sortingFn: 'textEmptyLast',
   }),
   columnHelper.accessor('field', {
     header: 'Fagfelt',
     cell: (info) => info.getValue(),
     filterFn: 'subject',
+    sortingFn: 'textEmptyLast',
   }),
 ];
 
@@ -84,6 +105,7 @@ export default function Table({ terms }: Props) {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     data: terms,
     columns,
@@ -97,18 +119,24 @@ export default function Table({ terms }: Props) {
         field: true,
       },
       globalFilter: transFilter,
+      sorting,
     },
     filterFns: {
       subject: subjectFilter,
     },
+    sortingFns: {
+      textEmptyLast,
+    },
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
-    getRowCanExpand: (row) => true,
+    getRowCanExpand: () => true,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     globalFilterFn: translationFilter,
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
   });
 
   return (
@@ -127,7 +155,24 @@ export default function Table({ terms }: Props) {
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder ? null : (
+                      <div
+                        style={header.column.getCanSort() ? { cursor: 'pointer', userSelect: 'none' } : {}}
+                        onClick={header.column.getToggleSortingHandler()}
+                        title={
+                          header.column.getCanSort()
+                            ? header.column.getNextSortingOrder() === 'asc'
+                              ? 'Sort ascending'
+                              : header.column.getNextSortingOrder() === 'desc'
+                                ? 'Sort descending'
+                                : 'Clear sort'
+                            : undefined
+                        }
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        <SortingIndicator isSorted={header.column.getIsSorted()} />
+                      </div>
+                    )}
                   </th>
                 ))}
               </tr>
@@ -158,3 +203,20 @@ export default function Table({ terms }: Props) {
     </div>
   );
 }
+
+type SortingIndicatorProps = {
+  isSorted: false | SortDirection;
+};
+
+const SortingIndicator = ({ isSorted }: SortingIndicatorProps) => {
+  return (
+    <span>
+      {' '}
+      {isSorted === 'asc' ? (
+        <i className="fa-solid fa-angle-up" />
+      ) : isSorted === 'desc' ? (
+        <i className="fa-solid fa-angle-down" />
+      ) : null}
+    </span>
+  );
+};
