@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TranslationFilter } from './translation-filter/translation-filter';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, type KeyboardEvent } from 'react';
 import { useLoaderData } from '@remix-run/react';
 import type { SubjectsLoaderData } from '~/types/subject';
 import style from '~/routes/termliste/termliste.module.css';
@@ -27,6 +27,17 @@ import { SubjectFilter } from './subject-filter/subject-filter';
 import { loader } from '~/routes/termliste/route';
 import { subjectFilter, translationFilter } from '~/routes/termliste/filters';
 import { TermDetaljer } from './term-detaljer/term-detaljer';
+
+function handleKeyDown(handler: ((event: KeyboardEvent) => void) | undefined) {
+  return (event: KeyboardEvent) => {
+    if (event.code === 'Enter' || event.code === 'Space') {
+      event.preventDefault();
+      if (handler && typeof handler === 'function') {
+        handler(event);
+      }
+    }
+  };
+}
 
 declare module '@tanstack/react-table' {
   // inkluder egentilpassede filterfunksjoner
@@ -56,6 +67,7 @@ const columns = [
     id: 'detaljer',
     header: () => null,
     cell: ({ row }: { row: Row<Term> }) => <ExpandButton row={row} />,
+    enableSorting: false,
   },
   columnHelper.accessor('en', {
     header: 'Engelsk',
@@ -140,7 +152,11 @@ export default function Table({ terms }: Props) {
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
+                  <th
+                    key={header.id}
+                    tabIndex={header.column.getCanSort() ? 0 : undefined}
+                    onKeyDown={handleKeyDown(header.column.getToggleSortingHandler())}
+                  >
                     {header.isPlaceholder ? null : (
                       <div
                         style={header.column.getCanSort() ? { cursor: 'pointer', userSelect: 'none' } : {}}
@@ -167,9 +183,11 @@ export default function Table({ terms }: Props) {
           <tbody>
             {table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
-                <tr>
+                <tr className={style.termEntry} onClick={row.getToggleExpandedHandler()}>
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    <td key={cell.id} tabIndex={0} onKeyDown={handleKeyDown(row.getToggleExpandedHandler())}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
                   ))}
                 </tr>
                 {row.getIsExpanded() ? (

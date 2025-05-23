@@ -26,6 +26,10 @@ td {
   padding: 4px 16px;
 }
 
+.termEntry:hover {
+  background-color: aliceblue;
+}
+
 .expandButton {
   border-style: none;
   background: none;
