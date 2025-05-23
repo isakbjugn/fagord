@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TranslationFilter } from './translation-filter/translation-filter';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, type KeyboardEvent } from 'react';
 import { useLoaderData } from '@remix-run/react';
 import type { SubjectsLoaderData } from '~/types/subject';
 import style from '~/routes/termliste/termliste.module.css';
@@ -27,6 +27,16 @@ import { SubjectFilter } from './subject-filter/subject-filter';
 import { loader } from '~/routes/termliste/route';
 import { subjectFilter, translationFilter } from '~/routes/termliste/filters';
 import { TermDetaljer } from './term-detaljer/term-detaljer';
+
+function handleKeyDown(handler: ((event: KeyboardEvent) => void) | undefined) {
+  return (event: KeyboardEvent) => {
+    if (event.code === 'Enter' || event.code === 'Space') {
+      if (handler && typeof handler === 'function') {
+        handler(event);
+      }
+    }
+  };
+}
 
 declare module '@tanstack/react-table' {
   // inkluder egentilpassede filterfunksjoner
@@ -56,6 +66,7 @@ const columns = [
     id: 'detaljer',
     header: () => null,
     cell: ({ row }: { row: Row<Term> }) => <ExpandButton row={row} />,
+    enableSorting: false,
   },
   columnHelper.accessor('en', {
     header: 'Engelsk',
@@ -140,7 +151,11 @@ export default function Table({ terms }: Props) {
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
+                  <th
+                    key={header.id}
+                    tabIndex={header.column.getCanSort() ? 0 : undefined}
+                    onKeyDown={handleKeyDown(header.column.getToggleSortingHandler())}
+                  >
                     {header.isPlaceholder ? null : (
                       <div
                         style={header.column.getCanSort() ? { cursor: 'pointer', userSelect: 'none' } : {}}
@@ -167,9 +182,18 @@ export default function Table({ terms }: Props) {
           <tbody>
             {table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
-                <tr>
+                <tr className={style.termEntry}>
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    <td
+                      key={cell.id}
+                      tabIndex={cell.column.id !== 'detaljer' ? 0 : undefined}
+                      onClick={cell.column.id !== 'detaljer' ? row.getToggleExpandedHandler() : undefined}
+                      onKeyDown={
+                        cell.column.id !== 'detaljer' ? handleKeyDown(row.getToggleExpandedHandler()) : undefined
+                      }
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
                   ))}
                 </tr>
                 {row.getIsExpanded() ? (
@@ -196,12 +220,7 @@ type ExpandButtonProps = {
 
 function ExpandButton({ row }: ExpandButtonProps) {
   return (
-    <button
-      {...{
-        onClick: row.getToggleExpandedHandler(),
-        className: style.expandButton,
-      }}
-    >
+    <button onClick={row.getToggleExpandedHandler()} className={style.expandButton} tabIndex={0}>
       {row.getIsExpanded() ? (
         <i aria-hidden className="fa-solid fa-angle-up" />
       ) : (
