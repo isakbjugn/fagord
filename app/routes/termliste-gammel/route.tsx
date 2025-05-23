@@ -25,9 +25,9 @@ import type { loader as rootLoader } from '~/root';
 import style from '~/routes/termliste-gammel/termliste-gammel.module.css';
 import type { Subject, SubjectsLoaderData } from '~/types/subject';
 import type { Language, Term } from '~/types/term';
-import { TranslationFilter } from '~/routes/termliste/filters/translation-filter';
+import { TranslationFilter } from '~/routes/termliste/translation-filter/translation-filter';
 import { useTranslationFilter } from '~/routes/termliste-gammel/filters/use-translation-filter';
-import { SubjectFilter } from '~/routes/termliste/filters/subject-filter';
+import { SubjectFilter } from '~/routes/termliste/subject-filter/subject-filter';
 import { useSubjectFilter } from '~/routes/termliste-gammel/filters/use-subject-filter';
 
 export function loader() {
