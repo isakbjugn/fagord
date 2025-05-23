@@ -146,68 +146,70 @@ export default function Table({ terms }: Props) {
             subjectsData={subjectsData}
           />
         </div>
-        <table className={style.table}>
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    tabIndex={header.column.getCanSort() ? 0 : undefined}
-                    onKeyDown={handleKeyDown(header.column.getToggleSortingHandler())}
-                  >
-                    {header.isPlaceholder ? null : (
-                      <div
-                        style={header.column.getCanSort() ? { cursor: 'pointer', userSelect: 'none' } : {}}
-                        onClick={header.column.getToggleSortingHandler()}
-                        title={
-                          header.column.getCanSort()
-                            ? header.column.getNextSortingOrder() === 'asc'
-                              ? 'Sort ascending'
-                              : header.column.getNextSortingOrder() === 'desc'
-                                ? 'Sort descending'
-                                : 'Clear sort'
-                            : undefined
-                        }
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        <SortingIndicator isSorted={header.column.getIsSorted()} />
-                      </div>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <Fragment key={row.id}>
-                <tr className={style.termEntry}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      tabIndex={cell.column.id !== 'detaljer' ? 0 : undefined}
-                      onClick={cell.column.id !== 'detaljer' ? row.getToggleExpandedHandler() : undefined}
-                      onKeyDown={
-                        cell.column.id !== 'detaljer' ? handleKeyDown(row.getToggleExpandedHandler()) : undefined
-                      }
+        <div className={style.tableScrollWrapper}>
+          <table className={style.table}>
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      tabIndex={header.column.getCanSort() ? 0 : undefined}
+                      onKeyDown={handleKeyDown(header.column.getToggleSortingHandler())}
                     >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
+                      {header.isPlaceholder ? null : (
+                        <div
+                          style={header.column.getCanSort() ? { cursor: 'pointer', userSelect: 'none' } : {}}
+                          onClick={header.column.getToggleSortingHandler()}
+                          title={
+                            header.column.getCanSort()
+                              ? header.column.getNextSortingOrder() === 'asc'
+                                ? 'Sort ascending'
+                                : header.column.getNextSortingOrder() === 'desc'
+                                  ? 'Sort descending'
+                                  : 'Clear sort'
+                              : undefined
+                          }
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          <SortingIndicator isSorted={header.column.getIsSorted()} />
+                        </div>
+                      )}
+                    </th>
                   ))}
                 </tr>
-                {row.getIsExpanded() ? (
-                  <tr>
-                    <td colSpan={1} />
-                    <td colSpan={columns.length}>
-                      <TermDetaljer term={row.original} />
-                    </td>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <Fragment key={row.id}>
+                  <tr className={style.termEntry}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        tabIndex={cell.column.id !== 'detaljer' ? 0 : undefined}
+                        onClick={cell.column.id !== 'detaljer' ? row.getToggleExpandedHandler() : undefined}
+                        onKeyDown={
+                          cell.column.id !== 'detaljer' ? handleKeyDown(row.getToggleExpandedHandler()) : undefined
+                        }
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
                   </tr>
-                ) : null}
-              </Fragment>
-            ))}
-          </tbody>
-        </table>
+                  {row.getIsExpanded() ? (
+                    <tr>
+                      <td colSpan={1} />
+                      <td colSpan={columns.length}>
+                        <TermDetaljer term={row.original} />
+                      </td>
+                    </tr>
+                  ) : null}
+                </Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <Paginator table={table} />
       </div>
     </div>

@@ -5,10 +5,16 @@
   margin-bottom: 8px;
 }
 
+.tableScrollWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px 8px 0 0;
+  overscroll-behavior-x: none;
+}
+
 .table {
   background-color: var(--color-paper);
   color: black;
-  border-radius: 8px 8px 0 0;
   width: 100%;
   font-size: 14px;
 }
