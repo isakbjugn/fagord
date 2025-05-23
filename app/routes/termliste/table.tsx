@@ -55,20 +55,7 @@ const columns = [
   {
     id: 'detaljer',
     header: () => null,
-    cell: ({ row }: { row: Row<Term> }) => (
-      <button
-        {...{
-          onClick: row.getToggleExpandedHandler(),
-          className: style.expandButton,
-        }}
-      >
-        {row.getIsExpanded() ? (
-          <i aria-hidden className="fa-solid fa-angle-up" />
-        ) : (
-          <i aria-hidden className="fa-solid fa-angle-down" />
-        )}
-      </button>
-    ),
+    cell: ({ row }: { row: Row<Term> }) => <ExpandButton row={row} />,
   },
   columnHelper.accessor('en', {
     header: 'Engelsk',
@@ -200,6 +187,27 @@ export default function Table({ terms }: Props) {
         <Paginator table={table} />
       </div>
     </div>
+  );
+}
+
+type ExpandButtonProps = {
+  row: Row<Term>;
+};
+
+function ExpandButton({ row }: ExpandButtonProps) {
+  return (
+    <button
+      {...{
+        onClick: row.getToggleExpandedHandler(),
+        className: style.expandButton,
+      }}
+    >
+      {row.getIsExpanded() ? (
+        <i aria-hidden className="fa-solid fa-angle-up" />
+      ) : (
+        <i aria-hidden className="fa-solid fa-angle-down" />
+      )}
+    </button>
   );
 }
 
