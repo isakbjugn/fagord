@@ -220,12 +220,7 @@ type ExpandButtonProps = {
 
 function ExpandButton({ row }: ExpandButtonProps) {
   return (
-    <button
-      {...{
-        onClick: row.getToggleExpandedHandler(),
-        className: style.expandButton,
-      }}
-    >
+    <button onClick={row.getToggleExpandedHandler()} className={style.expandButton} tabIndex={0}>
       {row.getIsExpanded() ? (
         <i aria-hidden className="fa-solid fa-angle-up" />
       ) : (
