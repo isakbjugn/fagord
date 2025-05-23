@@ -25,8 +25,7 @@ import '~/routes/termliste/termliste.module.css';
 import { Paginator } from '~/routes/termliste/paginator/paginator';
 import { SubjectFilter } from './subject-filter/subject-filter';
 import { loader } from '~/routes/termliste/route';
-import { subjectFilter } from '~/routes/termliste/filters/subject-filter';
-import { translationFilter } from '~/routes/termliste/filters/translation-filter';
+import { subjectFilter, translationFilter } from '~/routes/termliste/filters';
 import { TermDetaljer } from './term-detaljer/term-detaljer';
 
 declare module '@tanstack/react-table' {
