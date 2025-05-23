@@ -31,7 +31,6 @@ import { TermDetaljer } from './term-detaljer/term-detaljer';
 function handleKeyDown(handler: ((event: KeyboardEvent) => void) | undefined) {
   return (event: KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'Space') {
-      event.preventDefault();
       if (handler && typeof handler === 'function') {
         handler(event);
       }
@@ -183,9 +182,16 @@ export default function Table({ terms }: Props) {
           <tbody>
             {table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
-                <tr className={style.termEntry} onClick={row.getToggleExpandedHandler()}>
+                <tr className={style.termEntry}>
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} tabIndex={0} onKeyDown={handleKeyDown(row.getToggleExpandedHandler())}>
+                    <td
+                      key={cell.id}
+                      tabIndex={cell.column.id !== 'detaljer' ? 0 : undefined}
+                      onClick={cell.column.id !== 'detaljer' ? row.getToggleExpandedHandler() : undefined}
+                      onKeyDown={
+                        cell.column.id !== 'detaljer' ? handleKeyDown(row.getToggleExpandedHandler()) : undefined
+                      }
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
