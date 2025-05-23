@@ -8,7 +8,7 @@ type Props = {
 export const Paginator = ({ table }: Props) => {
   return (
     <div className={style.paginator}>
-      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <span className={style.pageIndicator} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
         <div>Side</div>
         <strong>
           {table.getState().pagination.pageIndex + 1} av {table.getPageCount().toLocaleString()}

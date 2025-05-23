@@ -14,3 +14,13 @@
     background-color: transparent;
     border: none;
 }
+
+@media (max-width: 480px) {
+    .pageIndicator {
+        visibility: hidden;
+    }
+
+    .paginator {
+        gap: 4px;
+    }
+}
