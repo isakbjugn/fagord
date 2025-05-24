@@ -44,10 +44,12 @@ export function Search() {
         action={location.pathname}
         onChange={(event) => {
           const isFirstSearch = q === null;
-          submit(event.currentTarget, {
-            replace: !isFirstSearch,
-            debounceTimeout: 200,
-          });
+          if (submit) {
+            submit(event.currentTarget, {
+              replace: !isFirstSearch,
+              debounceTimeout: 200,
+            });
+          }
         }}
       >
         <input
