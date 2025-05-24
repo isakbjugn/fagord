@@ -56,6 +56,7 @@ export function Search() {
           id="q"
           defaultValue={q || ''}
           placeholder="Søk etter term"
+          autoCapitalize="none"
           type="search"
           name="q"
           className={`${styles.search} ${searching ? styles.loading : ''}`}
