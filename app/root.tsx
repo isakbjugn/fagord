@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@mui/material';
 import type { LinksFunction, LoaderFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import type { ClientLoaderFunctionArgs } from '@remix-run/react';
 import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
@@ -9,7 +8,6 @@ import { Footer } from '~/lib/components/footer';
 import { Header } from '~/lib/components/header';
 import { filterTerms } from '~/lib/search';
 import { splashscreens } from '~/links/splashscreens';
-import fagordTheme from '~/theme/theme';
 import type { Term } from '~/types/term';
 
 import appStylesHref from './app.css?url';
@@ -120,13 +118,11 @@ export default function Root() {
         <script src="https://kit.fontawesome.com/aff1df517b.js" crossOrigin="anonymous"></script>
       </head>
       <body>
-        <ThemeProvider theme={fagordTheme}>
-          <Header />
-          <main>
-            <Outlet />
-          </main>
-          <Footer />
-        </ThemeProvider>
+        <Header />
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
         <Scripts />
       </body>
     </html>
