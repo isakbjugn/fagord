@@ -17,7 +17,7 @@
     "@emotion/react": "11.14.0",
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.14.0",
-    "@mui/material": "6.1.4",
+    "@mui/material": "6.3.1",
     "@mui/system": "6.1.4",
     "@mui/utils": "6.4.9",
     "@remix-run/node": "2.16.6",
