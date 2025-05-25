@@ -1,18 +1,17 @@
-import { Await, Form, Link, useLoaderData, useLocation, useNavigation } from '@remix-run/react';
-import { Suspense, useEffect, useState } from 'react';
+import { Form, Link, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { Button } from 'reactstrap';
-import { useDebounceSubmit } from 'remix-utils/use-debounce-submit';
 
-import type { loader as rootLoader } from '~/root';
 import styles from '~/styles/search.module.css';
 import type { Term } from '~/types/term';
+import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 
 export function Search() {
-  const { q, searchResult } = useLoaderData<typeof rootLoader>();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [resultsOpen, setResultsOpen] = useState(false);
   const location = useLocation();
   const navigation = useNavigation();
-  const submit = useDebounceSubmit();
+  const fetcher = useDebounceFetcher<{ searchResult: Term[] }>();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
 
   useEffect(() => {
@@ -32,29 +31,26 @@ export function Search() {
   useEffect(() => {
     const searchField = document.getElementById('q');
     if (searchField instanceof HTMLInputElement) {
-      searchField.value = q || '';
+      searchField.value = searchParams.get('q') || '';
     }
-  }, [q]);
+  }, [searchParams]);
+
+  function submitSearchTerm(event: FormEvent<HTMLFormElement>) {
+    setSearchParams((prevParams) => {
+      prevParams.set('q', (event.currentTarget as HTMLFormElement).q.value);
+      return prevParams;
+    });
+
+    const formData = new FormData(event.currentTarget);
+    fetcher.submit(formData, { method: 'post', action: '/api/termliste/søk', debounceTimeout: 200 });
+  }
 
   return (
     <div className={styles.wrapper}>
-      <Form
-        id="search-form"
-        role="search"
-        action={location.pathname}
-        onChange={(event) => {
-          const isFirstSearch = q === null;
-          if (submit) {
-            submit(event.currentTarget, {
-              replace: !isFirstSearch,
-              debounceTimeout: 200,
-            });
-          }
-        }}
-      >
+      <Form id="search-form" role="search" action={location.pathname} onChange={submitSearchTerm}>
         <input
           id="q"
-          defaultValue={q || ''}
+          defaultValue={searchParams.get('q') ?? 'Søk etter term'}
           placeholder="Søk etter term"
           autoCapitalize="none"
           type="search"
@@ -63,20 +59,17 @@ export function Search() {
         />
         <div className={styles.spinner} aria-hidden hidden={!searching} />
       </Form>
-      <Suspense fallback={null}>
-        <Await resolve={searchResult}>
-          {(terms) => (
-            <nav className={styles.resultDropdown} hidden={!resultsOpen}>
-              <ul className={styles.results}>
-                {terms.map((term: Term) => (
-                  <SearchResult term={term} key={term._id} />
-                ))}
-              </ul>
-              <NoOptionsMessage q={q} />
-            </nav>
-          )}
-        </Await>
-      </Suspense>
+      {fetcher.data?.searchResult && (
+        <nav className={styles.resultDropdown} hidden={!resultsOpen}>
+          <ul className={styles.results}>
+            {fetcher.data.searchResult.map((term: Term) => (
+              <SearchResult term={term} key={term._id} />
+            ))}
+          </ul>
+          <NoOptionsMessage q={searchParams.get('q')} />
+        </nav>
+      )}
+      <pre>{JSON.stringify(fetcher.data?.searchResult)}</pre>
     </div>
   );
 }
@@ -96,7 +89,7 @@ function SearchResult({ term }: { term: Term }) {
   );
 }
 
-function NoOptionsMessage({ q }: { q: string | null }) {
+function NoOptionsMessage({ q }: { q: string | null | undefined }) {
   if (!q) return null;
   return (
     <Link to={`/ny-term/${q}`} className={styles.addButton}>
