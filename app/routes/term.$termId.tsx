@@ -8,6 +8,7 @@ import {
   useFetcher,
   useLoaderData,
   useLocation,
+  useParams,
   useRouteError,
 } from '@remix-run/react';
 import { useRef, useState } from 'react';
@@ -23,52 +24,50 @@ import { ToggleButton } from '~/lib/components/toggle-button';
 import { useToggle } from '~/lib/use-toggle';
 import style from '~/styles/term.module.css';
 import type { Term, Variant } from '~/types/term';
+import { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
 
-export const loader = async ({ params }: ClientLoaderFunctionArgs) => {
+export const loader: LoaderFunction = async ({ params }: LoaderFunctionArgs) => {
   const { termId } = params;
-  const termUrl = `https://api.fagord.no/termer/${termId}`;
+  const termsUrl = 'https://api.fagord.no/termer';
 
-  const termResponse = await fetch(termUrl);
+  const termResponse = await fetch(termsUrl);
   if (!termResponse.ok) {
     throw new Response('Failed to fetch term', { status: termResponse.status });
   }
-  const term = (await termResponse.json()) as Term;
+
+  const terms = (await termResponse.json()) as Term[];
+  const term = terms.find((term) => term._id === termId) || undefined;
+
+  if (!term) {
+    throw new Response('Termen finnes ikke', { status: 404 });
+  }
+
   return {
+    terms: terms,
     term: term,
   };
 };
 
-let isInitialRequest = true;
-
 export const clientLoader: ClientLoaderFunction = async ({ params, serverLoader }: ClientLoaderFunctionArgs) => {
-  if (isInitialRequest) {
-    return await serverLoader();
-  }
-
-  const { termId } = params;
-  const cachedTerms = localStorage.getItem('terms');
-
-  if (termId && cachedTerms) {
+  let cachedTerms = localStorage.getItem('terms');
+  if (cachedTerms) {
     const terms = JSON.parse(cachedTerms) as Term[];
-    const term = terms.find((cachedTerm) => cachedTerm._id === termId);
-
+    const term = terms.find((term) => term._id === params.termId);
     if (!term) {
-      throw new Response('Term not found', { status: 404 });
+      throw new Response('Termen finnes ikke', { status: 404 });
     }
     return {
+      terms: terms,
       term: term,
     };
   }
 
-  const termUrl = `https://api.fagord.no/termer/${termId}`;
+  const termResponse = (await serverLoader()) as { terms: Term[]; term?: Term };
+  localStorage.setItem('terms', JSON.stringify(termResponse.terms));
 
-  const termResponse = await fetch(termUrl);
-  if (!termResponse.ok) {
-    throw new Response('Failed to fetch term', { status: termResponse.status });
-  }
-  const term = (await termResponse.json()) as Term;
   return {
-    term: term,
+    terms: termResponse.terms,
+    term: termResponse.term,
   };
 };
 
@@ -263,44 +262,38 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const { termId } = useParams();
 
-  if (isRouteErrorResponse(error)) {
+  if (isRouteErrorResponse(error) && error.status === 404) {
     if (error.status === 404) {
       return (
         <div className="container my-3">
           <div className="col-12 col-lg-10 mx-auto">
-            <h1>Termen ble ikke funnet</h1>
-            <p>Vi kunne ikke finne termen du leter etter.</p>
-            <Link to="/termliste">Tilbake til termlisten</Link>
+            <h1>Ops! Her var det ingenting!</h1>
+            <p>Vi fant ikke termen du slo opp. Er du sikker på at den finnes?</p>
+            <span style={{ display: 'flex', gap: '8px' }}>
+              <Link to="/termliste">
+                <button className="btn btn-outline-light">Tilbake til termlisten</button>
+              </Link>
+              <Link to={`/ny-term/${termId}`}>
+                <button className="btn btn-outline-light">Opprett term</button>
+              </Link>
+            </span>
           </div>
         </div>
       );
     }
-    return (
-      <div className="container my-3">
-        <div className="col-12 col-lg-10 mx-auto">
-          <h1>Feil</h1>
-          <p>{error.statusText || error.status}</p>
-        </div>
-      </div>
-    );
-  } else if (error instanceof Error) {
-    return (
-      <div className="container my-3">
-        <div className="col-12 col-lg-10 mx-auto">
-          <h1>Feil</h1>
-          <p>{error.message}</p>
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="container my-3">
-        <div className="col-12 col-lg-10 mx-auto">
-          <h1>Ukjent feil</h1>
-          <p>Det oppstod en ukjent feil.</p>
-        </div>
-      </div>
-    );
   }
+
+  return (
+    <div className="container my-3">
+      <div className="col-12 col-lg-10 mx-auto">
+        <h1>Her gikk noe galt!</h1>
+        <p>Noe gikk feil mens vi slo opp termen.</p>
+        <Link to="/termliste">
+          <button className="btn btn-outline-light">Tilbake til termlisten</button>
+        </Link>
+      </div>
+    </div>
+  );
 }
