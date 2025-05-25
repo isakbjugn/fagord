@@ -69,7 +69,6 @@ export function Search() {
           <NoOptionsMessage q={searchParams.get('q')} />
         </nav>
       )}
-      <pre>{JSON.stringify(fetcher.data?.searchResult)}</pre>
     </div>
   );
 }
