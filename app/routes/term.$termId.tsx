@@ -1,5 +1,17 @@
-import { Await, Form, Link, Outlet, useFetcher, useLocation, useParams, useRouteLoaderData } from '@remix-run/react';
-import { Suspense, useRef, useState } from 'react';
+import {
+  ClientLoaderFunction,
+  ClientLoaderFunctionArgs,
+  Form,
+  isRouteErrorResponse,
+  Link,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+  useLocation,
+  useParams,
+  useRouteError,
+} from '@remix-run/react';
+import { useRef, useState } from 'react';
 import type { ColorOptions, Tag } from 'react-tagcloud';
 import { TagCloud } from 'react-tagcloud';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
@@ -7,43 +19,78 @@ import { ClientOnly } from 'remix-utils/client-only';
 
 import { DialectInput } from '~/lib/components/dialect-input';
 import { Dialog } from '~/lib/components/dialog';
-import { Loader } from '~/lib/components/loader';
 import { ShareTermButton } from '~/lib/components/share-term-button.client';
 import { ToggleButton } from '~/lib/components/toggle-button';
 import { useToggle } from '~/lib/use-toggle';
-import type { loader as rootLoader } from '~/root';
 import style from '~/styles/term.module.css';
 import type { Term, Variant } from '~/types/term';
+import { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
+
+export const loader: LoaderFunction = async ({ params }: LoaderFunctionArgs) => {
+  const { termId } = params;
+  const termsUrl = 'https://api.fagord.no/termer';
+
+  const termResponse = await fetch(termsUrl);
+  if (!termResponse.ok) {
+    throw new Response('Failed to fetch term', { status: termResponse.status });
+  }
+
+  const terms = (await termResponse.json()) as Term[];
+  const term = terms.find((term) => term._id === termId) || undefined;
+
+  if (!term) {
+    throw new Response('Termen finnes ikke', { status: 404 });
+  }
+
+  return {
+    terms: terms,
+    term: term,
+  };
+};
+
+export const clientLoader: ClientLoaderFunction = async ({ params, serverLoader }: ClientLoaderFunctionArgs) => {
+  let cachedTerms = localStorage.getItem('terms');
+  if (cachedTerms) {
+    const terms = JSON.parse(cachedTerms) as Term[];
+    const term = terms.find((term) => term._id === params.termId);
+    if (!term) {
+      throw new Response('Termen finnes ikke', { status: 404 });
+    }
+    return {
+      terms: terms,
+      term: term,
+    };
+  }
+
+  const termResponse = (await serverLoader()) as { terms: Term[]; term?: Term };
+  localStorage.setItem('terms', JSON.stringify(termResponse.terms));
+
+  return {
+    terms: termResponse.terms,
+    term: termResponse.term,
+  };
+};
+
+clientLoader.hydrate = true;
 
 export default function Term() {
-  const { terms } = useRouteLoaderData<typeof rootLoader>('root');
-  const { termId } = useParams();
+  const { term } = useLoaderData<typeof loader>();
 
   return (
-    <Suspense fallback={<Loader />}>
-      <Await resolve={terms}>
-        {(terms) => {
-          const term = terms.find((term: Term) => term._id === termId);
-
-          return (
-            <main className="container my-3">
-              <div className="col-12 col-lg-10 mx-auto ">
-                <div className="row" style={{ color: 'white' }}>
-                  <Breadcrumb>
-                    <BreadcrumbItem>
-                      <Link to="/termliste">Termliste</Link>
-                    </BreadcrumbItem>
-                    <BreadcrumbItem active>{term.en}</BreadcrumbItem>
-                  </Breadcrumb>
-                </div>
-                <TermComponent term={term} />
-                <VariantCloud variants={term.variants} />
-              </div>
-            </main>
-          );
-        }}
-      </Await>
-    </Suspense>
+    <main className="container my-3">
+      <div className="col-12 col-lg-10 mx-auto ">
+        <div className="row" style={{ color: 'white' }}>
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to="/termliste">Termliste</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem active>{term.en}</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+        <TermComponent term={term} />
+        <VariantCloud variants={term.variants} />
+      </div>
+    </main>
   );
 }
 
@@ -212,3 +259,41 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
     </>
   );
 };
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const { termId } = useParams();
+
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    if (error.status === 404) {
+      return (
+        <div className="container my-3">
+          <div className="col-12 col-lg-10 mx-auto">
+            <h1>Ops! Her var det ingenting!</h1>
+            <p>Vi fant ikke termen du slo opp. Er du sikker på at den finnes?</p>
+            <span style={{ display: 'flex', gap: '8px' }}>
+              <Link to="/termliste">
+                <button className="btn btn-outline-light">Tilbake til termlisten</button>
+              </Link>
+              <Link to={`/ny-term/${termId}`}>
+                <button className="btn btn-outline-light">Opprett term</button>
+              </Link>
+            </span>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  return (
+    <div className="container my-3">
+      <div className="col-12 col-lg-10 mx-auto">
+        <h1>Her gikk noe galt!</h1>
+        <p>Noe gikk feil mens vi slo opp termen.</p>
+        <Link to="/termliste">
+          <button className="btn btn-outline-light">Tilbake til termlisten</button>
+        </Link>
+      </div>
+    </div>
+  );
+}
