@@ -1,6 +1,7 @@
 import type { ClientActionFunctionArgs } from '@remix-run/react';
 
 import type { Term } from '~/types/term';
+import Fuse from 'fuse.js/basic';
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const formData = await request.formData();
@@ -8,16 +9,18 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
   const cachedTerms = localStorage.getItem('terms');
 
   if (q && cachedTerms) {
-    const lowerCaseTerm = q.toLowerCase();
     const terms = JSON.parse(cachedTerms) as Term[];
+
+    const fuse = new Fuse(terms, {
+      keys: ['en', 'nb', 'nn'],
+      threshold: 0.3, // Adjust the threshold for fuzzy matching,
+      includeScore: false,
+    });
+
     return {
-      searchResult: terms
-        .filter(
-          (term: Term) =>
-            term.en.toLowerCase().includes(lowerCaseTerm) ||
-            term.nb.toLowerCase().includes(lowerCaseTerm) ||
-            term.nn.toLowerCase().includes(lowerCaseTerm),
-        )
+      searchResult: fuse
+        .search(q)
+        .map((result) => result.item)
         .slice(0, 5),
     };
   }
