@@ -3,11 +3,11 @@ import { Suspense } from 'react';
 import { Await, useRouteLoaderData } from '@remix-run/react';
 import type { loader as rootLoader } from '~/root';
 import Table from './table';
-import { data } from '@remix-run/node';
+import { data, LoaderFunction } from '@remix-run/node';
 import type { Subject } from '~/types/subject';
 import { Loader } from '~/lib/components/loader';
 
-export function loader() {
+export const loader: LoaderFunction = () => {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
 
   return fetch(subjectsUrl)
@@ -24,13 +24,13 @@ export function loader() {
       return data(
         {
           success: false,
-          subjects: [],
+          subjects: [] as Subject[],
           message: 'Kunne ikke laste fagfelt',
         },
         { status: 500 },
       );
     });
-}
+};
 
 export default function Termliste() {
   const { terms } = useRouteLoaderData<typeof rootLoader>('root');

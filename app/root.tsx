@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
 import type { ClientLoaderFunctionArgs } from '@remix-run/react';
 import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
@@ -6,7 +6,6 @@ import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import { ErrorMessage } from '~/lib/components/error-message';
 import { Footer } from '~/lib/components/footer';
 import { Header } from '~/lib/components/header';
-import { filterTerms } from '~/lib/search';
 import { splashscreens } from '~/links/splashscreens';
 import type { Term } from '~/types/term';
 
@@ -14,31 +13,23 @@ import appStylesHref from './app.css?url';
 
 interface ServerData {
   terms: Promise<Term[]>;
-  q: string;
-  searchResult: Promise<Term[]>;
 }
 
-export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
+export const loader: LoaderFunction = () => {
   const termsUrl = 'https://api.fagord.no/termer/';
   const terms = fetch(termsUrl).then((res) => {
     if (res.ok) return res.json();
     else throw new Error(`${res.status} ${res.statusText}: Feil under henting av termer!`);
   });
-  const q = new URL(request.url).searchParams.get('q');
-  const searchResult = terms.then((terms) => filterTerms(terms, q));
 
   return {
-    terms: terms.then((data) => data.sort((a: Term, b: Term) => a.en.localeCompare(b.en))),
-    q: q,
-    searchResult: searchResult,
+    terms: terms,
   };
 };
 
 let isInitialRequest = true;
 
-export async function clientLoader({ request, serverLoader }: ClientLoaderFunctionArgs) {
-  const q = new URL(request.url).searchParams.get('q');
-
+export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   if (isInitialRequest) {
     isInitialRequest = false;
     const serverData = (await serverLoader()) as ServerData;
@@ -49,12 +40,8 @@ export async function clientLoader({ request, serverLoader }: ClientLoaderFuncti
 
   const cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
-    const terms = JSON.parse(cachedTerms) as Term[];
-
     return {
-      terms: terms.sort((a: Term, b: Term) => a.en.localeCompare(b.en)),
-      q: q,
-      searchResult: filterTerms(terms, q),
+      terms: JSON.parse(cachedTerms) as Term[],
     };
   }
 

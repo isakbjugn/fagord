@@ -19,7 +19,6 @@ import {
 import { TranslationFilter } from './translation-filter/translation-filter';
 import { Fragment, useState, type KeyboardEvent } from 'react';
 import { useLoaderData } from '@remix-run/react';
-import type { SubjectsLoaderData } from '~/types/subject';
 import style from '~/routes/termliste/termliste.module.css';
 import '~/routes/termliste/termliste.module.css';
 import { Paginator } from '~/routes/termliste/paginator/paginator';
@@ -95,14 +94,14 @@ type Props = {
 };
 
 export default function Table({ terms }: Props) {
-  const subjectsData = useLoaderData<typeof loader>() as unknown as SubjectsLoaderData;
+  const subjectsData = useLoaderData<typeof loader>();
   const [transFilter, setTransFilter] = useState<any>(['all']);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'en', desc: false }]);
   const table = useReactTable({
     data: terms,
     columns,
@@ -241,9 +240,9 @@ const SortingIndicator = ({ isSorted }: SortingIndicatorProps) => {
     <span>
       {' '}
       {isSorted === 'asc' ? (
-        <i className="fa-solid fa-angle-up" />
+        <i aria-hidden className="fa-solid fa-angle-up" />
       ) : isSorted === 'desc' ? (
-        <i className="fa-solid fa-angle-down" />
+        <i aria-hidden className="fa-solid fa-angle-down" />
       ) : null}
     </span>
   );
