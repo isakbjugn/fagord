@@ -47,7 +47,13 @@ export function Search() {
 
   return (
     <div className={styles.wrapper}>
-      <Form id="search-form" role="search" action={location.pathname} onChange={submitSearchTerm}>
+      <Form
+        id="search-form"
+        role="search"
+        action={location.pathname}
+        onClick={submitSearchTerm}
+        onChange={submitSearchTerm}
+      >
         <input
           id="q"
           defaultValue={searchParams.get('q') ?? 'Søk etter term'}
