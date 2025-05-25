@@ -1,5 +1,16 @@
-import { Await, Form, Link, Outlet, useFetcher, useLocation, useParams, useRouteLoaderData } from '@remix-run/react';
-import { Suspense, useRef, useState } from 'react';
+import {
+  ClientLoaderFunction,
+  ClientLoaderFunctionArgs,
+  Form,
+  isRouteErrorResponse,
+  Link,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+  useLocation,
+  useRouteError,
+} from '@remix-run/react';
+import { useRef, useState } from 'react';
 import type { ColorOptions, Tag } from 'react-tagcloud';
 import { TagCloud } from 'react-tagcloud';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
@@ -7,43 +18,80 @@ import { ClientOnly } from 'remix-utils/client-only';
 
 import { DialectInput } from '~/lib/components/dialect-input';
 import { Dialog } from '~/lib/components/dialog';
-import { Loader } from '~/lib/components/loader';
 import { ShareTermButton } from '~/lib/components/share-term-button.client';
 import { ToggleButton } from '~/lib/components/toggle-button';
 import { useToggle } from '~/lib/use-toggle';
-import type { loader as rootLoader } from '~/root';
 import style from '~/styles/term.module.css';
 import type { Term, Variant } from '~/types/term';
 
+export const loader = async ({ params }: ClientLoaderFunctionArgs) => {
+  const { termId } = params;
+  const termUrl = `https://api.fagord.no/termer/${termId}`;
+
+  const termResponse = await fetch(termUrl);
+  if (!termResponse.ok) {
+    throw new Response('Failed to fetch term', { status: termResponse.status });
+  }
+  const term = (await termResponse.json()) as Term;
+  return {
+    term: term,
+  };
+};
+
+let isInitialRequest = true;
+
+export const clientLoader: ClientLoaderFunction = async ({ params, serverLoader }: ClientLoaderFunctionArgs) => {
+  if (isInitialRequest) {
+    return await serverLoader();
+  }
+
+  const { termId } = params;
+  const cachedTerms = localStorage.getItem('terms');
+
+  if (termId && cachedTerms) {
+    const terms = JSON.parse(cachedTerms) as Term[];
+    const term = terms.find((cachedTerm) => cachedTerm._id === termId);
+
+    if (!term) {
+      throw new Response('Term not found', { status: 404 });
+    }
+    return {
+      term: term,
+    };
+  }
+
+  const termUrl = `https://api.fagord.no/termer/${termId}`;
+
+  const termResponse = await fetch(termUrl);
+  if (!termResponse.ok) {
+    throw new Response('Failed to fetch term', { status: termResponse.status });
+  }
+  const term = (await termResponse.json()) as Term;
+  return {
+    term: term,
+  };
+};
+
+clientLoader.hydrate = true;
+
 export default function Term() {
-  const { terms } = useRouteLoaderData<typeof rootLoader>('root');
-  const { termId } = useParams();
+  const { term } = useLoaderData<typeof loader>();
 
   return (
-    <Suspense fallback={<Loader />}>
-      <Await resolve={terms}>
-        {(terms) => {
-          const term = terms.find((term: Term) => term._id === termId);
-
-          return (
-            <main className="container my-3">
-              <div className="col-12 col-lg-10 mx-auto ">
-                <div className="row" style={{ color: 'white' }}>
-                  <Breadcrumb>
-                    <BreadcrumbItem>
-                      <Link to="/termliste">Termliste</Link>
-                    </BreadcrumbItem>
-                    <BreadcrumbItem active>{term.en}</BreadcrumbItem>
-                  </Breadcrumb>
-                </div>
-                <TermComponent term={term} />
-                <VariantCloud variants={term.variants} />
-              </div>
-            </main>
-          );
-        }}
-      </Await>
-    </Suspense>
+    <main className="container my-3">
+      <div className="col-12 col-lg-10 mx-auto ">
+        <div className="row" style={{ color: 'white' }}>
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to="/termliste">Termliste</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem active>{term.en}</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+        <TermComponent term={term} />
+        <VariantCloud variants={term.variants} />
+      </div>
+    </main>
   );
 }
 
@@ -212,3 +260,47 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
     </>
   );
 };
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    if (error.status === 404) {
+      return (
+        <div className="container my-3">
+          <div className="col-12 col-lg-10 mx-auto">
+            <h1>Termen ble ikke funnet</h1>
+            <p>Vi kunne ikke finne termen du leter etter.</p>
+            <Link to="/termliste">Tilbake til termlisten</Link>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="container my-3">
+        <div className="col-12 col-lg-10 mx-auto">
+          <h1>Feil</h1>
+          <p>{error.statusText || error.status}</p>
+        </div>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div className="container my-3">
+        <div className="col-12 col-lg-10 mx-auto">
+          <h1>Feil</h1>
+          <p>{error.message}</p>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="container my-3">
+        <div className="col-12 col-lg-10 mx-auto">
+          <h1>Ukjent feil</h1>
+          <p>Det oppstod en ukjent feil.</p>
+        </div>
+      </div>
+    );
+  }
+}

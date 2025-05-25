@@ -1,11 +1,12 @@
 import '~/routes/termliste/termliste.module.css';
 import { Suspense } from 'react';
-import { Await, useRouteLoaderData } from '@remix-run/react';
+import { Await, useNavigate, useRouteLoaderData } from '@remix-run/react';
 import type { loader as rootLoader } from '~/root';
 import Table from './table';
 import { data, LoaderFunction } from '@remix-run/node';
 import type { Subject } from '~/types/subject';
 import { Loader } from '~/lib/components/loader';
+import { ErrorMessage } from '~/lib/components/error-message';
 
 export const loader: LoaderFunction = () => {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
@@ -20,7 +21,7 @@ export const loader: LoaderFunction = () => {
         { headers: { 'Cache-Control': 'max-age=3600' } },
       );
     })
-    .catch((error) => {
+    .catch(() => {
       return data(
         {
           success: false,
@@ -33,10 +34,26 @@ export const loader: LoaderFunction = () => {
 };
 
 export default function Termliste() {
-  const { terms } = useRouteLoaderData<typeof rootLoader>('root');
+  const termsData = useRouteLoaderData<typeof rootLoader>('root');
+  const navigate = useNavigate();
   return (
     <Suspense fallback={<Loader />}>
-      <Await resolve={terms}>{(terms) => <Table terms={terms} />}</Await>
+      <Await resolve={termsData}>
+        {(resolvedTermsData) =>
+          resolvedTermsData.success ? (
+            <Suspense fallback={<Loader />}>
+              <Await resolve={resolvedTermsData.terms}>{(terms) => <Table terms={terms} />}</Await>
+            </Suspense>
+          ) : (
+            <ErrorMessage>
+              <p>Klarte ikke å laste termer</p>
+              <button className="btn btn-outline-dark" onClick={() => navigate('/termliste')}>
+                Last inn siden på nytt
+              </button>
+            </ErrorMessage>
+          )
+        }
+      </Await>
     </Suspense>
   );
 }

@@ -7,24 +7,31 @@ import { ErrorMessage } from '~/lib/components/error-message';
 import { Footer } from '~/lib/components/footer';
 import { Header } from '~/lib/components/header';
 import { splashscreens } from '~/links/splashscreens';
-import type { Term } from '~/types/term';
+import type { Term, TermsLoaderData } from '~/types/term';
 
 import appStylesHref from './app.css?url';
 
-interface ServerData {
-  terms: Promise<Term[]>;
-}
-
 export const loader: LoaderFunction = () => {
   const termsUrl = 'https://api.fagord.no/termer/';
-  const terms = fetch(termsUrl).then((res) => {
-    if (res.ok) return res.json();
-    else throw new Error(`${res.status} ${res.statusText}: Feil under henting av termer!`);
-  });
 
-  return {
-    terms: terms,
-  };
+  return fetch(termsUrl)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}: Feil under henting av termer!`);
+      }
+      return {
+        success: true,
+        terms: res.json() as Promise<Term[]>,
+        message: undefined,
+      };
+    })
+    .catch(() => {
+      return {
+        success: false,
+        terms: Promise.resolve([] as Term[]),
+        message: 'Kunne ikke laste termer',
+      };
+    });
 };
 
 let isInitialRequest = true;
@@ -32,22 +39,28 @@ let isInitialRequest = true;
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   if (isInitialRequest) {
     isInitialRequest = false;
-    const serverData = (await serverLoader()) as ServerData;
-    const resolvedTerms = await serverData.terms;
-    localStorage.setItem('terms', JSON.stringify(resolvedTerms));
+    const serverData = (await serverLoader()) as TermsLoaderData;
+    if (serverData.success) {
+      const resolvedTerms = await serverData.terms;
+      localStorage.setItem('terms', JSON.stringify(resolvedTerms));
+    }
     return serverData;
   }
 
   const cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
     return {
+      success: true,
       terms: JSON.parse(cachedTerms) as Term[],
+      message: undefined,
     };
   }
 
-  const serverData = (await serverLoader()) as ServerData;
-  const resolvedTerms = await serverData.terms;
-  localStorage.setItem('terms', JSON.stringify(resolvedTerms));
+  const serverData = (await serverLoader()) as TermsLoaderData;
+  if (serverData.success) {
+    const resolvedTerms = await serverData.terms;
+    localStorage.setItem('terms', JSON.stringify(resolvedTerms));
+  }
   return serverData;
 }
 
