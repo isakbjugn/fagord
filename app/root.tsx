@@ -1,5 +1,5 @@
 import type { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
-import type { ClientLoaderFunctionArgs } from '@remix-run/react';
+import type { ClientLoaderFunction, ClientLoaderFunctionArgs } from '@remix-run/react';
 import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 
@@ -34,35 +34,33 @@ export const loader: LoaderFunction = () => {
     });
 };
 
-let isInitialRequest = true;
-
-export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
-  if (isInitialRequest) {
-    isInitialRequest = false;
-    const serverData = (await serverLoader()) as TermsLoaderData;
-    if (serverData.success) {
-      const resolvedTerms = await serverData.terms;
-      localStorage.setItem('terms', JSON.stringify(resolvedTerms));
-    }
-    return serverData;
-  }
-
+export const clientLoader: ClientLoaderFunction = ({ serverLoader }: ClientLoaderFunctionArgs) => {
   const cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
-    return {
+    return Promise.resolve({
       success: true,
-      terms: JSON.parse(cachedTerms) as Term[],
+      terms: Promise.resolve(JSON.parse(cachedTerms) as Term[]),
       message: undefined,
-    };
+    });
   }
 
-  const serverData = (await serverLoader()) as TermsLoaderData;
-  if (serverData.success) {
-    const resolvedTerms = await serverData.terms;
-    localStorage.setItem('terms', JSON.stringify(resolvedTerms));
-  }
-  return serverData;
-}
+  return (serverLoader() as Promise<TermsLoaderData>)
+    .then((data) => {
+      if (data.success) {
+        data.terms.then((resolvedTerms) => {
+          localStorage.setItem('terms', JSON.stringify(resolvedTerms));
+        });
+      }
+      return data;
+    })
+    .catch(() => {
+      return {
+        success: false,
+        terms: [],
+        message: 'Kunne ikke laste termer',
+      };
+    });
+};
 
 clientLoader.hydrate = true;
 
