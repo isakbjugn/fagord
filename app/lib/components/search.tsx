@@ -1,32 +1,19 @@
 import { Form, Link, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useEffect } from 'react';
 import { Button } from 'reactstrap';
 
 import styles from '~/styles/search.module.css';
 import type { Term } from '~/types/term';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
+import { useClickToOpen } from '~/lib/use-click-to-open';
 
 export function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [resultsOpen, setResultsOpen] = useState(false);
+  const resultsOpen = useClickToOpen('search-form', false);
   const location = useLocation();
   const navigation = useNavigation();
   const fetcher = useDebounceFetcher<{ searchResult: Term[] }>();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
-
-  useEffect(() => {
-    function handleClick(event: MouseEvent) {
-      if (window.document.getElementById('search-form')?.contains(event.target as Node)) {
-        setResultsOpen(true);
-      } else {
-        setResultsOpen(false);
-      }
-    }
-
-    window.addEventListener('click', handleClick);
-
-    return () => window.removeEventListener('click', handleClick);
-  });
 
   useEffect(() => {
     const searchField = document.getElementById('q');
