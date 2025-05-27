@@ -25,6 +25,7 @@ import { useToggle } from '~/lib/use-toggle';
 import style from '~/styles/term.module.css';
 import type { Term, Variant } from '~/types/term';
 import { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
+import { Wordcloud } from '@visx/wordcloud';
 
 export const loader: LoaderFunction = async ({ params }: LoaderFunctionArgs) => {
   const { termId } = params;
@@ -89,6 +90,7 @@ export default function Term() {
         </div>
         <TermComponent term={term} />
         <VariantCloud variants={term.variants} />
+        <SuperVariantCloud variants={term.variants} />
       </div>
     </main>
   );
@@ -202,6 +204,22 @@ export const TranslationCard = ({ term }: TranslationCardProps) => {
 interface VariantCloudProps {
   variants: Variant[];
 }
+
+export const SuperVariantCloud = ({ variants }: VariantCloudProps) => {
+  return (
+    <Wordcloud
+      words={variants.map((variant) => ({ text: variant.term, value: variant.votes }))}
+      width={800}
+      height={400}
+      random={() => 0.5}
+      rotate={0}
+      fontSize={14}
+      font={'Arial'}
+    >
+      {(cloudWords) => cloudWords.map((word, i) => <p key={word.text}>{word.text}</p>)}
+    </Wordcloud>
+  );
+};
 
 export const VariantCloud = ({ variants }: VariantCloudProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
