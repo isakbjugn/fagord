@@ -1,5 +1,5 @@
 import { Form, Link, useLocation, useNavigation, useSearchParams } from '@remix-run/react';
-import { type FormEvent, useEffect } from 'react';
+import { type FormEvent } from 'react';
 import { Button } from 'reactstrap';
 
 import styles from '~/styles/search.module.css';
@@ -15,18 +15,15 @@ export function Search() {
   const fetcher = useDebounceFetcher<{ searchResult: Term[] }>();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
 
-  useEffect(() => {
-    const searchField = document.getElementById('q');
-    if (searchField instanceof HTMLInputElement) {
-      searchField.value = searchParams.get('q') || '';
-    }
-  }, [searchParams]);
-
   function submitSearchTerm(event: FormEvent<HTMLFormElement>) {
-    setSearchParams((prevParams) => {
-      prevParams.set('q', (event.currentTarget as HTMLFormElement).q.value);
-      return prevParams;
-    });
+    const isFirstSearch = !searchParams.has('q');
+    setSearchParams(
+      (prevParams) => {
+        prevParams.set('q', (event.currentTarget as HTMLFormElement).q.value);
+        return prevParams;
+      },
+      { replace: !isFirstSearch },
+    );
 
     const formData = new FormData(event.currentTarget);
     fetcher.submit(formData, { method: 'post', action: '/api/termliste/søk', debounceTimeout: 200 });
@@ -43,7 +40,7 @@ export function Search() {
       >
         <input
           id="q"
-          defaultValue={searchParams.get('q') ?? 'Søk etter term'}
+          defaultValue={searchParams.get('q') ?? undefined}
           placeholder="Søk etter term"
           autoCapitalize="none"
           type="search"
