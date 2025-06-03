@@ -4,14 +4,13 @@ import {
   Await,
   ClientLoaderFunction,
   ClientLoaderFunctionArgs,
-  data,
   useLoaderData,
   useNavigate,
-} from '@remix-run/react';
+} from 'react-router';
 import Table from './table';
 import { Loader } from '~/lib/components/loader';
 import { ErrorMessage } from '~/lib/components/error-message';
-import { LoaderFunction } from '@remix-run/node';
+import { LoaderFunction } from 'react-router';
 import { Term } from '~/types/term';
 
 export const loader: LoaderFunction = () => {
@@ -23,17 +22,17 @@ export const loader: LoaderFunction = () => {
     return (await res.json()) as Term[];
   });
 
-  return data({
+  return {
     terms,
-  });
+  };
 };
 
 export const clientLoader: ClientLoaderFunction = ({ serverLoader }: ClientLoaderFunctionArgs) => {
   const cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
-    return data({
+    return {
       terms: JSON.parse(cachedTerms) as Term[],
-    });
+    };
   }
 
   return (serverLoader() as Promise<{ terms: Promise<Term[]> }>).then((data) => {

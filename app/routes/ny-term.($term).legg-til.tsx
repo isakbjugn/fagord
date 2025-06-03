@@ -1,6 +1,6 @@
-import type { ActionFunction, ActionFunctionArgs } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import type { ClientActionFunctionArgs } from '@remix-run/react';
+import type { ActionFunction, ActionFunctionArgs } from 'react-router';
+import { redirect } from 'react-router';
+import type { ClientActionFunctionArgs } from 'react-router';
 
 import type { Term } from '~/types/term';
 

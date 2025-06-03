@@ -1,4 +1,4 @@
-import type { ClientActionFunctionArgs } from '@remix-run/react';
+import type { ClientActionFunctionArgs } from 'react-router';
 
 import type { Term } from '~/types/term';
 

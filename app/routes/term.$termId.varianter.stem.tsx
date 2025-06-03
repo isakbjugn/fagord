@@ -1,5 +1,5 @@
-import { type ActionFunctionArgs } from '@remix-run/node';
-import type { ClientActionFunctionArgs } from '@remix-run/react';
+import { type ActionFunctionArgs } from 'react-router';
+import type { ClientActionFunctionArgs } from 'react-router';
 
 import type { SubmitVariant } from '~/types/term';
 

@@ -1,5 +1,5 @@
-import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData, useNavigation } from '@remix-run/react';
+import type { LoaderFunction, LoaderFunctionArgs } from 'react-router';
+import { Form, useLoaderData, useNavigation } from 'react-router';
 import type { ChangeEvent } from 'react';
 import { Button, Label, Row } from 'reactstrap';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';

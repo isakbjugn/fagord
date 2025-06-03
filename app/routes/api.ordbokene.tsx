@@ -1,4 +1,4 @@
-import type { ClientActionFunctionArgs } from '@remix-run/react';
+import type { ClientActionFunctionArgs } from 'react-router';
 
 import { DictionaryName, getLookupFromOrdbokene, getSuggestion, getValidationText, isTermValid } from '~/lib/ordbokene';
 import type { OrdbokeneResponse } from '~/types/ordbokene';
