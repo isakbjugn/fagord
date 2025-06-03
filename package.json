@@ -13,22 +13,22 @@
     "lint": "oxlint ./app"
   },
   "dependencies": {
-    "@react-router/node": "^7.0.0",
-    "@react-router/serve": "^7.0.0",
+    "@react-router/node": "7.6.1",
+    "@react-router/serve": "7.6.1",
     "@tanstack/react-table": "8.21.3",
     "bootstrap": "5.3.7",
     "fuse.js": "7.1.0",
     "isbot": "5.1.28",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-router": "^7.0.0",
+    "react-router": "7.6.1",
     "react-tagcloud": "2.3.3",
     "reactstrap": "9.2.3",
     "remix-utils": "7.7.0"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.0.0",
-    "@react-router/fs-routes": "^7.0.0",
+    "@react-router/dev": "7.6.1",
+    "@react-router/fs-routes": "7.6.1",
     "@types/node": "24.0.0",
     "@types/react": "18.2.33",
     "@types/react-dom": "18.2.14",
