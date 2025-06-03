@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Spinner } from '~/lib/components/spinner';
-import { Await } from '@remix-run/react';
+import { Await } from 'react-router';
 import style from './subject-filter.module.css';
 import { AllSubjects, type SubjectsLoaderData } from '~/types/subject';
 

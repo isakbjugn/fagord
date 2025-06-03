@@ -10,7 +10,7 @@ import {
   useLocation,
   useParams,
   useRouteError,
-} from '@remix-run/react';
+} from 'react-router';
 import { useRef, useState } from 'react';
 import type { ColorOptions, Tag } from 'react-tagcloud';
 import { TagCloud } from 'react-tagcloud';
@@ -24,7 +24,7 @@ import { ToggleButton } from '~/lib/components/toggle-button';
 import { useToggle } from '~/lib/use-toggle';
 import style from '~/styles/term.module.css';
 import type { Term, Variant } from '~/types/term';
-import { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunction, LoaderFunctionArgs } from 'react-router';
 
 export const loader: LoaderFunction = async ({ params }: LoaderFunctionArgs) => {
   const { termId } = params;

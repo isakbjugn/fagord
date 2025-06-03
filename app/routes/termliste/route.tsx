@@ -1,9 +1,9 @@
 import '~/routes/termliste/termliste.module.css';
 import { Suspense } from 'react';
-import { Await, useNavigate, useRouteLoaderData } from '@remix-run/react';
+import { Await, useNavigate, useRouteLoaderData } from 'react-router';
 import type { loader as rootLoader } from '~/root';
 import Table from './table';
-import { data, LoaderFunction } from '@remix-run/node';
+import { data, LoaderFunction } from 'react-router';
 import type { Subject } from '~/types/subject';
 import { Loader } from '~/lib/components/loader';
 import { ErrorMessage } from '~/lib/components/error-message';

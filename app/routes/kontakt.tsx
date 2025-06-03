@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 
 import { contactEmailUrl, fagordIssuesUrl, linkedInUrl } from '~/lib/constants';
 import style from '~/styles/kontakt.module.css';

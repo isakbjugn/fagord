@@ -18,7 +18,7 @@ import {
 } from '@tanstack/react-table';
 import { TranslationFilter } from './translation-filter/translation-filter';
 import { Fragment, useState, type KeyboardEvent } from 'react';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData } from 'react-router';
 import style from '~/routes/termliste/termliste.module.css';
 import '~/routes/termliste/termliste.module.css';
 import { Paginator } from '~/routes/termliste/paginator/paginator';

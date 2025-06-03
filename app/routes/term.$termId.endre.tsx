@@ -1,6 +1,6 @@
-import type { ActionFunctionArgs } from '@remix-run/node';
-import type { ClientActionFunctionArgs } from '@remix-run/react';
-import { Form, Link, redirect } from '@remix-run/react';
+import type { ActionFunctionArgs } from 'react-router';
+import type { ClientActionFunctionArgs } from 'react-router';
+import { Form, Link, redirect } from 'react-router';
 import { Button, Label, Row } from 'reactstrap';
 
 import type { SubmitTerm } from '~/types/term';

@@ -1,6 +1,6 @@
-import type { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
-import type { ClientLoaderFunction, ClientLoaderFunctionArgs } from '@remix-run/react';
-import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
+import type { LinksFunction, LoaderFunction, MetaFunction } from 'react-router';
+import type { ClientLoaderFunction, ClientLoaderFunctionArgs } from 'react-router';
+import { Links, Meta, Outlet, Scripts, useRouteError } from 'react-router';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 
 import { ErrorMessage } from '~/lib/components/error-message';

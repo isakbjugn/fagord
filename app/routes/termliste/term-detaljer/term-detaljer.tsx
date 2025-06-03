@@ -1,5 +1,5 @@
 import type { Term } from '~/types/term';
-import { Link } from '@remix-run/react';
+import { Link } from 'react-router';
 
 export const TermDetaljer = ({ term }: { term: Term }) => {
   const isValidUrl = (reference: string) => {

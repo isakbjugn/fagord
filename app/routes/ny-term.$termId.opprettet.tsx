@@ -1,5 +1,5 @@
-import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import type { LoaderFunction, LoaderFunctionArgs } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import { Button } from 'reactstrap';
 
 import style from '~/styles/ny-term.module.css';
