@@ -1,5 +1,10 @@
-import type { LinksFunction, LoaderFunction, MetaFunction } from 'react-router';
-import type { ClientLoaderFunction, ClientLoaderFunctionArgs } from 'react-router';
+import type {
+  ClientLoaderFunction,
+  ClientLoaderFunctionArgs,
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from 'react-router';
 import { Links, Meta, Outlet, Scripts, useRouteError } from 'react-router';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 
