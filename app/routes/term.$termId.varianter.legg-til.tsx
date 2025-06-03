@@ -1,5 +1,5 @@
-import { type ActionFunctionArgs, redirect } from 'react-router';
-import type { ClientActionFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, ClientActionFunctionArgs } from 'react-router';
+import { redirect } from 'react-router';
 
 import type { SubmitVariant } from '~/types/term';
 

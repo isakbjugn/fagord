@@ -1,6 +1,5 @@
-import type { ActionFunction, ActionFunctionArgs } from 'react-router';
+import type { ActionFunction, ActionFunctionArgs, ClientActionFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
-import type { ClientActionFunctionArgs } from 'react-router';
 
 import type { Term } from '~/types/term';
 

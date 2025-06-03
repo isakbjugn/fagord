@@ -1,6 +1,5 @@
+import type { ClientLoaderFunction, ClientLoaderFunctionArgs, LoaderFunction, LoaderFunctionArgs } from 'react-router';
 import {
-  ClientLoaderFunction,
-  ClientLoaderFunctionArgs,
   Form,
   isRouteErrorResponse,
   Link,
@@ -24,7 +23,6 @@ import { ToggleButton } from '~/lib/components/toggle-button';
 import { useToggle } from '~/lib/use-toggle';
 import style from '~/styles/term.module.css';
 import type { Term, Variant } from '~/types/term';
-import { LoaderFunction, LoaderFunctionArgs } from 'react-router';
 
 export const loader: LoaderFunction = async ({ params }: LoaderFunctionArgs) => {
   const { termId } = params;
