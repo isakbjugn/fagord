@@ -27,7 +27,9 @@
     "remix-utils": "7.7.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "2.16.5",
+    "@remix-run/dev": "2.16.8",
+    "@remix-run/fs-routes": "2.16.8",
+    "@remix-run/route-config": "2.16.8",
     "@types/node": "22.15.29",
     "@types/react": "18.2.33",
     "@types/react-dom": "18.2.14",
