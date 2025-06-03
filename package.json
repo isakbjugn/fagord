@@ -34,7 +34,7 @@
     "@types/react-tagcloud": "2.3.2",
     "@vitejs/plugin-react-swc": "3.10.0",
     "autoprefixer": "10.4.21",
-    "oxlint": "0.16.12",
+    "oxlint": "0.17.0",
     "postcss": "8.5.3",
     "prettier": "3.5.3",
     "typescript": "5.8.3",
