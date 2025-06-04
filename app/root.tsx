@@ -1,10 +1,4 @@
-import type {
-  ClientLoaderFunction,
-  ClientLoaderFunctionArgs,
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-} from 'react-router';
+import type { LinksFunction, MetaFunction } from 'react-router';
 import { Links, Meta, Outlet, Scripts, useRouteError } from 'react-router';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 
@@ -13,10 +7,11 @@ import { Footer } from '~/lib/components/footer';
 import { Header } from '~/lib/components/header';
 import { splashscreens } from '~/links/splashscreens';
 import type { Term } from '~/types/term';
+import type { Route } from './+types/root';
 
 import appStylesHref from './app.css?url';
 
-export const loader: LoaderFunction = () => {
+export const loader = () => {
   const termsUrl = 'https://api.fagord.no/termer/';
   const terms = fetch(termsUrl).then(async (res) => {
     if (!res.ok) {
@@ -30,7 +25,7 @@ export const loader: LoaderFunction = () => {
   };
 };
 
-export const clientLoader: ClientLoaderFunction = ({ serverLoader }: ClientLoaderFunctionArgs) => {
+export const clientLoader = ({ serverLoader }: Route.ClientLoaderArgs) => {
   const cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
     return {

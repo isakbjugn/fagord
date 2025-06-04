@@ -1,11 +1,9 @@
-import type { ClientLoaderFunction, ClientLoaderFunctionArgs, LoaderFunction, LoaderFunctionArgs } from 'react-router';
 import {
   Form,
   isRouteErrorResponse,
   Link,
   Outlet,
   useFetcher,
-  useLoaderData,
   useLocation,
   useParams,
   useRouteError,
@@ -15,6 +13,7 @@ import type { ColorOptions, Tag } from 'react-tagcloud';
 import { TagCloud } from 'react-tagcloud';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
 import { ClientOnly } from 'remix-utils/client-only';
+import type { Route } from './+types/term.$termId';
 
 import { DialectInput } from '~/lib/components/dialect-input';
 import { Dialog } from '~/lib/components/dialog';
@@ -24,7 +23,7 @@ import { useToggle } from '~/lib/use-toggle';
 import style from '~/styles/term.module.css';
 import type { Term, Variant } from '~/types/term';
 
-export const loader: LoaderFunction = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params }: Route.LoaderArgs) => {
   const { termId } = params;
   const termsUrl = 'https://api.fagord.no/termer';
 
@@ -46,7 +45,7 @@ export const loader: LoaderFunction = async ({ params }: LoaderFunctionArgs) => 
   };
 };
 
-export const clientLoader: ClientLoaderFunction = async ({ params, serverLoader }: ClientLoaderFunctionArgs) => {
+export const clientLoader = async ({ params, serverLoader }: Route.ClientLoaderArgs) => {
   let cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
     const terms = JSON.parse(cachedTerms) as Term[];
@@ -71,8 +70,8 @@ export const clientLoader: ClientLoaderFunction = async ({ params, serverLoader 
 
 clientLoader.hydrate = true;
 
-export default function Term() {
-  const { term } = useLoaderData<typeof loader>();
+export default function Term({ loaderData }: Route.ComponentProps) {
+  const { term } = loaderData;
 
   return (
     <main className="container my-3">

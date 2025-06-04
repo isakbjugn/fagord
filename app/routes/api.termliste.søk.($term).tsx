@@ -1,9 +1,8 @@
-import type { ClientActionFunctionArgs } from 'react-router';
-
 import type { Term } from '~/types/term';
 import Fuse from 'fuse.js/basic';
+import type { Route } from './+types/api.termliste.søk.($term)';
 
-export async function clientAction({ request }: ClientActionFunctionArgs) {
+export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
   const { q } = Object.fromEntries(formData) as { q: string };
   const cachedTerms = localStorage.getItem('terms');

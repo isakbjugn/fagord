@@ -1,18 +1,18 @@
-import type { LoaderFunction, LoaderFunctionArgs } from 'react-router';
-import { Form, useLoaderData, useNavigation } from 'react-router';
+import { Form, useNavigation } from 'react-router';
 import type { ChangeEvent } from 'react';
 import { Button, Label, Row } from 'reactstrap';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 
 import { DialectInput } from '~/lib/components/dialect-input';
+import type { Route } from './+types/ny-term.($term)';
 import style from '~/styles/ny-term.module.css';
 
-export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
+export const loader = ({ params }: Route.LoaderArgs) => {
   return { termFromUrl: params.term };
 };
 
-export default function NyTerm() {
-  const { termFromUrl } = useLoaderData<typeof loader>();
+export default function NyTerm({ loaderData }: Route.ComponentProps) {
+  const { termFromUrl } = loaderData;
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
 

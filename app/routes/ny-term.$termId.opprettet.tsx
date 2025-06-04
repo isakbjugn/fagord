@@ -1,15 +1,15 @@
-import type { LoaderFunction, LoaderFunctionArgs } from 'react-router';
-import { Link, useLoaderData } from 'react-router';
+import { Link } from 'react-router';
 import { Button } from 'reactstrap';
 
+import type { Route } from './+types/ny-term.$termId.opprettet';
 import style from '~/styles/ny-term.module.css';
 
-export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
+export const loader = ({ params }: Route.LoaderArgs) => {
   return { termId: params.termId };
 };
 
-export default function NyTermOpprettet() {
-  const { termId } = useLoaderData<typeof loader>();
+export default function NyTermOpprettet({ loaderData }: Route.ComponentProps) {
+  const { termId } = loaderData;
 
   return (
     <section className={style.success}>

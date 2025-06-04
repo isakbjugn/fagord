@@ -1,8 +1,7 @@
-import type { ActionFunctionArgs, ClientActionFunctionArgs } from 'react-router';
-
 import type { SubmitVariant } from '~/types/term';
+import type { Route } from './+types/term.$termId.varianter.stem';
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ request, params }: Route.ActionArgs) {
   const formData = await request.formData();
   const { termId } = params;
   const submitVariant = Object.fromEntries(formData) as unknown as SubmitVariant;
@@ -23,7 +22,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   return await res.json();
 }
 
-export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
   localStorage.removeItem('terms');
   return serverAction();
 }
