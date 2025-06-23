@@ -18,12 +18,10 @@ import {
 } from '@tanstack/react-table';
 import { TranslationFilter } from './translation-filter/translation-filter';
 import { Fragment, useState, type KeyboardEvent } from 'react';
-import { useLoaderData } from '@remix-run/react';
 import style from '~/routes/termliste/termliste.module.css';
 import '~/routes/termliste/termliste.module.css';
 import { Paginator } from '~/routes/termliste/paginator/paginator';
 import { SubjectFilter } from './subject-filter/subject-filter';
-import { loader } from '~/routes/termliste/route';
 import { subjectFilter, translationFilter } from '~/routes/termliste/filters';
 import { TermDetaljer } from './term-detaljer/term-detaljer';
 
@@ -94,7 +92,6 @@ type Props = {
 };
 
 export default function Table({ terms }: Props) {
-  const subjectsData = useLoaderData<typeof loader>();
   const [transFilter, setTransFilter] = useState<any>(['all']);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -140,10 +137,7 @@ export default function Table({ terms }: Props) {
       <div className="col-12 col-lg-10 mx-auto">
         <div className={style.header}>
           <TranslationFilter setTransFilter={setTransFilter} />
-          <SubjectFilter
-            onChange={(subject) => table.getColumn('field')?.setFilterValue(subject)}
-            subjectsData={subjectsData}
-          />
+          <SubjectFilter onChange={(subject) => table.getColumn('field')?.setFilterValue(subject)} />
         </div>
         <div className={style.tableScrollWrapper}>
           <table className={style.table}>
