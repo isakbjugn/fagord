@@ -14,50 +14,58 @@ import appStylesHref from './app.css?url';
 export const loader: LoaderFunction = () => {
   const termsUrl = 'https://api.fagord.no/termer/';
 
-  return fetch(termsUrl)
-    .then((res) => {
+  const termsData = fetch(termsUrl)
+    .then(async (res) => {
       if (!res.ok) {
         throw new Error(`${res.status} ${res.statusText}: Feil under henting av termer!`);
       }
       return {
         success: true,
-        terms: res.json() as Promise<Term[]>,
+        terms: (await res.json()) as Term[],
         message: undefined,
       };
     })
     .catch(() => {
       return {
         success: false,
-        terms: Promise.resolve([] as Term[]),
+        terms: [] as Term[],
         message: 'Kunne ikke laste termer',
       };
     });
+
+  return {
+    termsData,
+  };
 };
 
 export const clientLoader: ClientLoaderFunction = ({ serverLoader }: ClientLoaderFunctionArgs) => {
   const cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
-    return Promise.resolve({
-      success: true,
-      terms: Promise.resolve(JSON.parse(cachedTerms) as Term[]),
-      message: undefined,
-    });
+    return {
+      termsData: {
+        success: true,
+        terms: JSON.parse(cachedTerms) as Term[],
+        message: undefined,
+      },
+    };
   }
 
-  return (serverLoader() as Promise<TermsLoaderData>)
+  return (serverLoader() as Promise<{ termsData: Promise<TermsLoaderData> }>)
     .then((data) => {
-      if (data.success) {
-        data.terms.then((resolvedTerms) => {
-          localStorage.setItem('terms', JSON.stringify(resolvedTerms));
-        });
-      }
+      data.termsData.then((termsData) => {
+        if (termsData.success) {
+          localStorage.setItem('terms', JSON.stringify(termsData.terms));
+        }
+      });
       return data;
     })
     .catch(() => {
       return {
-        success: false,
-        terms: [],
-        message: 'Kunne ikke laste termer',
+        termsData: {
+          success: false,
+          terms: [] as Term[],
+          message: 'Kunne ikke laste termer',
+        },
       };
     });
 };
