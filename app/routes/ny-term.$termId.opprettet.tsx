@@ -4,12 +4,8 @@ import { Button } from 'reactstrap';
 import type { Route } from './+types/ny-term.$termId.opprettet';
 import style from '~/styles/ny-term.module.css';
 
-export const loader = ({ params }: Route.LoaderArgs) => {
-  return { termId: params.termId };
-};
-
-export default function NyTermOpprettet({ loaderData }: Route.ComponentProps) {
-  const { termId } = loaderData;
+export default function NyTermOpprettet({ params }: Route.ComponentProps) {
+  const termId = params.termId as string;
 
   return (
     <section className={style.success}>

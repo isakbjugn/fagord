@@ -12,7 +12,7 @@ import { useRef, useState } from 'react';
 import type { ColorOptions, Tag } from 'react-tagcloud';
 import { TagCloud } from 'react-tagcloud';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
-import { ClientOnly } from 'remix-utils/client-only';
+import { ClientOnly } from '~/lib/client-only';
 import type { Route } from './+types/term.$termId';
 
 import { DialectInput } from '~/lib/components/dialect-input';
@@ -59,7 +59,7 @@ export const clientLoader = async ({ params, serverLoader }: Route.ClientLoaderA
     };
   }
 
-  const termResponse = (await serverLoader()) as { terms: Term[]; term?: Term };
+  const termResponse = (await serverLoader()) as { terms: Term[]; term: Term };
   localStorage.setItem('terms', JSON.stringify(termResponse.terms));
 
   return {

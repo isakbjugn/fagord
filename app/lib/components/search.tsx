@@ -4,8 +4,8 @@ import { Button } from 'reactstrap';
 
 import styles from '~/styles/search.module.css';
 import type { Term } from '~/types/term';
-import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 import { useClickToOpen } from '~/lib/use-click-to-open';
+import { useDebounceFetcher } from '~/lib/use-debounce-fetcher';
 
 export function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
