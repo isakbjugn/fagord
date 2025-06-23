@@ -1,6 +1,13 @@
 import '~/routes/termliste/termliste.module.css';
 import { Suspense } from 'react';
-import { Await, data, useLoaderData, useNavigate } from '@remix-run/react';
+import {
+  Await,
+  ClientLoaderFunction,
+  ClientLoaderFunctionArgs,
+  data,
+  useLoaderData,
+  useNavigate,
+} from '@remix-run/react';
 import Table from './table';
 import { Loader } from '~/lib/components/loader';
 import { ErrorMessage } from '~/lib/components/error-message';
@@ -20,6 +27,24 @@ export const loader: LoaderFunction = () => {
     terms,
   });
 };
+
+export const clientLoader: ClientLoaderFunction = ({ serverLoader }: ClientLoaderFunctionArgs) => {
+  const cachedTerms = localStorage.getItem('terms');
+  if (cachedTerms) {
+    return data({
+      terms: JSON.parse(cachedTerms) as Term[],
+    });
+  }
+
+  return (serverLoader() as Promise<{ terms: Promise<Term[]> }>).then((data) => {
+    data.terms.then((terms) => {
+      localStorage.setItem('terms', JSON.stringify(terms));
+    });
+    return data;
+  });
+};
+
+clientLoader.hydrate = true;
 
 export default function Termliste() {
   const { terms } = useLoaderData<typeof loader>();
