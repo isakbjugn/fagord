@@ -1,5 +1,6 @@
 import type { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
 import type { ClientLoaderFunction, ClientLoaderFunctionArgs } from '@remix-run/react';
+import { data } from '@remix-run/react';
 import { Links, Meta, Outlet, Scripts, useRouteError } from '@remix-run/react';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 
@@ -7,59 +8,38 @@ import { ErrorMessage } from '~/lib/components/error-message';
 import { Footer } from '~/lib/components/footer';
 import { Header } from '~/lib/components/header';
 import { splashscreens } from '~/links/splashscreens';
-import type { Term, TermsLoaderData } from '~/types/term';
+import type { Term } from '~/types/term';
 
 import appStylesHref from './app.css?url';
 
 export const loader: LoaderFunction = () => {
   const termsUrl = 'https://api.fagord.no/termer/';
+  const terms = fetch(termsUrl).then(async (res) => {
+    if (!res.ok) {
+      throw new Response('Klarte ikke å hente termer', { status: 500 });
+    }
+    return (await res.json()) as Term[];
+  });
 
-  return fetch(termsUrl)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`${res.status} ${res.statusText}: Feil under henting av termer!`);
-      }
-      return {
-        success: true,
-        terms: res.json() as Promise<Term[]>,
-        message: undefined,
-      };
-    })
-    .catch(() => {
-      return {
-        success: false,
-        terms: Promise.resolve([] as Term[]),
-        message: 'Kunne ikke laste termer',
-      };
-    });
+  return data({
+    terms,
+  });
 };
 
 export const clientLoader: ClientLoaderFunction = ({ serverLoader }: ClientLoaderFunctionArgs) => {
   const cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
-    return Promise.resolve({
-      success: true,
-      terms: Promise.resolve(JSON.parse(cachedTerms) as Term[]),
-      message: undefined,
+    return data({
+      terms: JSON.parse(cachedTerms) as Term[],
     });
   }
 
-  return (serverLoader() as Promise<TermsLoaderData>)
-    .then((data) => {
-      if (data.success) {
-        data.terms.then((resolvedTerms) => {
-          localStorage.setItem('terms', JSON.stringify(resolvedTerms));
-        });
-      }
-      return data;
-    })
-    .catch(() => {
-      return {
-        success: false,
-        terms: [],
-        message: 'Kunne ikke laste termer',
-      };
+  return (serverLoader() as Promise<{ terms: Promise<Term[]> }>).then((data) => {
+    data.terms.then((terms) => {
+      localStorage.setItem('terms', JSON.stringify(terms));
     });
+    return data;
+  });
 };
 
 clientLoader.hydrate = true;
