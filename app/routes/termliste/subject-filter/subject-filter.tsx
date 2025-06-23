@@ -14,7 +14,7 @@ export const SubjectFilter = ({ onChange }: Props) => {
     subjectsFetcher.load('/api/fagfelt');
   }
 
-  if (subjectsFetcher.state === 'loading')
+  if (subjectsFetcher.state === 'loading' && !subjectsFetcher.data)
     return (
       <div className={style.container}>
         <Spinner />
