@@ -1,4 +1,3 @@
-import { Spinner } from '~/lib/components/spinner';
 import style from './subject-filter.module.css';
 import { AllSubjects } from '~/types/subject';
 import { useSubjectsFetcher } from '~/routes/termliste/subject-filter/use-subjects-fetcher';
@@ -16,8 +15,10 @@ export const SubjectFilter = ({ onChange }: Props) => {
 
   if (subjectsFetcher.state === 'loading' && !subjectsFetcher.data)
     return (
-      <div className={style.container}>
-        <Spinner />
+      <div className={style.skeleton}>
+        <p>
+          <i className="fa-solid fa-spinner fa-spin" /> Henter fagfelt
+        </p>
       </div>
     );
 
