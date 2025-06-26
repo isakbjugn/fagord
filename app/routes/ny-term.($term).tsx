@@ -93,12 +93,14 @@ export default function NyTerm() {
 
 function TermInput({ defaultValue }: { defaultValue: string }) {
   const fetcher = useDebounceFetcher<boolean>();
+  const definitionFetcher = useDebounceFetcher<string | null>();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const formData = new FormData();
     formData.append('term', event.target.value);
 
     fetcher.submit(formData, { method: 'post', action: '/api/termliste/finnes', debounceTimeout: 200 });
+    definitionFetcher.submit(formData, { method: 'post', action: '/api/definisjon', debounceTimeout: 300 });
   }
 
   return (
@@ -113,6 +115,22 @@ function TermInput({ defaultValue }: { defaultValue: string }) {
         onChange={handleChange}
       />
       <div className="invalid-feedback bright-feedback-text">Termen finnes allerede i termlista.</div>
+      <Definitions definitions={definitionFetcher.data} />
     </>
+  );
+}
+
+type Props = {
+  definitions: string | null | undefined;
+};
+
+function Definitions({ definitions }: Props) {
+  if (!definitions) return null;
+
+  return (
+    <div className="mt-2">
+      <p>Definisjon</p>
+      <div dangerouslySetInnerHTML={{ __html: definitions }} />
+    </div>
   );
 }
