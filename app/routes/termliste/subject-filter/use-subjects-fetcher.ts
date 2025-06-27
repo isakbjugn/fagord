@@ -1,9 +1,9 @@
 import { useFetcher } from 'react-router';
-import type { loader } from '~/routes/api.fagfelt';
 import { useEffect } from 'react';
+import { Subject } from '~/types/subject';
 
 export function useSubjectsFetcher() {
-  const fetcher = useFetcher<typeof loader>();
+  const fetcher = useFetcher<{ subjects: Subject[]; error: boolean; message: string | undefined }>();
 
   useEffect(() => {
     if (!fetcher.data && fetcher.state === 'idle') {
