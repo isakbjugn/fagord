@@ -1,5 +1,5 @@
 import { useFetcher } from 'react-router';
-import type { loader } from '~/routes/api.fagfelt';
+import { loader } from '~/routes/api.fagfelt';
 import { useEffect } from 'react';
 
 export function useSubjectsFetcher() {

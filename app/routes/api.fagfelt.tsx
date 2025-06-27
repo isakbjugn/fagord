@@ -1,7 +1,7 @@
-import { data, LoaderFunction } from 'react-router';
+import { data } from 'react-router';
 import { Subject } from '~/types/subject';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const subjectsUrl = 'https://api.fagord.no/fagfelt/';
 
   const subjectsResponse = await fetch(subjectsUrl);
@@ -10,4 +10,4 @@ export const loader: LoaderFunction = async () => {
   }
   const subjects = (await subjectsResponse.json()) as Subject[];
   return data({ subjects, error: false, message: undefined }, { headers: { 'Cache-Control': 'max-age=3600' } });
-};
+}
