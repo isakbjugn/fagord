@@ -1,5 +1,4 @@
 import style from './translation-filter.module.css';
-import { Form, FormGroup, Input, Label } from 'reactstrap';
 import { TransFilter, TransFilterType } from '~/types/filters';
 
 const transFilters: TransFilter[] = [
@@ -26,10 +25,11 @@ type Props = {
 
 export const TranslationFilter = ({ setTransFilter }: Props) => {
   return (
-    <Form className={style.form}>
+    <div className={style.form}>
       {transFilters.map((filter) => (
-        <FormGroup check inline key={filter.filter}>
-          <Input
+        <div className="form-check form-check-inline" key={filter.filter}>
+          <input
+            className="form-check-input"
             name="dictionaryView"
             type="radio"
             onChange={() => {
@@ -37,9 +37,9 @@ export const TranslationFilter = ({ setTransFilter }: Props) => {
             }}
             defaultChecked={filter.defaultChecked}
           />
-          <Label check>{filter.text}</Label>
-        </FormGroup>
+          <label className="form-check-label">{filter.text}</label>
+        </div>
       ))}
-    </Form>
+    </div>
   );
 };
