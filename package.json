@@ -28,7 +28,7 @@
   "devDependencies": {
     "@react-router/dev": "7.6.1",
     "@react-router/fs-routes": "7.6.1",
-    "@types/node": "24.0.0",
+    "@types/node": "24.0.6",
     "@types/react": "18.2.33",
     "@types/react-dom": "18.2.14",
     "@types/react-tagcloud": "2.3.2",
