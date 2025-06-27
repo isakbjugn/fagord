@@ -1,8 +1,7 @@
-import type { ClientActionFunctionArgs } from '@remix-run/react';
-
 import type { Term } from '~/types/term';
+import type { Route } from './+types/api.termliste.finnes';
 
-export async function clientAction({ request }: ClientActionFunctionArgs) {
+export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
   const { term } = Object.fromEntries(formData) as { term: string };
   const cachedTerms = localStorage.getItem('terms');

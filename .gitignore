@@ -33,3 +33,6 @@ build
 
 # environment
 .env
+
+# react router
+.react-router

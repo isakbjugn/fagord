@@ -1,20 +1,13 @@
 import '~/routes/termliste/termliste.module.css';
 import { Suspense } from 'react';
-import {
-  Await,
-  ClientLoaderFunction,
-  ClientLoaderFunctionArgs,
-  data,
-  useLoaderData,
-  useNavigate,
-} from '@remix-run/react';
+import { Await, useLoaderData, useNavigate } from 'react-router';
 import Table from './table';
 import { Loader } from '~/lib/components/loader';
 import { ErrorMessage } from '~/lib/components/error-message';
-import { LoaderFunction } from '@remix-run/node';
 import { Term } from '~/types/term';
+import { Route } from './+types/route';
 
-export const loader: LoaderFunction = () => {
+export const loader = () => {
   const termsUrl = 'https://api.fagord.no/termer/';
   const terms = fetch(termsUrl).then(async (res) => {
     if (!res.ok) {
@@ -23,17 +16,17 @@ export const loader: LoaderFunction = () => {
     return (await res.json()) as Term[];
   });
 
-  return data({
+  return {
     terms,
-  });
+  };
 };
 
-export const clientLoader: ClientLoaderFunction = ({ serverLoader }: ClientLoaderFunctionArgs) => {
+export const clientLoader = ({ serverLoader }: Route.ClientLoaderArgs) => {
   const cachedTerms = localStorage.getItem('terms');
   if (cachedTerms) {
-    return data({
+    return {
       terms: JSON.parse(cachedTerms) as Term[],
-    });
+    };
   }
 
   return (serverLoader() as Promise<{ terms: Promise<Term[]> }>).then((data) => {

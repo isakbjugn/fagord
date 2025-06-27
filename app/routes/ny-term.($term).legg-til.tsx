@@ -1,10 +1,9 @@
-import type { ActionFunction, ActionFunctionArgs } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import type { ClientActionFunctionArgs } from '@remix-run/react';
+import { redirect } from 'react-router';
 
 import type { Term } from '~/types/term';
+import type { Route } from './+types/ny-term.($term).legg-til';
 
-export const action: ActionFunction = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
   const termsUrl = 'https://api.fagord.no/termer/';
   const newTerm: Term = await fetch(termsUrl, {
@@ -23,7 +22,7 @@ export const action: ActionFunction = async ({ request }: ActionFunctionArgs) =>
   return redirect(`/ny-term/${newTerm._id}/opprettet`);
 };
 
-export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
   localStorage.removeItem('terms');
   await serverAction();
 }

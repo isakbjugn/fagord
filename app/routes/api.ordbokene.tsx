@@ -1,7 +1,6 @@
-import type { ClientActionFunctionArgs } from '@remix-run/react';
-
 import { DictionaryName, getLookupFromOrdbokene, getSuggestion, getValidationText, isTermValid } from '~/lib/ordbokene';
 import type { OrdbokeneResponse } from '~/types/ordbokene';
+import type { Route } from './+types/api.ordbokene';
 
 const DictionaryKey = {
   nb: 'bm',
@@ -14,7 +13,7 @@ export interface DictionaryResponse {
   suggestion: string | undefined;
 }
 
-export async function clientAction({ request }: ClientActionFunctionArgs): Promise<DictionaryResponse> {
+export async function clientAction({ request }: Route.ClientActionArgs): Promise<DictionaryResponse> {
   const formData = await request.formData();
   const ordbokeneApiUrl = 'https://ord.uib.no/api/';
   const { term, dialect } = Object.fromEntries(formData) as { term: string; dialect: 'nb' | 'nn' };

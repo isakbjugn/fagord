@@ -1,15 +1,11 @@
-import type { LoaderFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link } from 'react-router';
 import { Button } from 'reactstrap';
 
+import type { Route } from './+types/ny-term.$termId.opprettet';
 import style from '~/styles/ny-term.module.css';
 
-export const loader: LoaderFunction = ({ params }: LoaderFunctionArgs) => {
-  return { termId: params.termId };
-};
-
-export default function NyTermOpprettet() {
-  const { termId } = useLoaderData<typeof loader>();
+export default function NyTermOpprettet({ params }: Route.ComponentProps) {
+  const termId = params.termId as string;
 
   return (
     <section className={style.success}>

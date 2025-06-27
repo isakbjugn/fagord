@@ -1,7 +1,8 @@
-import type { LoaderFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { redirect } from 'react-router';
 
-export const loader: LoaderFunction = async ({ request }) => {
+import type { Route } from './+types/_index';
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
   const url = new URL(request.url);
   if (url.pathname === '/') {
     return redirect(`/hjem${url.search}`);

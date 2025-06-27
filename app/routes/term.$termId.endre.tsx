@@ -1,11 +1,10 @@
-import type { ActionFunctionArgs } from '@remix-run/node';
-import type { ClientActionFunctionArgs } from '@remix-run/react';
-import { Form, Link, redirect } from '@remix-run/react';
+import { Form, Link, redirect } from 'react-router';
 import { Button, Label, Row } from 'reactstrap';
 
 import type { SubmitTerm } from '~/types/term';
+import type { Route } from './+types/term.$termId.endre';
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ request, params }: Route.ActionArgs) {
   const formData = await request.formData();
   const { termId } = params;
   const submitTerm = Object.fromEntries(formData) as unknown as SubmitTerm;
@@ -27,7 +26,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   return redirect(`/term/${responseBody._id}`);
 }
 
-export async function clientAction({ serverAction }: ClientActionFunctionArgs) {
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
   localStorage.removeItem('terms');
   await serverAction();
 }

@@ -1,4 +1,4 @@
-import { useFetcher } from '@remix-run/react';
+import { useFetcher } from 'react-router';
 import type { loader } from '~/routes/api.fagfelt';
 import { useEffect } from 'react';
 
