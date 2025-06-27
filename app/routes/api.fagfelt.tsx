@@ -1,4 +1,4 @@
-import { data, LoaderFunction } from '@remix-run/node';
+import { data, LoaderFunction } from 'react-router';
 import { Subject } from '~/types/subject';
 
 export const loader: LoaderFunction = async () => {
