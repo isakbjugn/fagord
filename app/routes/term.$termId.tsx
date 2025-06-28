@@ -4,6 +4,7 @@ import {
   Link,
   Outlet,
   useFetcher,
+  useLoaderData,
   useLocation,
   useParams,
   useRouteError,
@@ -70,8 +71,8 @@ export const clientLoader = async ({ params, serverLoader }: Route.ClientLoaderA
 
 clientLoader.hydrate = true;
 
-export default function Term({ loaderData }: Route.ComponentProps) {
-  const { term } = loaderData;
+export default function Term() {
+  const { term } = useLoaderData<typeof loader>();
 
   return (
     <main className="container my-3">
@@ -127,11 +128,12 @@ interface DefinitionProps {
 const Definition = ({ definition }: DefinitionProps) => {
   const location = useLocation();
   const isEditing = location.pathname.includes('endre');
-  const buttonText = definition !== '' ? 'Endre definisjon' : 'Legg til definisjon';
+  const hasDefinition = definition && definition !== '';
+  const buttonText = hasDefinition ? 'Endre definisjon' : 'Legg til definisjon';
 
   return (
     <div>
-      <p>{definition !== '' ? definition : <em>Ingen definisjon tilgjengelig.</em>}</p>
+      <p>{hasDefinition ? definition : <em>Ingen definisjon tilgjengelig.</em>}</p>
       <Outlet />
       {!isEditing && (
         <Link to="endre">

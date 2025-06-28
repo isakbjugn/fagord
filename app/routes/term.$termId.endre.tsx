@@ -36,15 +36,18 @@ export default function Endre() {
     <Form method="post">
       <Row>
         <Label>
+          Legg til/endre definisjon
           <input name="definition" placeholder="Skriv inn definisjon" className="form-control" required={true} />
         </Label>
       </Row>
-      <Button color="success">Send inn</Button>
-      <Link to="..">
-        <Button type="button" outline color="light">
-          Lukk
-        </Button>
-      </Link>
+      <span className="d-flex gap-2">
+        <Button color="success">Send inn</Button>
+        <Link to="..">
+          <Button type="button" outline color="light">
+            Lukk
+          </Button>
+        </Link>
+      </span>
     </Form>
   );
 }
