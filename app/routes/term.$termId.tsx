@@ -128,11 +128,12 @@ interface DefinitionProps {
 const Definition = ({ definition }: DefinitionProps) => {
   const location = useLocation();
   const isEditing = location.pathname.includes('endre');
-  const buttonText = definition !== '' ? 'Endre definisjon' : 'Legg til definisjon';
+  const hasDefinition = definition && definition !== '';
+  const buttonText = hasDefinition ? 'Endre definisjon' : 'Legg til definisjon';
 
   return (
     <div>
-      <p>{definition !== '' ? definition : <em>Ingen definisjon tilgjengelig.</em>}</p>
+      <p>{hasDefinition ? definition : <em>Ingen definisjon tilgjengelig.</em>}</p>
       <Outlet />
       {!isEditing && (
         <Link to="endre">
