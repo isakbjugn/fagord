@@ -4,6 +4,7 @@ import {
   Link,
   Outlet,
   useFetcher,
+  useLoaderData,
   useLocation,
   useParams,
   useRouteError,
@@ -70,8 +71,8 @@ export const clientLoader = async ({ params, serverLoader }: Route.ClientLoaderA
 
 clientLoader.hydrate = true;
 
-export default function Term({ loaderData }: Route.ComponentProps) {
-  const { term } = loaderData;
+export default function Term() {
+  const { term } = useLoaderData<typeof loader>();
 
   return (
     <main className="container my-3">

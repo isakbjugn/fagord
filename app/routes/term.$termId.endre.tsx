@@ -36,6 +36,7 @@ export default function Endre() {
     <Form method="post">
       <Row>
         <Label>
+          Legg til/endre definisjon
           <input name="definition" placeholder="Skriv inn definisjon" className="form-control" required={true} />
         </Label>
       </Row>
