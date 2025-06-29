@@ -7,7 +7,7 @@ import { DialectInput } from '~/lib/components/dialect-input';
 import style from '~/styles/ny-term.module.css';
 
 export default function NyTerm() {
-  const { termFromUrl } = useParams();
+  const { term: termFromUrl } = useParams();
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
 
