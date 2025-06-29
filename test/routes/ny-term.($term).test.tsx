@@ -1,5 +1,5 @@
 import { createRoutesStub } from 'react-router';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import Endre from '~/routes/term.$termId.endre';
@@ -67,5 +67,31 @@ describe('Tester innsending på Ny term-siden', () => {
 
     const formData = await actionSpy.mock.results[0].value;
     expect(formData).toHaveProperty('en', termFromUrl);
+  });
+
+  test('Viser valideringstekst når term allerede finnes', async () => {
+    const existingTerm = 'existence';
+    const validationText = 'Termen finnes allerede i termlista.';
+
+    const Stub = createRoutesStub([
+      {
+        path: '/ny-term',
+        Component: NyTerm,
+      },
+      {
+        path: '/api/termliste/finnes',
+        action() {
+          return {
+            exists: true,
+            validationText,
+          };
+        },
+      },
+    ]);
+
+    render(<Stub initialEntries={['/ny-term']} />);
+
+    await userEvent.type(screen.getByLabelText('Engelsk term'), existingTerm);
+    await waitFor(() => screen.findByText(validationText));
   });
 });
