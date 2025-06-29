@@ -1,45 +1,52 @@
 import { NavLink, useLocation } from 'react-router';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 
 import style from '~/styles/header.module.css';
 
 import { navLinks } from '../nav-links';
-import { useToggle } from '../use-toggle';
 import { Search } from './search';
 
 export const Header = () => {
-  const [isNavOpen, toggleNav, setIsNavOpen] = useToggle(false);
-  const [isSearchOpen, toggleSearch] = useToggle(false);
   const { search } = useLocation();
 
   return (
-    <Navbar dark expand="lg">
-      <NavbarToggler onClick={toggleNav} />
-      <NavbarBrand className="mr-auto" href="/hjem">
-        <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />
-      </NavbarBrand>
-      <NavbarToggler onClick={toggleSearch} className={style.search}>
-        <span aria-hidden className="fa fa-search" />
-      </NavbarToggler>
-      <Collapse isOpen={isNavOpen} navbar>
-        <Nav
-          navbar
-          onClick={() => {
-            setIsNavOpen(false);
-          }}
+    <nav className="navbar navbar-expand-lg navbar-dark">
+      <div className="container-fluid">
+        <a
+          className="navbar-toggler"
+          aria-label="Åpne/lukk navigasjonsmeny"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navigasjonsmeny"
         >
-          {navLinks.map((navItem) => (
-            <NavItem key={navItem.address}>
-              <NavLink className="nav-link text-nowrap" to={{ pathname: navItem.address, search: search }}>
-                <span aria-hidden className={'fa fa-lg ' + navItem.icon + ' ' + style.icon} /> {navItem.text}
-              </NavLink>
-            </NavItem>
-          ))}
-        </Nav>
-      </Collapse>
-      <Collapse isOpen={isSearchOpen} navbar className="ms-auto">
-        <Search />
-      </Collapse>
-    </Navbar>
+          <span className="navbar-toggler-icon" />
+        </a>
+        <a className="mr-auto navbar-brand" href="/hjem">
+          <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />
+        </a>
+        <button
+          className={`navbar-toggler ${style.search}`}
+          aria-label="Åpne/lukk søkefeltet"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#søkefelt"
+        >
+          <span aria-hidden className="fa fa-search" />
+        </button>
+        <div className="collapse navbar-collapse" id="navigasjonsmeny">
+          <ul className="navbar-nav">
+            {navLinks.map((navItem) => (
+              <li className="nav-item" key={navItem.address}>
+                <NavLink className="nav-link text-nowrap" to={{ pathname: navItem.address, search: search }}>
+                  <span aria-hidden className={'fa fa-lg ' + navItem.icon + ' ' + style.icon} /> {navItem.text}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="collapse navbar-collapse ms-auto" id="søkefelt">
+          <Search />
+        </div>
+      </div>
+    </nav>
   );
 };
