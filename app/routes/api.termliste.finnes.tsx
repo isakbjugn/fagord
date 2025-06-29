@@ -7,7 +7,16 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
   const cachedTerms = localStorage.getItem('terms');
   if (term && cachedTerms) {
     const terms = JSON.parse(cachedTerms) as Term[];
-    return terms.find((cachedTerm) => cachedTerm.en === term) !== undefined;
+    const exists = terms.find((cachedTerm) => cachedTerm.en === term) !== undefined;
+    const validationText = exists ? 'Termen finnes allerede i termlista.' : undefined;
+
+    return {
+      exists,
+      validationText,
+    };
   }
-  return false;
+
+  return {
+    exists: false,
+  };
 }

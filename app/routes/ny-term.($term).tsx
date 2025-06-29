@@ -87,7 +87,7 @@ export default function NyTerm() {
 }
 
 function TermInput({ defaultValue }: { defaultValue: string | undefined }) {
-  const existsFetcher = useDebounceFetcher<boolean>();
+  const existsFetcher = useDebounceFetcher<{ exists: boolean; validationText: string | undefined }>();
   const definitionFetcher = useDebounceFetcher<string | null>();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -104,14 +104,12 @@ function TermInput({ defaultValue }: { defaultValue: string | undefined }) {
         id="en"
         name="en"
         defaultValue={defaultValue}
-        className={'form-control' + (existsFetcher.data ? ' is-invalid' : '')}
+        className={'form-control' + (existsFetcher.data?.exists ? ' is-invalid' : '')}
         type="text"
         autoCapitalize="none"
         onChange={handleChange}
       />
-      <div className="invalid-feedback bright-feedback-text">
-        {existsFetcher.data && 'Termen finnes allerede i termlista.'}
-      </div>
+      <div className="invalid-feedback bright-feedback-text">{existsFetcher.data?.validationText}</div>
       <Definitions definitions={definitionFetcher.data} />
     </>
   );
