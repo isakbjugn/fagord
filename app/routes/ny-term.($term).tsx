@@ -1,14 +1,13 @@
-import { Form, useNavigation } from 'react-router';
+import { Form, useNavigation, useParams } from 'react-router';
 import type { ChangeEvent } from 'react';
 import { Button, Label, Row } from 'reactstrap';
 import { useDebounceFetcher } from '~/lib/use-debounce-fetcher';
 
 import { DialectInput } from '~/lib/components/dialect-input';
-import type { Route } from './+types/ny-term.($term)';
 import style from '~/styles/ny-term.module.css';
 
-export default function NyTerm({ params }: Route.ComponentProps) {
-  const termFromUrl = params.term as string;
+export default function NyTerm() {
+  const { termFromUrl } = useParams();
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
 
@@ -87,15 +86,15 @@ export default function NyTerm({ params }: Route.ComponentProps) {
   );
 }
 
-function TermInput({ defaultValue }: { defaultValue: string }) {
-  const fetcher = useDebounceFetcher<boolean>();
+function TermInput({ defaultValue }: { defaultValue: string | undefined }) {
+  const existsFetcher = useDebounceFetcher<{ exists: boolean; validationText: string | undefined }>();
   const definitionFetcher = useDebounceFetcher<string | null>();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const formData = new FormData();
     formData.append('term', event.target.value);
 
-    fetcher.submit(formData, { method: 'post', action: '/api/termliste/finnes', debounceTimeout: 200 });
+    existsFetcher.submit(formData, { method: 'post', action: '/api/termliste/finnes', debounceTimeout: 200 });
     definitionFetcher.submit(formData, { method: 'post', action: '/api/definisjon', debounceTimeout: 300 });
   }
 
@@ -105,12 +104,12 @@ function TermInput({ defaultValue }: { defaultValue: string }) {
         id="en"
         name="en"
         defaultValue={defaultValue}
-        className={'form-control' + (fetcher.data ? ' is-invalid' : '')}
+        className={'form-control' + (existsFetcher.data?.exists ? ' is-invalid' : '')}
         type="text"
         autoCapitalize="none"
         onChange={handleChange}
       />
-      <div className="invalid-feedback bright-feedback-text">Termen finnes allerede i termlista.</div>
+      <div className="invalid-feedback bright-feedback-text">{existsFetcher.data?.validationText}</div>
       <Definitions definitions={definitionFetcher.data} />
     </>
   );
