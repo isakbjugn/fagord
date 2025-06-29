@@ -18,11 +18,11 @@ describe('Tester innsending på Ny term-siden', () => {
 
     const Stub = createRoutesStub([
       {
-        path: `/ny-term`,
+        path: '/ny-term',
         Component: NyTerm,
       },
       {
-        path: `/ny-term/legg-til`,
+        path: '/ny-term/legg-til',
         Component: Endre,
         action: actionSpy,
       },
@@ -37,5 +37,35 @@ describe('Tester innsending på Ny term-siden', () => {
 
     const formData = await actionSpy.mock.results[0].value;
     expect(formData).toHaveProperty('en', newTerm);
+  });
+
+  test('Bruker term i URL som default-verdi for engelsk term', async () => {
+    const termFromUrl = 'innovation';
+
+    const actionSpy = vi.fn(async ({ request }) => {
+      const formData = await request.formData();
+      return Object.fromEntries(formData);
+    });
+
+    const Stub = createRoutesStub([
+      {
+        path: `/ny-term/:term`,
+        Component: NyTerm,
+      },
+      {
+        path: `/ny-term/:term/legg-til`,
+        Component: Endre,
+        action: actionSpy,
+      },
+    ]);
+
+    render(<Stub initialEntries={[`/ny-term/${termFromUrl}`]} />);
+
+    await userEvent.click(screen.getByText('Legg til term'));
+
+    expect(actionSpy).toHaveBeenCalled();
+
+    const formData = await actionSpy.mock.results[0].value;
+    expect(formData).toHaveProperty('en', termFromUrl);
   });
 });
