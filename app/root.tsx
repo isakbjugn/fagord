@@ -1,6 +1,7 @@
 import type { LinksFunction, MetaFunction } from 'react-router';
 import { Links, Meta, Outlet, Scripts, useRouteError } from 'react-router';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
+import bootstrapScriptsHref from 'bootstrap/dist/js/bootstrap.bundle.min.js?url';
 
 import { ErrorMessage } from '~/lib/components/error-message';
 import { Footer } from '~/lib/components/footer';
@@ -101,6 +102,7 @@ export default function Root() {
         </main>
         <Footer />
         <Scripts />
+        <script src={bootstrapScriptsHref} />
       </body>
     </html>
   );

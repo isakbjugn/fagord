@@ -1,6 +1,5 @@
 import { Form, useNavigation, useParams } from 'react-router';
 import type { ChangeEvent } from 'react';
-import { Button, Label, Row } from 'reactstrap';
 import { useDebounceFetcher } from '~/lib/use-debounce-fetcher';
 
 import { DialectInput } from '~/lib/components/dialect-input';
@@ -15,44 +14,44 @@ export default function NyTerm() {
     <section className={style.form}>
       <Form method="post" action="legg-til">
         <h2>Legg til ny term</h2>
-        <Row>
-          <Label for="en">
+        <div className="row">
+          <label className="form-label" htmlFor="en">
             Engelsk term
             <TermInput defaultValue={termFromUrl} />
-          </Label>
-        </Row>
-        <Label>Norske termer</Label>
-        <Row className="mb-4">
+          </label>
+        </div>
+        <label className="form-label">Norske termer</label>
+        <div className="row mb-4">
           <div className="col-sm-6">
-            <Label for="nb">
+            <label className="form-label" htmlFor="nb">
               Bokmål
               <DialectInput name="nb" dialect="nb" />
-            </Label>
+            </label>
           </div>
           <div className="col-sm-6">
-            <Label for="nn">
+            <label className="form-label" htmlFor="nn">
               Nynorsk
               <DialectInput name="nn" dialect="nn" />
-            </Label>
+            </label>
           </div>
-        </Row>
-        <Row>
+        </div>
+        <div className="row">
           <div className="col-sm-6">
-            <Label for="field">
+            <label className="form-label" htmlFor="field">
               Fagfelt
               <input name="field" className="form-control" type="text" />
-            </Label>
+            </label>
           </div>
           <div className="col-sm-6">
-            <Label for="subfield">
+            <label className="form-label" htmlFor="subfield">
               Gren
               <input name="subfield" className="form-control" type="text" />
-            </Label>
+            </label>
           </div>
-        </Row>
-        <Row>
+        </div>
+        <div className="row">
           <div className="col-sm-6 col-md-12">
-            <Label for="pos">
+            <label className="form-label" htmlFor="pos">
               Ordklasse
               <select name="pos" className="form-select">
                 <option>substantiv</option>
@@ -66,21 +65,21 @@ export default function NyTerm() {
                 <option>konjunksjon</option>
                 <option>interjeksjon</option>
               </select>
-            </Label>
+            </label>
           </div>
-        </Row>
-        <Row>
-          <Label htmlFor="reference">
+        </div>
+        <div className="row">
+          <label className="form-label" htmlFor="reference">
             Referanse
             <input name="reference" className="form-control" type="text" />
-          </Label>
-        </Row>
-        <Button color="success">
+          </label>
+        </div>
+        <button className="btn btn-success">
           {submitting && (
             <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
           )}
           Legg til term
-        </Button>
+        </button>
       </Form>
     </section>
   );

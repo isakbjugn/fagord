@@ -1,6 +1,5 @@
 import { Form, Link, useLocation, useNavigation, useSearchParams } from 'react-router';
 import { type FormEvent } from 'react';
-import { Button } from 'reactstrap';
 
 import styles from '~/styles/search.module.css';
 import type { Term } from '~/types/term';
@@ -82,7 +81,7 @@ function NoOptionsMessage({ q }: { q: string | null | undefined }) {
   if (!q) return null;
   return (
     <Link to={`/ny-term/${q}`} className={styles.addButton}>
-      <Button outline>Opprett ny term</Button>
+      <button className="btn btn-outline-secondary">Opprett ny term</button>
     </Link>
   );
 }

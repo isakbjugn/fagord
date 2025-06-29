@@ -1,5 +1,4 @@
 import { Link } from 'react-router';
-import { Button } from 'reactstrap';
 
 import type { Route } from './+types/ny-term.$termId.opprettet';
 import style from '~/styles/ny-term.module.css';
@@ -13,14 +12,10 @@ export default function NyTermOpprettet({ params }: Route.ComponentProps) {
       <p>Takk for ditt bidrag til Fagord. Termen og dens oversettelse er nå lagt til i en voksende termbase.</p>
       <span className={style.buttons}>
         <Link to={`/term/${termId}`}>
-          <Button outline color="light">
-            Gå til term
-          </Button>
+          <button className="btn btn-outline-light">Gå til term</button>
         </Link>
         <Link to="/ny-term">
-          <Button outline color="light">
-            Opprett ny term
-          </Button>
+          <button className="btn btn-outline-light">Opprett ny term</button>
         </Link>
       </span>
     </section>
