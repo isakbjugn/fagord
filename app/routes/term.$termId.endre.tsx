@@ -1,5 +1,4 @@
 import { Form, Link, redirect } from 'react-router';
-import { Button, Label, Row } from 'reactstrap';
 
 import type { SubmitTerm } from '~/types/term';
 import type { Route } from './+types/term.$termId.endre';
@@ -34,18 +33,18 @@ export async function clientAction({ serverAction }: Route.ClientActionArgs) {
 export default function Endre() {
   return (
     <Form method="post">
-      <Row>
-        <Label>
+      <div className="row">
+        <label className="form-label" htmlFor="definition">
           Legg til/endre definisjon
           <input name="definition" placeholder="Skriv inn definisjon" className="form-control" required={true} />
-        </Label>
-      </Row>
+        </label>
+      </div>
       <span className="d-flex gap-2">
-        <Button color="success">Send inn</Button>
+        <button className="btn btn-success">Send inn</button>
         <Link to="..">
-          <Button type="button" outline color="light">
+          <button type="button" className="btn btn-outline-light">
             Lukk
-          </Button>
+          </button>
         </Link>
       </span>
     </Form>

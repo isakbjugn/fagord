@@ -12,7 +12,6 @@ import {
 import { useRef, useState } from 'react';
 import type { ColorOptions, Tag } from 'react-tagcloud';
 import { TagCloud } from 'react-tagcloud';
-import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardText, CardTitle, Col, Label, Row } from 'reactstrap';
 import { ClientOnly } from '~/lib/client-only';
 import type { Route } from './+types/term.$termId';
 
@@ -78,12 +77,14 @@ export default function Term() {
     <main className="container my-3">
       <div className="col-12 col-lg-10 mx-auto ">
         <div className="row" style={{ color: 'white' }}>
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <Link to="/termliste">Termliste</Link>
-            </BreadcrumbItem>
-            <BreadcrumbItem active>{term.en}</BreadcrumbItem>
-          </Breadcrumb>
+          <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/termliste">Termliste</Link>
+              </li>
+              <li className="breadcrumb-item active">{term.en}</li>
+            </ol>
+          </nav>
         </div>
         <TermComponent term={term} />
         <VariantCloud variants={term.variants} />
@@ -137,9 +138,9 @@ const Definition = ({ definition }: DefinitionProps) => {
       <Outlet />
       {!isEditing && (
         <Link to="endre">
-          <Button type="button" outline color="light">
+          <button className="btn btn-outline-light" type="button">
             {buttonText}
-          </Button>
+          </button>
         </Link>
       )}
     </div>
@@ -157,44 +158,44 @@ export const TranslationCard = ({ term }: TranslationCardProps) => {
   const buttonText = term.nb !== '' || term.nn !== '' ? 'Legg til forslag' : 'Legg til oversettelse';
 
   return (
-    <Card className={style.card}>
-      <CardBody>
-        <CardTitle tag="h5">Oversettelse</CardTitle>
-        <CardText>
+    <div className={`card ${style.card}`}>
+      <div className="card-body">
+        <h5 className="card-title">Oversettelse</h5>
+        <p className="card-text">
           Engelsk: <em>{term.en}</em>
-        </CardText>
-        <CardText>
+        </p>
+        <p className="card-text">
           Bokmål: <em>{term.nb}</em>
-        </CardText>
-        <CardText>
+        </p>
+        <p className="card-text">
           Nynorsk: <em>{term.nn}</em>
-        </CardText>
+        </p>
         {isWriting ? (
           <Form method="post" action="varianter/legg-til" onSubmit={toggleWriting}>
-            <Row>
-              <Col>
-                <Label htmlFor="term">
+            <div className="row">
+              <div className="col">
+                <label className="form-label" htmlFor="term">
                   <DialectInput name="term" dialect={dialect as 'nb' | 'nn'} />
-                </Label>
-              </Col>
-              <Col>
+                </label>
+              </div>
+              <div className="col">
                 <ToggleButton leftLabel="nb" rightLabel="nn" name="dialect" handleChange={setDialect} />
-              </Col>
-            </Row>
+              </div>
+            </div>
             <span className={style.buttons}>
-              <Button color="success">Send inn</Button>
-              <Button type="button" color="light" outline onClick={toggleWriting}>
+              <button className="btn btn-success">Send inn</button>
+              <button className="btn btn-outline-light" type="button" onClick={toggleWriting}>
                 Lukk
-              </Button>
+              </button>
             </span>
           </Form>
         ) : (
-          <Button color="light" outline onClick={toggleWriting}>
+          <button className="btn btn-outline-light" onClick={toggleWriting}>
             {buttonText}
-          </Button>
+          </button>
         )}
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   );
 };
 
