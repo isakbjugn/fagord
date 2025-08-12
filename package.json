@@ -34,7 +34,7 @@
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "@types/react-tagcloud": "2.3.2",
-    "@vitejs/plugin-react-swc": "3.10.2",
+    "@vitejs/plugin-react-swc": "4.0.0",
     "autoprefixer": "10.4.21",
     "oxlint": "1.6.0",
     "postcss": "8.5.6",
