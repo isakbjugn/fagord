@@ -1,19 +1,16 @@
 import '~/styles/dialog.css';
 
-import type { ForwardedRef, ReactElement } from 'react';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import type { ReactElement, Ref } from 'react';
+import { useImperativeHandle, useRef } from 'react';
 
-export const Dialog = forwardRef(function Dialog(
-  { children }: { children: ReactElement },
-  forwardedRef: ForwardedRef<HTMLDialogElement>,
-) {
-  const ref = useRef<HTMLDialogElement>(null);
-  useImperativeHandle(forwardedRef, () => ref.current as HTMLDialogElement);
+export function Dialog({ children, ref }: { children: ReactElement; ref?: Ref<HTMLDialogElement> }) {
+  const internalRef = useRef<HTMLDialogElement>(null);
+  useImperativeHandle(ref, () => internalRef.current as HTMLDialogElement);
 
   return (
-    <dialog ref={ref}>
+    <dialog ref={internalRef}>
       {children}
-      <button onClick={() => ref?.current?.close()}>Lukk</button>
+      <button onClick={() => internalRef?.current?.close()}>Lukk</button>
     </dialog>
   );
-});
+}
