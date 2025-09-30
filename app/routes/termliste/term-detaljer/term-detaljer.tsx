@@ -6,7 +6,7 @@ export const TermDetaljer = ({ term }: { term: Term }) => {
     try {
       let url = new URL(reference);
       return url.protocol == 'http:' || url.protocol == 'https:';
-    } catch (_) {
+    } catch {
       return false;
     }
   };
