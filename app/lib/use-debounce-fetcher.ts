@@ -7,7 +7,7 @@ interface DebouncedSubmitFunction {
 
 export function useDebounceFetcher<T = any>() {
   const fetcher = useFetcher<T>();
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>(null);
 
   useEffect(() => {
     return () => {
