@@ -25,53 +25,19 @@ import type { Term, Variant } from '~/types/term';
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
   const { termId } = params;
-  const termsUrl = 'https://api.fagord.no/termer';
+  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const termsUrl = `${FAGORD_RUST_API_URL}/terms/${termId}`;
 
   const termResponse = await fetch(termsUrl);
   if (!termResponse.ok) {
-    throw new Response('Failed to fetch term', { status: termResponse.status });
-  }
-
-  const terms = (await termResponse.json()) as Term[];
-  const term = terms.find((term) => term._id === termId) || undefined;
-
-  if (!term) {
     throw new Response('Termen finnes ikke', { status: 404 });
   }
 
-  return {
-    terms: terms,
-    term: term,
-  };
+  return termResponse.json();
 };
-
-export const clientLoader = async ({ params, serverLoader }: Route.ClientLoaderArgs) => {
-  let cachedTerms = localStorage.getItem('terms');
-  if (cachedTerms) {
-    const terms = JSON.parse(cachedTerms) as Term[];
-    const term = terms.find((term) => term._id === params.termId);
-    if (!term) {
-      throw new Response('Termen finnes ikke', { status: 404 });
-    }
-    return {
-      terms: terms,
-      term: term,
-    };
-  }
-
-  const termResponse = (await serverLoader()) as { terms: Term[]; term: Term };
-  localStorage.setItem('terms', JSON.stringify(termResponse.terms));
-
-  return {
-    terms: termResponse.terms,
-    term: termResponse.term,
-  };
-};
-
-clientLoader.hydrate = true;
 
 export default function Term() {
-  const { term } = useLoaderData<typeof loader>();
+  const term = useLoaderData<typeof loader>();
 
   return (
     <main className="container my-3">
@@ -87,15 +53,14 @@ export default function Term() {
           </nav>
         </div>
         <TermComponent term={term} />
-        <VariantCloud variants={term.variants} />
+        {term.variants ? <VariantCloud variants={term.variants} /> : null}
       </div>
     </main>
   );
 }
 
 const TermComponent = ({ term }: { term: Term }) => {
-  const fieldSpec = term.subfield !== '' ? term.subfield : term.field;
-  const fieldSpecStr = fieldSpec !== '' ? ' (' + fieldSpec + ')' : '';
+  const field = term.subfield || term.field;
 
   return (
     <article>
@@ -103,7 +68,7 @@ const TermComponent = ({ term }: { term: Term }) => {
         <div className={style.header}>
           <div className={style.title}>
             <h1>{term.en}</h1>
-            <h3>{fieldSpecStr}</h3>
+            {field && <h3>({field})</h3>}
           </div>
           <ClientOnly fallback={null}>{() => <ShareTermButton term={term} />}</ClientOnly>
         </div>
