@@ -4,8 +4,9 @@ export async function clientAction({ request }: Route.ClientActionArgs): Promise
   const formData = await request.formData();
   const definitionApiUrl = 'https://rust-api.fagord.no/definitions';
   const { term } = Object.fromEntries(formData) as { term: string };
+  const termWithDashes = term.replace(/\s+/g, '-');
 
-  const res = await fetch(`${definitionApiUrl}/${term}`);
+  const res = await fetch(`${definitionApiUrl}/${termWithDashes}`);
 
   if (!res.ok) {
     return null;
