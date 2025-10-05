@@ -53,7 +53,7 @@ export default function Term() {
           </nav>
         </div>
         <TermComponent term={term} />
-        {term.variants ? <VariantCloud variants={term.variants} /> : null}
+        <VariantCloud variants={term.variants} />
       </div>
     </main>
   );
