@@ -1,8 +1,9 @@
 import type { Route } from './+types/api.definisjon';
 
-export async function clientAction({ request }: Route.ClientActionArgs): Promise<string | null> {
+export async function action({ request }: Route.ActionArgs): Promise<string | null> {
   const formData = await request.formData();
-  const definitionApiUrl = 'https://rust-api.fagord.no/definitions';
+  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const definitionApiUrl = `${FAGORD_RUST_API_URL}/definitions`;
   const { term } = Object.fromEntries(formData) as { term: string };
   const termWithDashes = term.replace(/\s+/g, '-');
 
