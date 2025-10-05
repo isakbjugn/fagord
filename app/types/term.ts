@@ -19,11 +19,11 @@ export interface Variant {
   votes: number;
 }
 
-export type Language = Pick<Term, 'en' | 'nb' | 'nn'>;
+export interface ChangeDefinition {
+  definition: string;
+}
 
-export type SubmitTerm = Partial<Term>;
-
-export interface SubmitVariant {
+export interface CreateVariant {
   term: string;
   dialect: 'nb' | 'nn';
 }

@@ -1,33 +1,31 @@
 import { Form, Link, redirect } from 'react-router';
 
-import type { SubmitTerm } from '~/types/term';
+import type { ChangeDefinition } from '~/types/term';
 import type { Route } from './+types/term.$termId.endre';
 
 export async function action({ request, params }: Route.ActionArgs) {
   const formData = await request.formData();
   const { termId } = params;
-  const submitTerm = Object.fromEntries(formData) as unknown as SubmitTerm;
-  const termsApiUrl = `https://www.api.fagord.no/termer/${termId}`;
+  const changeDefinition = Object.fromEntries(
+    Object.entries(Object.fromEntries(formData)).filter(([_, v]) => v !== ''),
+  ) as unknown as ChangeDefinition;
+
+  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const termsApiUrl = `${FAGORD_RUST_API_URL}/terms/${termId}/definition`;
 
   const res = await fetch(termsApiUrl, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    method: 'PUT',
-    body: JSON.stringify(submitTerm),
+    method: 'POST',
+    body: JSON.stringify(changeDefinition),
   });
 
   if (!res.ok) {
     throw Error(res.status.toString() + ' ' + res.statusText);
   }
-  const responseBody = await res.json();
-  return redirect(`/term/${responseBody._id}`);
-}
-
-export async function clientAction({ serverAction }: Route.ClientActionArgs) {
-  localStorage.removeItem('terms');
-  await serverAction();
+  return redirect(`/term/${termId}`);
 }
 
 export default function Endre() {
