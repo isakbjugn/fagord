@@ -22,4 +22,7 @@ export type Language = Pick<Term, 'en' | 'nb' | 'nn'>;
 
 export type SubmitTerm = Partial<Term>;
 
-export type SubmitVariant = Partial<Variant>;
+export interface SubmitVariant {
+  term: string;
+  dialect: 'nb' | 'nn';
+}
