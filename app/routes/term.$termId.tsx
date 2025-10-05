@@ -33,7 +33,7 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
     throw new Response('Termen finnes ikke', { status: 404 });
   }
 
-  return termResponse.json() as Promise<Term>;
+  return (await termResponse.json()) as Term;
 };
 
 export default function Term() {

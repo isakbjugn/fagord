@@ -48,7 +48,7 @@ export const TermDetaljer = ({ term }: { term: Term }) => {
         )}
         <tr>
           <td colSpan={2}>
-            <Link className="btn btn-outline-dark btn-sm" to={'/term/' + term._id} role="button">
+            <Link className="btn btn-outline-dark btn-sm" to={'/term/' + term.slug} role="button">
               Til termside
             </Link>
           </td>
