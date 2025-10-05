@@ -12,9 +12,10 @@ export interface Term {
 }
 
 export interface Variant {
-  term: string;
+  id: number;
+  text: string;
   dialect: 'nb' | 'nn';
-  votes?: number;
+  votes: number;
 }
 
 export type Language = Pick<Term, 'en' | 'nb' | 'nn'>;

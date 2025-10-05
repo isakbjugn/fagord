@@ -33,7 +33,7 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
     throw new Response('Termen finnes ikke', { status: 404 });
   }
 
-  return termResponse.json();
+  return termResponse.json() as Promise<Term>;
 };
 
 export default function Term() {
@@ -177,8 +177,8 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
   };
 
   const renderTermNoDuplicates = (variant: Variant): string => {
-    if (variants.filter((v) => v.term === variant.term).length > 1) return variant.term + ' (' + variant.dialect + ')';
-    return variant.term;
+    if (variants.filter((v) => v.text === variant.text).length > 1) return variant.text + ' (' + variant.dialect + ')';
+    return variant.text;
   };
 
   return (
@@ -194,7 +194,7 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
             value: displayed_variant,
             key: displayed_variant,
             props: {
-              term: v.term,
+              term: v.text,
               dialect: v.dialect,
             },
             count: v.votes,
@@ -217,7 +217,7 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
           <p>Stemmer...</p>
         ) : (
           <p>
-            Du har gitt én stemme til <em>«{fetcher.data?.term}»</em>.
+            Du har gitt én stemme til <em>«{fetcher.data?.text}»</em>.
           </p>
         )}
       </Dialog>
