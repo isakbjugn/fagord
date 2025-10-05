@@ -5,8 +5,9 @@ import type { Route } from './+types/ny-term.($term).legg-til';
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
-  const termsUrl = 'https://api.fagord.no/termer/';
-  const newTerm: Term = await fetch(termsUrl, {
+  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const termsApiUrl = `${FAGORD_RUST_API_URL}/terms`;
+  const newTerm: Term = await fetch(termsApiUrl, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -19,10 +20,5 @@ export const action = async ({ request }: Route.ActionArgs) => {
     }
     return res.json();
   });
-  return redirect(`/ny-term/${newTerm._id}/opprettet`);
+  return redirect(`/ny-term/${newTerm.slug}/opprettet`);
 };
-
-export async function clientAction({ serverAction }: Route.ClientActionArgs) {
-  localStorage.removeItem('terms');
-  await serverAction();
-}
