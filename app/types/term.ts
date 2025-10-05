@@ -12,13 +12,17 @@ export interface Term {
 }
 
 export interface Variant {
-  term: string;
+  id: number;
+  text: string;
   dialect: 'nb' | 'nn';
-  votes?: number;
+  votes: number;
 }
 
 export type Language = Pick<Term, 'en' | 'nb' | 'nn'>;
 
 export type SubmitTerm = Partial<Term>;
 
-export type SubmitVariant = Partial<Variant>;
+export interface SubmitVariant {
+  term: string;
+  dialect: 'nb' | 'nn';
+}

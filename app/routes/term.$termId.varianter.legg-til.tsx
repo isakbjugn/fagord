@@ -7,7 +7,8 @@ export async function action({ request, params }: Route.ActionArgs) {
   const formData = await request.formData();
   const { termId } = params;
   const submitVariant = Object.fromEntries(formData) as unknown as SubmitVariant;
-  const termsApiUrl = `https://www.api.fagord.no/termer/${termId}/varianter`;
+  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const termsApiUrl = `${FAGORD_RUST_API_URL}/terms/${termId}/variants`;
 
   const res = await fetch(termsApiUrl, {
     headers: {
@@ -21,11 +22,5 @@ export async function action({ request, params }: Route.ActionArgs) {
   if (!res.ok) {
     throw Error(res.status.toString() + ' ' + res.statusText);
   }
-  await res.json();
   return redirect(`/term/${termId}`);
-}
-
-export async function clientAction({ serverAction }: Route.ClientActionArgs) {
-  localStorage.removeItem('terms');
-  await serverAction();
 }

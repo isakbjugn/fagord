@@ -25,53 +25,19 @@ import type { Term, Variant } from '~/types/term';
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
   const { termId } = params;
-  const termsUrl = 'https://api.fagord.no/termer';
+  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const termsUrl = `${FAGORD_RUST_API_URL}/terms/${termId}`;
 
   const termResponse = await fetch(termsUrl);
   if (!termResponse.ok) {
-    throw new Response('Failed to fetch term', { status: termResponse.status });
-  }
-
-  const terms = (await termResponse.json()) as Term[];
-  const term = terms.find((term) => term._id === termId) || undefined;
-
-  if (!term) {
     throw new Response('Termen finnes ikke', { status: 404 });
   }
 
-  return {
-    terms: terms,
-    term: term,
-  };
+  return termResponse.json() as Promise<Term>;
 };
-
-export const clientLoader = async ({ params, serverLoader }: Route.ClientLoaderArgs) => {
-  let cachedTerms = localStorage.getItem('terms');
-  if (cachedTerms) {
-    const terms = JSON.parse(cachedTerms) as Term[];
-    const term = terms.find((term) => term._id === params.termId);
-    if (!term) {
-      throw new Response('Termen finnes ikke', { status: 404 });
-    }
-    return {
-      terms: terms,
-      term: term,
-    };
-  }
-
-  const termResponse = (await serverLoader()) as { terms: Term[]; term: Term };
-  localStorage.setItem('terms', JSON.stringify(termResponse.terms));
-
-  return {
-    terms: termResponse.terms,
-    term: termResponse.term,
-  };
-};
-
-clientLoader.hydrate = true;
 
 export default function Term() {
-  const { term } = useLoaderData<typeof loader>();
+  const term = useLoaderData<typeof loader>();
 
   return (
     <main className="container my-3">
@@ -94,8 +60,7 @@ export default function Term() {
 }
 
 const TermComponent = ({ term }: { term: Term }) => {
-  const fieldSpec = term.subfield !== '' ? term.subfield : term.field;
-  const fieldSpecStr = fieldSpec !== '' ? ' (' + fieldSpec + ')' : '';
+  const field = term.subfield || term.field;
 
   return (
     <article>
@@ -103,7 +68,7 @@ const TermComponent = ({ term }: { term: Term }) => {
         <div className={style.header}>
           <div className={style.title}>
             <h1>{term.en}</h1>
-            <h3>{fieldSpecStr}</h3>
+            {field && <h3>({field})</h3>}
           </div>
           <ClientOnly fallback={null}>{() => <ShareTermButton term={term} />}</ClientOnly>
         </div>
@@ -212,8 +177,8 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
   };
 
   const renderTermNoDuplicates = (variant: Variant): string => {
-    if (variants.filter((v) => v.term === variant.term).length > 1) return variant.term + ' (' + variant.dialect + ')';
-    return variant.term;
+    if (variants.filter((v) => v.text === variant.text).length > 1) return variant.text + ' (' + variant.dialect + ')';
+    return variant.text;
   };
 
   return (
@@ -229,7 +194,8 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
             value: displayed_variant,
             key: displayed_variant,
             props: {
-              term: v.term,
+              id: v.id.toString(),
+              term: v.text,
               dialect: v.dialect,
             },
             count: v.votes,
@@ -238,10 +204,8 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
         onClick={(tag: Tag) => {
           const formData = new FormData();
           if (tag.props) {
-            const { term, dialect } = tag.props as { term: string; dialect: 'nb' | 'nn' };
-            formData.append('term', term);
-            formData.append('dialect', dialect);
-
+            const { id } = tag.props as { id: string };
+            formData.append('variantId', id);
             fetcher.submit(formData, { method: 'post', action: 'varianter/stem' });
             dialogRef.current?.showModal();
           }
@@ -252,7 +216,7 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
           <p>Stemmer...</p>
         ) : (
           <p>
-            Du har gitt én stemme til <em>«{fetcher.data?.term}»</em>.
+            Du har gitt én stemme til <em>«{fetcher.data?.text}»</em>.
           </p>
         )}
       </Dialog>
