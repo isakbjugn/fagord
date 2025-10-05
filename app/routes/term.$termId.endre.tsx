@@ -34,7 +34,7 @@ export default function Endre() {
       <div className="row">
         <label className="form-label" htmlFor="definition">
           Legg til/endre definisjon
-          <input name="definition" placeholder="Skriv inn definisjon" className="form-control" />
+          <input name="definition" placeholder="Skriv inn definisjon" className="form-control" required={true} />
         </label>
       </div>
       <span className="d-flex gap-2">
