@@ -194,6 +194,7 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
             value: displayed_variant,
             key: displayed_variant,
             props: {
+              id: v.id.toString(),
               term: v.text,
               dialect: v.dialect,
             },
@@ -203,10 +204,8 @@ export const VariantCloud = ({ variants }: VariantCloudProps) => {
         onClick={(tag: Tag) => {
           const formData = new FormData();
           if (tag.props) {
-            const { term, dialect } = tag.props as { term: string; dialect: 'nb' | 'nn' };
-            formData.append('term', term);
-            formData.append('dialect', dialect);
-
+            const { id } = tag.props as { id: string };
+            formData.append('variantId', id);
             fetcher.submit(formData, { method: 'post', action: 'varianter/stem' });
             dialogRef.current?.showModal();
           }
