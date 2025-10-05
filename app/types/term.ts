@@ -21,6 +21,10 @@ export interface Variant {
 
 export type Language = Pick<Term, 'en' | 'nb' | 'nn'>;
 
+export interface ChangeDefinition {
+  definition: string;
+}
+
 export type SubmitTerm = Partial<Term>;
 
 export interface SubmitVariant {
