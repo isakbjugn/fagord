@@ -65,7 +65,7 @@ export function Search() {
 function SearchResult({ term }: { term: Term }) {
   return (
     <li className={styles.item}>
-      <Link to={`/term/${term._id}`} className={styles.itemLink}>
+      <Link to={`/term/${term.slug}`} className={styles.itemLink}>
         <div className={styles.itemTitle}>{term.en}</div>
         <div className={styles.itemSubtitle}>
           {term.nb && <span>{term.nb}</span>}
