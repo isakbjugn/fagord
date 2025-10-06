@@ -5,6 +5,7 @@ import Table from './table';
 import { Loader } from '~/lib/components/loader';
 import { ErrorMessage } from '~/lib/components/error-message';
 import { Term } from '~/types/term';
+import type { Route } from './+types/route';
 
 export async function loader() {
   const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
@@ -15,6 +16,12 @@ export async function loader() {
     throw new Response('Klarte ikke å hente termer', { status: 500 });
   }
   return (await termsResponse.json()) as Term[];
+}
+
+export function headers(_: Route.HeadersArgs) {
+  return {
+    'Cache-Control': 'public, max-age=300, s-maxage=600',
+  };
 }
 
 export default function Termliste() {
