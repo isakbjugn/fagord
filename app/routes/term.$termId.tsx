@@ -76,7 +76,7 @@ const TermComponent = ({ term }: { term: Term }) => {
       </div>
       <div className="row">
         <div className="col-12 col-md-6">
-          <Definition termId={term._id} definition={term.definition} />
+          <Definition definition={term.definition} />
         </div>
         <div className="col-12 col-sm-8 col-md-6 mt-2">
           <TranslationCard term={term} />
@@ -87,7 +87,6 @@ const TermComponent = ({ term }: { term: Term }) => {
 };
 
 interface DefinitionProps {
-  termId: string;
   definition?: string;
 }
 
