@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TranslationFilter } from './translation-filter/translation-filter';
-import { Fragment, Suspense, useState, type KeyboardEvent } from 'react';
+import { Fragment, useState, type KeyboardEvent } from 'react';
 import style from '~/routes/termliste/termliste.module.css';
 import '~/routes/termliste/termliste.module.css';
 import { Paginator } from '~/routes/termliste/paginator/paginator';
@@ -25,7 +25,6 @@ import { SubjectFilter } from './subject-filter/subject-filter';
 import { subjectFilter, translationFilter } from '~/routes/termliste/filters';
 import { TermDetaljer } from './term-detaljer/term-detaljer';
 import { Subject } from '~/types/subject';
-import { Await } from 'react-router';
 
 function handleKeyDown(handler: ((event: KeyboardEvent) => void) | undefined) {
   return (event: KeyboardEvent) => {
