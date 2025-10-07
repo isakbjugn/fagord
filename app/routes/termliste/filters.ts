@@ -10,9 +10,9 @@ export const subjectFilter: FilterFn<Term> = (row, columnId, filterValue) => {
 
 export const translationFilter: FilterFn<Term> = (row, columnId, filterValue) => {
   if (filterValue === 'translated') {
-    return row.original.nb !== '' && row.original.nn !== '';
+    return row.original.nb !== null && row.original.nn !== null;
   } else if (filterValue === 'incomplete') {
-    return row.original.nb === '' || row.original.nn === '';
+    return row.original.nb === null || row.original.nn === null;
   }
   return true;
 };
