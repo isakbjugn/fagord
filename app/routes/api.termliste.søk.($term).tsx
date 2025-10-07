@@ -39,34 +39,45 @@ export async function action({ request }: Route.ActionArgs) {
 export async function clientAction({ request, serverAction }: Route.ClientActionArgs) {
   const cached = localStorage.getItem('terms');
 
-  if (cached) {
+  if (cached && cached.includes('cachedAt')) {
     const formData = await request.formData();
     const { q } = Object.fromEntries(formData) as { q: string };
-    const terms = JSON.parse(cached) as Term[];
+    const { terms, cachedAt } = JSON.parse(cached) as { terms: Term[]; cachedAt: Date };
+    const maxAge = 1000 * 60 * 5; // 5 minutter
+    const isCacheValid = new Date().getTime() - new Date(cachedAt).getTime() < maxAge;
 
-    if (q) {
-      const fuse = new Fuse(terms, {
-        keys: ['en', 'nb', 'nn'],
-        threshold: 0.3,
-        includeScore: false,
-      });
+    if (isCacheValid) {
+      if (q) {
+        const fuse = new Fuse(terms, {
+          keys: ['en', 'nb', 'nn'],
+          threshold: 0.3,
+          includeScore: false,
+        });
 
-      return {
-        terms,
-        searchResult: fuse
-          .search(q)
-          .map((r) => r.item)
-          .slice(0, 5),
-      };
+        return {
+          terms,
+          searchResult: fuse
+            .search(q)
+            .map((r) => r.item)
+            .slice(0, 5),
+        };
+      }
+
+      return { terms, searchResult: [] };
     }
-
-    return { terms, searchResult: [] };
   }
 
   const { terms, searchResult } = await serverAction();
 
   if (terms) {
-    localStorage.setItem('terms', JSON.stringify(terms));
+    const cachedAt = new Date();
+    localStorage.setItem(
+      'terms',
+      JSON.stringify({
+        terms,
+        cachedAt,
+      }),
+    );
   }
 
   return { terms, searchResult };
