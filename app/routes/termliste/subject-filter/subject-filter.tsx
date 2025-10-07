@@ -34,8 +34,8 @@ export const SubjectFilter = ({ onChange }: Props) => {
     return (
       <select className={style.subjects} onChange={(event) => onChange(event.currentTarget.value)}>
         {[AllSubjects, ...subjectsFetcher.data.subjects].map((subject) => (
-          <option key={subject.field} value={subject.field}>
-            {subject.field}
+          <option key={subject.name} value={subject.name}>
+            {subject.name}
           </option>
         ))}
       </select>

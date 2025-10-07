@@ -4,7 +4,7 @@ import { AllSubjects } from '~/types/subject';
 
 export const subjectFilter: FilterFn<Term> = (row, columnId, filterValue) => {
   const subject = row.getValue(columnId);
-  if (filterValue === AllSubjects.field) return true;
+  if (filterValue === AllSubjects.name) return true;
   return subject === filterValue;
 };
 

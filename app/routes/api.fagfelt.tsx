@@ -2,7 +2,8 @@ import { data } from 'react-router';
 import { Subject } from '~/types/subject';
 
 export async function loader() {
-  const subjectsUrl = 'https://api.fagord.no/fagfelt/';
+  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const subjectsUrl = `${FAGORD_RUST_API_URL}/fields`;
 
   const subjectsResponse = await fetch(subjectsUrl);
   if (!subjectsResponse.ok) {
