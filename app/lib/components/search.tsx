@@ -52,7 +52,7 @@ export function Search() {
         <nav className={styles.resultDropdown} hidden={!resultsOpen}>
           <ul className={styles.results}>
             {fetcher.data.searchResult.map((term: Term) => (
-              <SearchResult term={term} key={term._id} />
+              <SearchResult term={term} key={term.slug} />
             ))}
           </ul>
           <NoOptionsMessage q={searchParams.get('q')} />
