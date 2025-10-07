@@ -17,13 +17,15 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TranslationFilter } from './translation-filter/translation-filter';
-import { Fragment, useState, type KeyboardEvent } from 'react';
+import { Fragment, Suspense, useState, type KeyboardEvent } from 'react';
 import style from '~/routes/termliste/termliste.module.css';
 import '~/routes/termliste/termliste.module.css';
 import { Paginator } from '~/routes/termliste/paginator/paginator';
 import { SubjectFilter } from './subject-filter/subject-filter';
 import { subjectFilter, translationFilter } from '~/routes/termliste/filters';
 import { TermDetaljer } from './term-detaljer/term-detaljer';
+import { Subject } from '~/types/subject';
+import { Await } from 'react-router';
 
 function handleKeyDown(handler: ((event: KeyboardEvent) => void) | undefined) {
   return (event: KeyboardEvent) => {
@@ -89,9 +91,10 @@ const columns = [
 
 type Props = {
   terms: Term[];
+  fields: Promise<Subject[]>;
 };
 
-export default function Table({ terms }: Props) {
+export default function Table({ terms, fields }: Props) {
   const [transFilter, setTransFilter] = useState<any>(['all']);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -137,7 +140,7 @@ export default function Table({ terms }: Props) {
       <div className="col-12 col-lg-10 mx-auto">
         <div className={style.header}>
           <TranslationFilter setTransFilter={setTransFilter} />
-          <SubjectFilter onChange={(subject) => table.getColumn('field')?.setFilterValue(subject)} />
+          <SubjectFilter subjects={fields} onChange={(subject) => table.getColumn('field')?.setFilterValue(subject)} />
         </div>
         <div className={style.tableScrollWrapper}>
           <table className={style.table}>
