@@ -1,6 +1,6 @@
 import { createRoutesStub } from 'react-router';
 import Hjem from '~/routes/hjem';
-import Termliste from '~/routes/termliste/route';
+import Termliste from '~/routes/route';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, describe, test } from 'vitest';
