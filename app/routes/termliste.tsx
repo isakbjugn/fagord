@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Await, data, useLoaderData, useNavigate } from 'react-router';
-import Table from './termliste/table';
+import Table from '~/lib/termliste/table';
 import { Loader } from '~/lib/components/loader';
 import { ErrorMessage } from '~/lib/components/error-message';
 import { Term } from '~/types/term';

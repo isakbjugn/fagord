@@ -19,9 +19,9 @@ import {
 import { TranslationFilter } from './translation-filter/translation-filter';
 import { Fragment, useState, type KeyboardEvent } from 'react';
 import style from './table.module.css';
-import { Paginator } from '~/routes/termliste/paginator/paginator';
+import { Paginator } from './paginator/paginator';
 import { SubjectFilter } from './subject-filter/subject-filter';
-import { subjectFilter, translationFilter } from '~/routes/termliste/filters';
+import { subjectFilter, translationFilter } from './filters';
 import { TermDetaljer } from './term-detaljer/term-detaljer';
 import { Subject } from '~/types/subject';
 
