@@ -1,11 +1,10 @@
-import '~/routes/termliste/termliste.module.css';
 import { Suspense } from 'react';
 import { Await, data, useLoaderData, useNavigate } from 'react-router';
-import Table from './table';
+import Table from './termliste/table';
 import { Loader } from '~/lib/components/loader';
 import { ErrorMessage } from '~/lib/components/error-message';
 import { Term } from '~/types/term';
-import type { Route } from './+types/route';
+import { Route } from './+types/termliste';
 import { Subject } from '~/types/subject';
 
 export async function loader() {
