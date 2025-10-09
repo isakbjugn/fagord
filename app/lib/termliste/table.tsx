@@ -89,10 +89,10 @@ const columns = [
 
 type Props = {
   terms: Term[];
-  fields: Promise<Subject[]>;
+  subjects: Promise<Subject[]>;
 };
 
-export default function Table({ terms, fields }: Props) {
+export default function Table({ terms, subjects }: Props) {
   const [transFilter, setTransFilter] = useState<any>(['all']);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -138,7 +138,10 @@ export default function Table({ terms, fields }: Props) {
       <div className="col-12 col-lg-10 mx-auto">
         <div className={style.header}>
           <TranslationFilter setTransFilter={setTransFilter} />
-          <SubjectFilter subjects={fields} onChange={(subject) => table.getColumn('field')?.setFilterValue(subject)} />
+          <SubjectFilter
+            subjects={subjects}
+            onChange={(subject) => table.getColumn('field')?.setFilterValue(subject)}
+          />
         </div>
         <div className={style.tableScrollWrapper}>
           <table className={style.table}>

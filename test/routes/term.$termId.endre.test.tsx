@@ -25,7 +25,7 @@ describe('Tester innsending på Endre-siden', () => {
         loader() {
           return {
             terms: createValidTerms(),
-            term: createValidTerms().find((term) => term._id === termId),
+            term: createValidTerms().find((term) => term.slug === termId),
           };
         },
       },
