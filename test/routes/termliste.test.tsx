@@ -27,23 +27,4 @@ describe('Tester innhold på og navigasjon fra Termliste-siden', () => {
     await waitFor(() => screen.findByText('hjernebark'));
     await waitFor(() => screen.findByText('hjernebork'));
   });
-  test('Feilende test', async () => {
-    const Stub = createRoutesStub([
-      {
-        path: '/termliste',
-        Component: Termliste,
-        loader() {
-          return {
-            terms: [],
-            subjects: [],
-          };
-        },
-      },
-    ]);
-
-    render(<Stub initialEntries={['/termliste']} />);
-
-    await waitFor(() => screen.findByText('cortex'));
-    await waitFor(() => screen.findByText('hjernebark'));
-  });
 });
