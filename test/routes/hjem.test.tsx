@@ -1,10 +1,11 @@
 import { createRoutesStub } from 'react-router';
 import Hjem from '~/routes/hjem';
-import Termliste from '~/routes/route';
+import Termliste from '~/routes/termliste';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, describe, test } from 'vitest';
 import { createValidTerms } from '../test-data/term';
+import { createValidSubjects } from '../test-data/subjects';
 
 afterEach(cleanup);
 
@@ -34,16 +35,7 @@ describe('Tester innhold på og navigasjon fra Hjem-siden', () => {
         loader() {
           return {
             terms: createValidTerms(),
-          };
-        },
-      },
-      {
-        path: '/api/fagfelt',
-        loader() {
-          return {
-            subjects: [],
-            error: false,
-            message: undefined,
+            subjects: createValidSubjects(),
           };
         },
       },
@@ -51,7 +43,7 @@ describe('Tester innhold på og navigasjon fra Hjem-siden', () => {
 
     render(<Stub initialEntries={['/hjem']} />);
 
-    userEvent.click(screen.getByText('Til termliste!'));
+    await userEvent.click(screen.getByText('Til termliste!'));
     await waitFor(() => screen.findByText('Engelsk'));
   });
 });

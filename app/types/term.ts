@@ -1,5 +1,4 @@
 export interface Term {
-  _id: string;
   slug: string;
   en: string;
   nb: string;

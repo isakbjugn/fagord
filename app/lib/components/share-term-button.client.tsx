@@ -11,7 +11,7 @@ export const ShareTermButton = ({ term }: Props) => {
   const termShareData = {
     title: 'Fagord',
     text: term.en + fieldSpecStr,
-    url: 'https://www.fagord.no/term/' + term._id,
+    url: 'https://www.fagord.no/term/' + term.slug,
   };
 
   return (

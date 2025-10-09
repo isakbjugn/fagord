@@ -15,7 +15,7 @@ export async function loader() {
     }
     return res.json() as Promise<Term[]>;
   });
-  const fieldsResponse = fetch(`${FAGORD_RUST_API_URL}/fields`).then((res) => {
+  const subjectsResponse = fetch(`${FAGORD_RUST_API_URL}/fields`).then((res) => {
     if (!res.ok) {
       throw data('Klarte ikke å hente fagfelt', { status: 500 });
     }
@@ -24,7 +24,7 @@ export async function loader() {
 
   return {
     terms: termsResponse,
-    fields: fieldsResponse,
+    subjects: subjectsResponse,
   };
 }
 
@@ -35,10 +35,10 @@ export function headers(_: Route.HeadersArgs) {
 }
 
 export default function Termliste() {
-  const { terms, fields } = useLoaderData<typeof loader>();
+  const { terms, subjects } = useLoaderData<typeof loader>();
   return (
     <Suspense fallback={<Loader />}>
-      <Await resolve={terms}>{(resolvedTerms) => <Table terms={resolvedTerms} fields={fields} />}</Await>
+      <Await resolve={terms}>{(resolvedTerms) => <Table terms={resolvedTerms} subjects={subjects} />}</Await>
     </Suspense>
   );
 }
