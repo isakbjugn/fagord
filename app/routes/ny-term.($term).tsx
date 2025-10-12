@@ -3,7 +3,7 @@ import type { ChangeEvent } from 'react';
 import { useDebounceFetcher } from '~/lib/use-debounce-fetcher';
 
 import { DialectInput } from '~/lib/components/dialect-input';
-import style from '~/styles/ny-term.module.css';
+import styles from '~/styles/ny-term.module.css';
 
 export default function NyTerm() {
   const { term: termFromUrl } = useParams();
@@ -11,7 +11,7 @@ export default function NyTerm() {
   const submitting = navigation.formAction === '/ny-term/legg-til';
 
   return (
-    <section className={style.form}>
+    <section className={styles.form}>
       <Form method="post" action="legg-til">
         <h2>Legg til ny term</h2>
         <div className="row">
@@ -50,7 +50,7 @@ export default function NyTerm() {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-6 col-md-12">
+          <div className="col-sm-6">
             <label className="form-label" htmlFor="pos">
               Ordklasse
               <select name="pos" className="form-select">
