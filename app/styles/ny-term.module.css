@@ -25,39 +25,3 @@
 :global(.form-control.is-invalid) {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23e57316'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23e57316' stroke='none'/%3e%3c/svg%3e");
 }
-
-.inputWrapper {
-  position: relative;
-}
-
-.button {
-  position: absolute;
-  right: 0.5rem;
-  top: 0;
-  bottom: 0;
-  background: none;
-  border: none;
-}
-
-.options {
-  margin-top: 0.25rem;
-  max-height: 12rem !important;
-  height: auto;
-  overflow-y: auto;
-  z-index: 10;
-
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.option {
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
-  color: black;
-}
-
-.option:hover,
-.option[data-focus] {
-  background-color: #deebff;
-}
