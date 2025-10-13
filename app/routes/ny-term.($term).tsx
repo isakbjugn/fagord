@@ -6,6 +6,7 @@ import { DialectInput } from '~/lib/components/dialect-input';
 import styles from '~/styles/ny-term.module.css';
 import { Subject } from '~/types/subject';
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
+import { ClientOnly } from '~/lib/client-only';
 
 export function loader() {
   const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
@@ -50,7 +51,13 @@ export default function NyTerm() {
           </div>
         </div>
         <Suspense fallback={<SubjectInputGroup />}>
-          <Await resolve={subjects}>{(resolvedSubjects) => <SubjectDropdown subjects={resolvedSubjects} />}</Await>
+          <Await resolve={subjects}>
+            {(resolvedSubjects) => (
+              <ClientOnly fallback={<SubjectInputGroup />}>
+                <SubjectDropdown subjects={resolvedSubjects} />
+              </ClientOnly>
+            )}
+          </Await>
         </Suspense>
         <div className="row">
           <div className="col-sm-6">
@@ -152,7 +159,7 @@ function SubjectInputGroup() {
 }
 
 function SubjectDropdown({ subjects }: { subjects: Subject[] }) {
-  const [selectedSubject, setSelectedSubject] = useState<string>();
+  const [selectedSubject, setSelectedSubject] = useState<string>('');
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     setSelectedSubject(event.currentTarget.value);
@@ -168,14 +175,12 @@ function SubjectDropdown({ subjects }: { subjects: Subject[] }) {
           <SubjectsCombobox subjects={subjects} name="field" onChange={handleChange} />
         </label>
       </div>
-      {selectedSubject && (
-        <div className="col-sm-6">
-          <label className="form-label" htmlFor="subfield">
-            Gren
-            <SubjectsCombobox subjects={subfields} name="subfield" />
-          </label>
-        </div>
-      )}
+      <div className="col-sm-6">
+        <label className="form-label" htmlFor="subfield">
+          Gren
+          <SubjectsCombobox subjects={subfields} name="subfield" disabled={selectedSubject === ''} />
+        </label>
+      </div>
     </div>
   );
 }
@@ -184,9 +189,10 @@ type SubjectDropdownProps = {
   subjects: Subject[];
   name: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 };
 
-function SubjectsCombobox({ subjects, name, onChange }: SubjectDropdownProps) {
+function SubjectsCombobox({ subjects, name, onChange, disabled }: SubjectDropdownProps) {
   const [query, setQuery] = useState('');
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -195,6 +201,7 @@ function SubjectsCombobox({ subjects, name, onChange }: SubjectDropdownProps) {
 
   const filteredSubjects =
     query === '' ? subjects : subjects.filter((s) => s.name.toLowerCase().includes(query.toLowerCase()));
+  const subjectExists = subjects.some((s) => s.name.toLowerCase() === query.toLowerCase());
 
   return (
     <Combobox name={name} onClose={() => setQuery('')}>
@@ -206,6 +213,7 @@ function SubjectsCombobox({ subjects, name, onChange }: SubjectDropdownProps) {
           onSelect={onChange}
           displayValue={(value: string) => value}
           autoComplete="off"
+          disabled={disabled}
         />
         {subjects.length > 0 && (
           <ComboboxButton className={styles.button}>
@@ -223,7 +231,7 @@ function SubjectsCombobox({ subjects, name, onChange }: SubjectDropdownProps) {
             {subject.name}
           </ComboboxOption>
         ))}
-        {query.length > 0 && (
+        {!subjectExists && query.length > 0 && (
           <ComboboxOption value={query} className={styles.option}>
             Opprett <span style={{ fontWeight: 'bold' }}>{query}</span>
           </ComboboxOption>
