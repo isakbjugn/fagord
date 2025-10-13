@@ -4,6 +4,7 @@ import { userEvent } from '@testing-library/user-event';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import Endre from '~/routes/term.$termId.endre';
 import NyTerm from '~/routes/ny-term.($term)';
+import { createValidSubjects } from '../test-data/subjects';
 
 afterEach(cleanup);
 
@@ -20,6 +21,7 @@ describe('Tester innsending på Ny term-siden', () => {
       {
         path: '/ny-term',
         Component: NyTerm,
+        loader: () => createValidSubjects(),
       },
       {
         path: '/ny-term/legg-til',
@@ -30,6 +32,7 @@ describe('Tester innsending på Ny term-siden', () => {
 
     render(<Stub initialEntries={['/ny-term']} />);
 
+    await waitFor(() => screen.findByText('Engelsk term'));
     await userEvent.type(screen.getByLabelText('Engelsk term'), newTerm);
     await userEvent.click(screen.getByText('Legg til term'));
 
@@ -51,6 +54,7 @@ describe('Tester innsending på Ny term-siden', () => {
       {
         path: `/ny-term/:term`,
         Component: NyTerm,
+        loader: () => createValidSubjects(),
       },
       {
         path: `/ny-term/:term/legg-til`,
@@ -61,6 +65,7 @@ describe('Tester innsending på Ny term-siden', () => {
 
     render(<Stub initialEntries={[`/ny-term/${termFromUrl}`]} />);
 
+    await waitFor(() => screen.findByText('Legg til term'));
     await userEvent.click(screen.getByText('Legg til term'));
 
     expect(actionSpy).toHaveBeenCalled();
@@ -77,6 +82,7 @@ describe('Tester innsending på Ny term-siden', () => {
       {
         path: '/ny-term',
         Component: NyTerm,
+        loader: () => createValidSubjects(),
       },
       {
         path: '/api/termliste/finnes',
@@ -91,6 +97,7 @@ describe('Tester innsending på Ny term-siden', () => {
 
     render(<Stub initialEntries={['/ny-term']} />);
 
+    await waitFor(() => screen.findByText('Engelsk term'));
     await userEvent.type(screen.getByLabelText('Engelsk term'), existingTerm);
     await waitFor(() => screen.findByText(validationText));
   });
