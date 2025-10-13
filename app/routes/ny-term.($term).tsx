@@ -208,7 +208,7 @@ function SubjectsCombobox({ subjects, name, onChange, disabled }: SubjectDropdow
       <div className={styles.inputWrapper}>
         <ComboboxInput
           id={name}
-          className={`form-control ${styles.input}`}
+          className="form-control"
           onChange={handleChange}
           onSelect={onChange}
           displayValue={(value: string) => value}
@@ -221,11 +221,7 @@ function SubjectsCombobox({ subjects, name, onChange, disabled }: SubjectDropdow
           </ComboboxButton>
         )}
       </div>
-      <ComboboxOptions
-        anchor="bottom"
-        style={{ width: 'var(--input-width)', backgroundColor: 'white', borderRadius: '8px' }}
-        className={styles.options}
-      >
+      <ComboboxOptions anchor="bottom" style={{ width: 'var(--input-width)' }} className={styles.options}>
         {filteredSubjects.map((subject) => (
           <ComboboxOption key={subject.name} value={subject.name} className={styles.option}>
             {subject.name}
