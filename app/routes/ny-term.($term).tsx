@@ -16,11 +16,11 @@ export function loader() {
     }
     return res.json() as Promise<Subject[]>;
   });
-  return subjects;
+  return { subjects };
 }
 
 export default function NyTerm() {
-  const subjects = useLoaderData<typeof loader>();
+  const { subjects } = useLoaderData<typeof loader>();
   const { term: termFromUrl } = useParams();
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
