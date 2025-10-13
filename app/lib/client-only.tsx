@@ -1,15 +1,29 @@
-import type { ReactElement } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
-export function ClientOnly({
-  children,
-  fallback = null,
-}: {
-  children: () => ReactElement;
-  fallback?: ReactElement | null;
-}) {
-  if (typeof window === 'undefined') {
-    return fallback;
+type ClientOnlyProps = {
+  children: ReactNode | (() => ReactNode);
+  fallback?: ReactNode;
+};
+
+/**
+ * Renders `fallback` on the server and before hydration,
+ * then renders `children` after the component has mounted.
+ *
+ * Example:
+ *   <ClientOnly fallback={<SimpleInput />}>
+ *     {() => <FancyCombobox />}
+ *   </ClientOnly>
+ */
+export function ClientOnly({ children, fallback = null }: ClientOnlyProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <>{fallback}</>;
   }
 
-  return children();
+  return <>{typeof children === 'function' ? children() : children}</>;
 }

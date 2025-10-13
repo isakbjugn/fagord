@@ -1,0 +1,35 @@
+.inputWrapper {
+  position: relative;
+}
+
+.button {
+  position: absolute;
+  right: 0.5rem;
+  top: 0;
+  bottom: 0;
+  background: none;
+  border: none;
+}
+
+.options {
+  margin-top: 0.25rem;
+  max-height: 12rem !important;
+  height: auto;
+  overflow-y: auto;
+  z-index: 10;
+
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.option {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: black;
+}
+
+.option:hover,
+.option[data-focus] {
+  background-color: #deebff;
+}

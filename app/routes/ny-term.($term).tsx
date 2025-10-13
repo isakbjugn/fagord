@@ -1,17 +1,32 @@
-import { Form, useNavigation, useParams } from 'react-router';
-import type { ChangeEvent } from 'react';
+import { Await, data, Form, useLoaderData, useNavigation, useParams } from 'react-router';
+import { ChangeEvent, Suspense, useState } from 'react';
 import { useDebounceFetcher } from '~/lib/use-debounce-fetcher';
 
 import { DialectInput } from '~/lib/components/dialect-input';
-import style from '~/styles/ny-term.module.css';
+import styles from '~/styles/ny-term.module.css';
+import { Subject } from '~/types/subject';
+import { ClientOnly } from '~/lib/client-only';
+import { SubjectsCombobox } from '~/lib/components/subjects-combobox';
+
+export function loader() {
+  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const subjects = fetch(`${FAGORD_RUST_API_URL}/fields`).then((res) => {
+    if (!res.ok) {
+      throw data('Klarte ikke å hente fagfelt', { status: 500 });
+    }
+    return res.json() as Promise<Subject[]>;
+  });
+  return subjects;
+}
 
 export default function NyTerm() {
+  const subjects = useLoaderData<typeof loader>();
   const { term: termFromUrl } = useParams();
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
 
   return (
-    <section className={style.form}>
+    <section className={styles.form}>
       <Form method="post" action="legg-til">
         <h2>Legg til ny term</h2>
         <div className="row">
@@ -35,22 +50,17 @@ export default function NyTerm() {
             </label>
           </div>
         </div>
+        <Suspense fallback={<SubjectInputGroup />}>
+          <Await resolve={subjects}>
+            {(resolvedSubjects) => (
+              <ClientOnly fallback={<SubjectInputGroup />}>
+                <SubjectDropdown subjects={resolvedSubjects} />
+              </ClientOnly>
+            )}
+          </Await>
+        </Suspense>
         <div className="row">
           <div className="col-sm-6">
-            <label className="form-label" htmlFor="field">
-              Fagfelt
-              <input name="field" className="form-control" type="text" />
-            </label>
-          </div>
-          <div className="col-sm-6">
-            <label className="form-label" htmlFor="subfield">
-              Gren
-              <input name="subfield" className="form-control" type="text" />
-            </label>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-6 col-md-12">
             <label className="form-label" htmlFor="pos">
               Ordklasse
               <select name="pos" className="form-select">
@@ -125,6 +135,52 @@ function Definitions({ definitions }: Props) {
     <div className="mt-2">
       <p>Definisjon</p>
       <div dangerouslySetInnerHTML={{ __html: definitions }} />
+    </div>
+  );
+}
+
+function SubjectInputGroup() {
+  return (
+    <div className="row">
+      <div className="col-sm-6">
+        <label className="form-label" htmlFor="field">
+          Fagfelt
+          <input name="field" className="form-control" type="text" />
+        </label>
+      </div>
+      <div className="col-sm-6">
+        <label className="form-label" htmlFor="subfield">
+          Gren
+          <input name="subfield" className="form-control" type="text" />
+        </label>
+      </div>
+    </div>
+  );
+}
+
+function SubjectDropdown({ subjects }: { subjects: Subject[] }) {
+  const [selectedSubject, setSelectedSubject] = useState<string>('');
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    setSelectedSubject(event.currentTarget.value);
+  }
+
+  const subfields = subjects.find((subject) => subject.name === selectedSubject)?.subfields || [];
+
+  return (
+    <div className="row">
+      <div className="col-sm-6">
+        <label className="form-label" htmlFor="field">
+          Fagfelt
+          <SubjectsCombobox subjects={subjects} name="field" onChange={handleChange} />
+        </label>
+      </div>
+      <div className="col-sm-6">
+        <label className="form-label" htmlFor="subfield">
+          Gren
+          <SubjectsCombobox subjects={subfields} name="subfield" disabled={selectedSubject === ''} />
+        </label>
+      </div>
     </div>
   );
 }
