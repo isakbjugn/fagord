@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@headlessui/react':
-        specifier: ^2.2.9
+        specifier: 2.2.9
         version: 2.2.9(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@react-router/node':
         specifier: 7.6.1
