@@ -21,7 +21,9 @@ describe('Tester innsending på Ny term-siden', () => {
       {
         path: '/ny-term',
         Component: NyTerm,
-        loader: () => createValidSubjects(),
+        loader: () => ({
+          subjects: createValidSubjects(),
+        }),
       },
       {
         path: '/ny-term/legg-til',
@@ -54,7 +56,9 @@ describe('Tester innsending på Ny term-siden', () => {
       {
         path: `/ny-term/:term`,
         Component: NyTerm,
-        loader: () => createValidSubjects(),
+        loader: () => ({
+          subjects: createValidSubjects(),
+        }),
       },
       {
         path: `/ny-term/:term/legg-til`,
@@ -82,7 +86,9 @@ describe('Tester innsending på Ny term-siden', () => {
       {
         path: '/ny-term',
         Component: NyTerm,
-        loader: () => createValidSubjects(),
+        loader: () => ({
+          subjects: createValidSubjects(),
+        }),
       },
       {
         path: '/api/termliste/finnes',
