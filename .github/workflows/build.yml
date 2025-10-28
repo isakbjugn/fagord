@@ -2,6 +2,9 @@ name: Run tests and deploy to Railway
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches: ["*"]
 
 jobs:
