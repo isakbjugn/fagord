@@ -2,7 +2,8 @@ name: Run tests and deploy to Railway
 
 on:
   push:
-    branches: ["*"]
+    branches:
+      - main
   pull_request:
     branches: ["*"]
 
