@@ -43,7 +43,7 @@
     "typescript": "5.9.3",
     "vite": "6.3.5",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "4.0.10"
+    "vitest": "4.0.13"
   },
   "engines": {
     "node": ">=20.0.0"
