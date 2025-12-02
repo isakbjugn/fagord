@@ -1,6 +1,6 @@
-# Sikkerhetstiltak for CI/CD Pipeline
+# Sikkerhetstiltak for CI/CD-pipeline
 
-Dette dokumentet forklarer sikkerhetstiltakene som er implementert for å beskytte mot forsyningskjedeangrep (supply chain attacks).
+Dette dokumentet forklarer sikkerhetstiltakene som er implementert for å beskytte mot forsyningskjedeangrep (eng. _supply chain attacks_).
 
 ## Implementerte tiltak
 
@@ -68,7 +68,7 @@ Dette dokumentet forklarer sikkerhetstiltakene som er implementert for å beskyt
 9. Deploy (kun main branch, kun hvis alt over passerer)
 ```
 
-## Ytterligere anbefalinger (valgfritt)
+## Ytterligere mulige tiltak
 
 ### A. **npm audit** i pipeline
 Legg til før deploy:
@@ -90,41 +90,3 @@ For kritiske applikasjoner, signer byggartefakter med Sigstore/cosign.
 
 ### D. **Renovate som alternativ til Dependabot**
 Mer konfigurerbar dependency management.
-
-## Testing av sikkerhetstiltak
-
-Kjør disse kommandoene lokalt for å verifisere:
-
-```bash
-# Test at ignore-scripts fungerer
-pnpm install --frozen-lockfile
-
-# Test at bygget fungerer
-pnpm build
-
-# Test linting
-pnpm lint
-
-# Test tester
-pnpm test
-```
-
-## Hva skjer hvis...?
-
-### ...en pakke trenger postinstall script?
-Bruk `--ignore-scripts=false` eller kjør scriptet manuelt etter install:
-```bash
-pnpm install --ignore-scripts=false
-```
-
-### ...linting finner feil?
-Bygget feiler og deployment skjer IKKE. Fix koden og push igjen.
-
-### ...Dependabot lager PR?
-1. GitHub kjører tester automatisk
-2. Review endringene
-3. Merge hvis alt ser bra ut
-4. Deployment skjer automatisk
-
-## Oppdatert: 2. desember 2025
-
