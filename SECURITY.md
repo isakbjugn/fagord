@@ -40,7 +40,21 @@ Dette dokumentet forklarer sikkerhetstiltakene som er implementert for å beskyt
 - **Beskyttelse mot**: Kodekvalitetsproblemer og potensielle sikkerhetshull
 - **Impact**: Stopper deployment hvis koden ikke møter kvalitetsstandarder
 
-### 7. **Dependabot** ✅
+### 7. **Dependency overrides for transitive avhengigheter** ✅
+- **Fil**: `package.json` (`pnpm.overrides`)
+- **Tiltak**: Tvinger sikre versjoner av indirekte avhengigheter
+- **Beskyttelse mot**: Sårbarheter i transitive dependencies som ikke kan oppgraderes direkte
+- **Impact**: Sikrer at hele avhengighetstreet bruker patchede versjoner
+- **Eksempel**: Tvinger `cross-spawn>=7.0.5`, `glob>=10.5.0`, `valibot>=1.2.0`
+
+### 8. **Security Audit** ✅
+- **Fil**: `.github/workflows/build.yml`
+- **Tiltak**: `pnpm audit --audit-level=high`
+- **Beskyttelse mot**: Kjente sårbarheter i avhengigheter (high/critical)
+- **Impact**: Blokkerer deployment hvis kritiske sårbarheter oppdages
+- **Kombinert med**: `pnpm.overrides` i `package.json` for å tvinge sikre versjoner av transitive avhengigheter
+
+### 9. **Dependabot** ✅
 - **Fil**: `.github/dependabot.yml`
 - **Tiltak**: Automatisk oppdatering av dependencies og GitHub Actions
 - **Beskyttelse mot**: Kjente sårbarheter i utgåtte pakker
@@ -59,34 +73,58 @@ Dette dokumentet forklarer sikkerhetstiltakene som er implementert for å beskyt
    ↓
 5. Install dependencies (UTEN scripts, frozen lockfile, HTTPS)
    ↓
-6. Run lint (blokkerer ved feil)
+6. Security audit (blokkerer ved high/critical sårbarheter)
    ↓
-7. Run tests (blokkerer ved feil)
+7. Run lint (blokkerer ved feil)
    ↓
-8. Build (blokkerer ved feil)
+8. Run tests (blokkerer ved feil)
    ↓
-9. Deploy (kun main branch, kun hvis alt over passerer)
+9. Build (blokkerer ved feil)
+   ↓
+10. Deploy (kun main branch, kun hvis alt over passerer)
 ```
 
 ## Ytterligere mulige tiltak
 
-### A. **npm audit** i pipeline
-Legg til før deploy:
-```yaml
-- name: Security audit
-  run: pnpm audit --audit-level=high
-  continue-on-error: true  # Advarsler stopper ikke deploy
-```
-
-### B. **SBOM (Software Bill of Materials)**
+### A. **SBOM (Software Bill of Materials)**
 For større prosjekter, generer SBOM:
 ```yaml
 - name: Generate SBOM
   run: npx @cyclonedx/cyclonedx-npm --output-file sbom.json
 ```
 
-### C. **Artifact signing**
+### B. **Artifact signing**
 For kritiske applikasjoner, signer byggartefakter med Sigstore/cosign.
 
-### D. **Renovate som alternativ til Dependabot**
+### C. **Renovate som alternativ til Dependabot**
 Mer konfigurerbar dependency management.
+
+### D. **Strengere audit-nivå**
+Vurder å senke terskelen til `moderate`:
+```yaml
+- name: Security audit
+  run: pnpm audit --audit-level=moderate
+```
+
+## Hvordan håndtere sårbarheter
+
+### Når `pnpm audit` feiler i CI/CD:
+
+1. **Kjør `pnpm audit` lokalt** for å se detaljer
+2. **Vurder alvorlighetsgrad** - high/critical må fikses umiddelbart
+3. **For direkte avhengigheter**: Oppgrader pakken i `package.json`
+4. **For transitive avhengigheter**: Bruk `pnpm.overrides` i `package.json`
+
+### Eksempel på override:
+```json
+{
+  "pnpm": {
+    "overrides": {
+      "vulnerable-package": ">=safe.version.here"
+    }
+  }
+}
+```
+
+5. **Test grundig** etter oppdatering
+6. **Commit og push** - CI/CD vil verifisere at sårbarheten er løst
