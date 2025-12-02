@@ -7,11 +7,14 @@ on:
   pull_request:
     branches: ["*"]
 
+permissions:
+  contents: read
+
 jobs:
   run_tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -33,6 +36,9 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      - name: Build
+        run: pnpm build
+
   deploy_to_railway:
     needs: run_tests
     if: github.ref == 'refs/heads/main'
@@ -42,6 +48,6 @@ jobs:
       SVC_ID: ${{ secrets.SVC_ID }}
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Deploy to Railway
         run: railway up --service=${{ env.SVC_ID }}
