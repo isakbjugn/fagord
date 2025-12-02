@@ -14,7 +14,7 @@ jobs:
   run_tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -48,6 +48,6 @@ jobs:
       SVC_ID: ${{ secrets.SVC_ID }}
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Deploy to Railway
         run: railway up --service=${{ env.SVC_ID }}
