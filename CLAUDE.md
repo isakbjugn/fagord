@@ -44,3 +44,14 @@ Applikasjonen kobler til et Rust API via miljøvariabelen `FAGORD_RUST_API_DOMAI
 ## Språkstøtte
 
 Støtter både bokmål og nynorsk for norske termer og varianter.
+
+## Utviklingsprinsipper
+
+### Læringsprosjekt
+Fagord er et læringsprosjekt. Nye løsninger bør implementeres på måter som gir innsikt i webteknologi – forklar gjerne underliggende konsepter og alternativer.
+
+### HTML først
+Foretrekk HTML og CSS fremfor JavaScript der det er mulig. Nettleserne har mye innebygd funksjonalitet som ofte er bedre enn JavaScript-løsninger.
+
+### Bevisst bruk av biblioteker
+Vurder alltid om et problem kan løses med egen kode før du tar inn et bibliotek. Spør: Er behovet avgrenset nok til at vi kan skrive det selv? Hva lærer vi av hver tilnærming?
