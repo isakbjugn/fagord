@@ -55,3 +55,10 @@ Foretrekk HTML og CSS fremfor JavaScript der det er mulig. Nettleserne har mye i
 
 ### Bevisst bruk av biblioteker
 Vurder alltid om et problem kan løses med egen kode før du tar inn et bibliotek. Spør: Er behovet avgrenset nok til at vi kan skrive det selv? Hva lærer vi av hver tilnærming?
+
+### Rammeverk: React Router 7
+Prosjektet bruker React Router 7 i framework-modus (tidligere Remix). To prinsipper gjelder:
+
+1. **Bruk rammeverkets verktøy**: Løs problemer med React Routers innebygde funksjoner (f.eks. caching, data-lasting) fremfor eksterne biblioteker.
+
+2. **Unngå innlåsing**: Vær oppmerksom på når noe blir vanskelig på grunn av React Router. Si fra når rammeverket skaper friksjon, slik at vi kan vurdere om det fortsatt er riktig valg.
