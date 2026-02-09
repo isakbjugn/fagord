@@ -55,6 +55,11 @@ export function Search() {
           <NoOptionsMessage q={searchParams.get('q')} />
         </nav>
       )}
+      {fetcher.data && fetcher.data.length === 0 && (
+        <nav className={styles.resultDropdown} hidden={!resultsOpen}>
+          <NoOptionsMessage q={searchParams.get('q')} />
+        </nav>
+      )}
     </div>
   );
 }
