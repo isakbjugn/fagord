@@ -1,42 +1,38 @@
-import { Form, Link, useLocation, useNavigation, useSearchParams } from 'react-router';
-import { type FormEvent } from 'react';
+import { type ChangeEvent } from 'react';
+import { Form, Link, useFetcher, useLocation, useNavigation, useSearchParams } from 'react-router';
 
 import styles from '~/styles/search.module.css';
 import type { Term } from '~/types/term';
 import { useClickToOpen } from '~/lib/use-click-to-open';
-import { useDebounceFetcher } from '~/lib/use-debounce-fetcher';
 
 export function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const resultsOpen = useClickToOpen('search-form', false);
   const location = useLocation();
   const navigation = useNavigation();
-  const fetcher = useDebounceFetcher<{ searchResult: Term[] }>();
+  const fetcher = useFetcher<Term[]>();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
 
-  function submitSearchTerm(event: FormEvent<HTMLFormElement>) {
+  function handleSearch(event: ChangeEvent<HTMLInputElement>) {
+    const q = event.target.value;
+
     const isFirstSearch = !searchParams.has('q');
     setSearchParams(
       (prevParams) => {
-        prevParams.set('q', (event.currentTarget as HTMLFormElement).q.value);
+        prevParams.set('q', q);
         return prevParams;
       },
       { replace: !isFirstSearch },
     );
 
-    const formData = new FormData(event.currentTarget);
-    fetcher.submit(formData, { method: 'post', action: '/api/termliste/søk', debounceTimeout: 200 });
+    if (q) {
+      fetcher.load(`/api/termliste/søk?q=${encodeURIComponent(q)}`);
+    }
   }
 
   return (
     <div className={styles.wrapper}>
-      <Form
-        id="search-form"
-        role="search"
-        action={location.pathname}
-        onClick={submitSearchTerm}
-        onChange={submitSearchTerm}
-      >
+      <Form id="search-form" role="search" action={location.pathname}>
         <input
           id="q"
           defaultValue={searchParams.get('q') ?? undefined}
@@ -44,14 +40,15 @@ export function Search() {
           autoCapitalize="none"
           type="search"
           name="q"
+          onChange={handleSearch}
           className={`${styles.search} ${searching ? styles.loading : ''}`}
         />
         <div className={styles.spinner} aria-hidden hidden={!searching} />
       </Form>
-      {fetcher.data?.searchResult && (
+      {fetcher.data && (
         <nav className={styles.resultDropdown} hidden={!resultsOpen}>
           <ul className={styles.results}>
-            {fetcher.data.searchResult.map((term: Term) => (
+            {fetcher.data.map((term: Term) => (
               <SearchResult term={term} key={term.slug} />
             ))}
           </ul>
