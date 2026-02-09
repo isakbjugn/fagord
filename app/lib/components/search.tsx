@@ -45,18 +45,13 @@ export function Search() {
         />
         <div className={styles.spinner} aria-hidden hidden={!searching} />
       </Form>
-      {fetcher.data && fetcher.data.length > 0 && (
+      {fetcher.data && (
         <nav className={styles.resultDropdown} hidden={!resultsOpen}>
           <ul className={styles.results}>
             {fetcher.data.map((term: Term) => (
               <SearchResult term={term} key={term.slug} />
             ))}
           </ul>
-          <NoOptionsMessage q={searchParams.get('q')} />
-        </nav>
-      )}
-      {fetcher.data && fetcher.data.length === 0 && (
-        <nav className={styles.resultDropdown} hidden={!resultsOpen}>
           <NoOptionsMessage q={searchParams.get('q')} />
         </nav>
       )}
