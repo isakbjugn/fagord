@@ -1,5 +1,5 @@
+import { type ChangeEvent } from 'react';
 import { Form, Link, useFetcher, useLocation, useNavigation, useSearchParams } from 'react-router';
-import { type FormEvent } from 'react';
 
 import styles from '~/styles/search.module.css';
 import type { Term } from '~/types/term';
@@ -13,8 +13,8 @@ export function Search() {
   const fetcher = useFetcher<Term[]>();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
 
-  function handleSearch(event: FormEvent<HTMLFormElement>) {
-    const q = (event.currentTarget as HTMLFormElement).q.value;
+  function handleSearch(event: ChangeEvent<HTMLInputElement>) {
+    const q = event.target.value;
 
     const isFirstSearch = !searchParams.has('q');
     setSearchParams(
@@ -32,13 +32,7 @@ export function Search() {
 
   return (
     <div className={styles.wrapper}>
-      <Form
-        id="search-form"
-        role="search"
-        action={location.pathname}
-        onClick={handleSearch}
-        onChange={handleSearch}
-      >
+      <Form id="search-form" role="search" action={location.pathname}>
         <input
           id="q"
           defaultValue={searchParams.get('q') ?? undefined}
@@ -46,6 +40,7 @@ export function Search() {
           autoCapitalize="none"
           type="search"
           name="q"
+          onChange={handleSearch}
           className={`${styles.search} ${searching ? styles.loading : ''}`}
         />
         <div className={styles.spinner} aria-hidden hidden={!searching} />
