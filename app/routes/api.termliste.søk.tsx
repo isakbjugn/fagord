@@ -2,22 +2,21 @@ import type { Term } from '~/types/term';
 import type { Route } from './+types/api.termliste.søk';
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const { searchParams } = new URL(request.url);
 
-  const url = new URL(request.url);
-  const q = url.searchParams.get('q');
+  if (!searchParams.get('q')) return [];
 
-  if (!q) {
-    return [];
-  }
-
-  const response = await fetch(`${FAGORD_RUST_API_URL}/terms?q=${encodeURIComponent(q)}&limit=5`);
+  searchParams.set('limit', '5');
+  const apiBase = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
+  const url = new URL('/terms', apiBase);
+  url.search = searchParams.toString();
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Response('Klarte ikke å søke etter termer', { status: 500 });
   }
 
-  return (await response.json()) as Promise<Term[]>;
+  return (await response.json()) as Term[];
 }
 
 export function headers(_: Route.HeadersArgs) {
