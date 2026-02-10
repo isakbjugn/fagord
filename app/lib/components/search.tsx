@@ -1,4 +1,4 @@
-import { type ChangeEvent } from 'react';
+import { type ChangeEvent, type MouseEvent, useState } from 'react';
 import { Form, Link, useFetcher, useLocation, useNavigation, useSearchParams } from 'react-router';
 
 import styles from '~/styles/search.module.css';
@@ -8,16 +8,21 @@ import { useClickToOpen } from '~/lib/use-click-to-open';
 export function Search() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const resultsOpen = useClickToOpen('search-form', false, location.key);
+  const [resultsOpen, setResultsOpen] = useClickToOpen('search-form', false, location.key);
   const navigation = useNavigation();
   const fetcher = useFetcher<Term[]>();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
+  const [query, setQuery] = useState(searchParams.get('q') ?? undefined);
 
   function handleSearch(event: ChangeEvent<HTMLInputElement>) {
     const q = event.target.value;
+    setQuery(q);
 
     if (q) {
+      setResultsOpen(true);
       fetcher.load(`/api/termliste/søk?q=${encodeURIComponent(q)}`);
+    } else {
+      setResultsOpen(false);
     }
   }
 
@@ -26,7 +31,7 @@ export function Search() {
       <Form method="get" id="search-form" role="search" action="termliste">
         <input
           id="q"
-          defaultValue={searchParams.get('q') ?? undefined}
+          defaultValue={query}
           placeholder="Søk etter term"
           autoCapitalize="none"
           type="search"
@@ -37,7 +42,7 @@ export function Search() {
         <div className={styles.spinner} aria-hidden hidden={!searching} />
       </Form>
       {fetcher.data && (
-        <nav className={styles.resultDropdown} hidden={!resultsOpen}>
+        <nav className={styles.resultDropdown} hidden={!query || !resultsOpen}>
           <ul className={styles.results}>
             {fetcher.data.map((term: Term) => (
               <SearchResult term={term} key={term.slug} />

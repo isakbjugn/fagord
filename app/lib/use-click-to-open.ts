@@ -22,5 +22,5 @@ export const useClickToOpen = (elementId: string, defaultOpen: boolean, resetKey
     return () => window.removeEventListener('click', handleClick);
   }, [elementId]);
 
-  return isOpen;
+  return [isOpen, setIsOpen] as const;
 };
