@@ -7,9 +7,12 @@ import { Term } from '~/types/term';
 import { Route } from './+types/termliste';
 import { Subject } from '~/types/subject';
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
-  const termsResponse = fetch(`${FAGORD_RUST_API_URL}/terms`).then((res) => {
+  const url = new URL(request.url);
+  const q = url.searchParams.get('q');
+  const termsUrl = q ? `${FAGORD_RUST_API_URL}/terms?q=${encodeURIComponent(q)}` : `${FAGORD_RUST_API_URL}/terms`;
+  const termsResponse = fetch(termsUrl).then((res) => {
     if (!res.ok) {
       throw new Response('Klarte ikke å hente termer', { status: 500 });
     }

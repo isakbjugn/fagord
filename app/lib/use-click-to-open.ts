@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 
-export const useClickToOpen = (elementId: string, defaultOpen: boolean) => {
+export const useClickToOpen = (elementId: string, defaultOpen: boolean, resetKey?: string) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  useEffect(() => {
+    setIsOpen(defaultOpen);
+  }, [resetKey, defaultOpen]);
 
   useEffect(() => {
     function handleClick(event: MouseEvent) {
@@ -18,5 +22,5 @@ export const useClickToOpen = (elementId: string, defaultOpen: boolean) => {
     return () => window.removeEventListener('click', handleClick);
   }, [elementId]);
 
-  return isOpen;
+  return [isOpen, setIsOpen] as const;
 };
