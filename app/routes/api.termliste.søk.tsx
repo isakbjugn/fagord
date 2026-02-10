@@ -11,16 +11,13 @@ export async function loader({ request }: Route.LoaderArgs) {
     return [];
   }
 
-  const response = await fetch(
-    `${FAGORD_RUST_API_URL}/terms?q=${encodeURIComponent(q)}`,
-  );
+  const response = await fetch(`${FAGORD_RUST_API_URL}/terms?q=${encodeURIComponent(q)}&limit=5`);
 
   if (!response.ok) {
     throw new Response('Klarte ikke å søke etter termer', { status: 500 });
   }
 
-  const terms = (await response.json()) as Term[];
-  return terms.slice(0, 5);
+  return (await response.json()) as Promise<Term[]>;
 }
 
 export function headers(_: Route.HeadersArgs) {
