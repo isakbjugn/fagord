@@ -6,8 +6,9 @@ import type { Term } from '~/types/term';
 import { useClickToOpen } from '~/lib/use-click-to-open';
 
 export function Search() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const resultsOpen = useClickToOpen('search-form', false);
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const resultsOpen = useClickToOpen('search-form', false, location.key);
   const navigation = useNavigation();
   const fetcher = useFetcher<Term[]>();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
