@@ -1,4 +1,4 @@
-import { createRoutesStub } from 'react-router';
+import { createRoutesStub, useSearchParams } from 'react-router';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, describe, expect, test } from 'vitest';
@@ -131,5 +131,42 @@ describe('Tester søkefunksjonalitet', () => {
     // Verifiser at lenken peker til riktig sted
     const createLink = screen.getByRole('link', { name: /Opprett ny term/i, hidden: true });
     expect(createLink.getAttribute('href')).toBe('/ny-term/nyterm');
+  });
+
+  test('Navigerer til termliste med søkeparameter når brukeren trykker Enter', async () => {
+    function TermlistePage() {
+      const [searchParams] = useSearchParams();
+      return <div>Termliste: q={searchParams.get('q')}</div>;
+    }
+
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        Component: Root,
+        children: [
+          {
+            index: true,
+            Component: () => <div>Testside</div>,
+          },
+          {
+            path: 'termliste',
+            Component: TermlistePage,
+          },
+        ],
+      },
+      {
+        path: '/api/termliste/søk',
+        loader() {
+          return [];
+        },
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    const searchInput = screen.getByPlaceholderText('Søk etter term');
+    await userEvent.type(searchInput, 'testsøk{Enter}');
+
+    await waitFor(() => screen.findByText('Termliste: q=testsøk'));
   });
 });
