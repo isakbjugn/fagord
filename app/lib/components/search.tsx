@@ -48,7 +48,7 @@ export function Search() {
               <SearchResult term={term} key={term.slug} />
             ))}
           </ul>
-          <NoOptionsMessage q={searchParams.get('q')} />
+          <NoOptionsMessage q={query} />
         </nav>
       )}
     </div>
