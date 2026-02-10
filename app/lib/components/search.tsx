@@ -8,22 +8,12 @@ import { useClickToOpen } from '~/lib/use-click-to-open';
 export function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const resultsOpen = useClickToOpen('search-form', false);
-  const location = useLocation();
   const navigation = useNavigation();
   const fetcher = useFetcher<Term[]>();
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
 
   function handleSearch(event: ChangeEvent<HTMLInputElement>) {
     const q = event.target.value;
-
-    const isFirstSearch = !searchParams.has('q');
-    setSearchParams(
-      (prevParams) => {
-        prevParams.set('q', q);
-        return prevParams;
-      },
-      { replace: !isFirstSearch },
-    );
 
     if (q) {
       fetcher.load(`/api/termliste/søk?q=${encodeURIComponent(q)}`);
@@ -32,7 +22,7 @@ export function Search() {
 
   return (
     <div className={styles.wrapper}>
-      <Form id="search-form" role="search" action={location.pathname}>
+      <Form method="get" id="search-form" role="search" action="termliste">
         <input
           id="q"
           defaultValue={searchParams.get('q') ?? undefined}
