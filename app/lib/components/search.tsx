@@ -1,4 +1,4 @@
-import { type ChangeEvent, type MouseEvent, useState } from 'react';
+import { type ChangeEvent, useState } from 'react';
 import { Form, Link, useFetcher, useLocation, useNavigation, useSearchParams } from 'react-router';
 
 import styles from '~/styles/search.module.css';
@@ -28,7 +28,7 @@ export function Search() {
 
   return (
     <div className={styles.wrapper}>
-      <Form method="get" id="search-form" role="search" action="termliste">
+      <Form method="get" id="search-form" role="search" action="/termliste">
         <input
           id="q"
           defaultValue={query}
