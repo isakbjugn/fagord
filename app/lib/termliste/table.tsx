@@ -89,7 +89,7 @@ const columns = [
 
 type Props = {
   terms: Term[];
-  subjects: Promise<Subject[]>;
+  subjects: Subject[];
 };
 
 export default function Table({ terms, subjects }: Props) {

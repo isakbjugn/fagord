@@ -1,11 +1,8 @@
 import { createRoutesStub } from 'react-router';
 import Hjem from '~/routes/hjem';
-import Termliste from '~/routes/termliste';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, describe, test } from 'vitest';
-import { createValidTerms } from '../test-data/term';
-import { createValidSubjects } from '../test-data/subjects';
 
 afterEach(cleanup);
 
@@ -24,6 +21,9 @@ describe('Tester innhold på og navigasjon fra Hjem-siden', () => {
   });
 
   test('Kan navigere fra /hjem til /termliste', async () => {
+    function TermlistePage() {
+      return <h1>Termliste</h1>;
+    }
     const Stub = createRoutesStub([
       {
         path: '/hjem',
@@ -31,19 +31,13 @@ describe('Tester innhold på og navigasjon fra Hjem-siden', () => {
       },
       {
         path: '/termliste',
-        Component: Termliste,
-        loader() {
-          return {
-            terms: createValidTerms(),
-            subjects: createValidSubjects(),
-          };
-        },
+        Component: TermlistePage,
       },
     ]);
 
     render(<Stub initialEntries={['/hjem']} />);
 
     await userEvent.click(screen.getByText('Til termliste!'));
-    await waitFor(() => screen.findByText('Engelsk'));
+    await waitFor(() => screen.findByText('Termliste'));
   });
 });

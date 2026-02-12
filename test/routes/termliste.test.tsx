@@ -1,5 +1,5 @@
 import { createRoutesStub } from 'react-router';
-import Termliste from '~/routes/termliste';
+import Termliste from '~/routes/termliste._index';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, test } from 'vitest';
 import { createValidTerms } from '../test-data/term';
