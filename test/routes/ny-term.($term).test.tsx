@@ -78,6 +78,52 @@ describe('Tester innsending på Ny term-siden', () => {
     expect(formData).toHaveProperty('en', termFromUrl);
   });
 
+  test('Dagens oppførsel: Viser IKKE definisjon ved sidelast selv om term er i URL', async () => {
+    const termFromUrl = 'letter';
+    const definition = '<p>a written message</p>';
+
+    const Stub = createRoutesStub([
+      {
+        path: `/ny-term/:term`,
+        Component: NyTerm,
+        loader: () => ({
+          subjects: createValidSubjects(),
+        }),
+      },
+      {
+        path: '/api/definisjon',
+        action: () => definition,
+      },
+    ]);
+
+    render(<Stub initialEntries={[`/ny-term/${termFromUrl}`]} />);
+
+    await waitFor(() => screen.findByText('Engelsk term'));
+    expect(screen.queryByText('Definisjon')).toBeNull();
+  });
+
+  test('Ønsket oppførsel: Viser definisjon ved sidelast når loader returnerer den', async () => {
+    const termFromUrl = 'letter';
+    const definition = '<p>a written message</p>';
+
+    const Stub = createRoutesStub([
+      {
+        path: `/ny-term/:term`,
+        Component: NyTerm,
+        loader: () => ({
+          subjects: createValidSubjects(),
+          definition,
+        }),
+      },
+    ]);
+
+    render(<Stub initialEntries={[`/ny-term/${termFromUrl}`]} />);
+
+    await waitFor(() => screen.findByText('Engelsk term'));
+    expect(screen.getByText('Definisjon')).toBeDefined();
+    expect(screen.getByText('a written message')).toBeDefined();
+  });
+
   test('Viser valideringstekst når term allerede finnes', async () => {
     const existingTerm = 'existence';
     const validationText = 'Termen finnes allerede i termlista.';
