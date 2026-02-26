@@ -7,8 +7,9 @@ import styles from '~/styles/ny-term.module.css';
 import { Subject } from '~/types/subject';
 import { ClientOnly } from '~/lib/client-only';
 import { SubjectsCombobox } from '~/lib/components/subjects-combobox';
+import type { Route } from './+types/ny-term.($term)';
 
-export function loader() {
+export async function loader({ params }: Route.LoaderArgs) {
   const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
   const subjects = fetch(`${FAGORD_RUST_API_URL}/fields`).then((res) => {
     if (!res.ok) {
@@ -16,11 +17,21 @@ export function loader() {
     }
     return res.json() as Promise<Subject[]>;
   });
-  return { subjects };
+
+  let definition: string | null = null;
+  if (params.term) {
+    const termWithDashes = params.term.replace(/\s+/g, '-');
+    const res = await fetch(`${FAGORD_RUST_API_URL}/definitions/${termWithDashes}`);
+    if (res.ok) {
+      definition = await res.text();
+    }
+  }
+
+  return { subjects, definition };
 }
 
 export default function NyTerm() {
-  const { subjects } = useLoaderData<typeof loader>();
+  const { subjects, definition } = useLoaderData<typeof loader>();
   const { term: termFromUrl } = useParams();
   const navigation = useNavigation();
   const submitting = navigation.formAction === '/ny-term/legg-til';
@@ -32,7 +43,7 @@ export default function NyTerm() {
         <div className="row">
           <label className="form-label" htmlFor="en">
             Engelsk term
-            <TermInput defaultValue={termFromUrl} />
+            <TermInput defaultValue={termFromUrl} loaderDefinition={definition} />
           </label>
         </div>
         <label className="form-label">Norske termer</label>
@@ -95,7 +106,13 @@ export default function NyTerm() {
   );
 }
 
-function TermInput({ defaultValue }: { defaultValue: string | undefined }) {
+function TermInput({
+  defaultValue,
+  loaderDefinition,
+}: {
+  defaultValue: string | undefined;
+  loaderDefinition: string | null;
+}) {
   const existsFetcher = useDebounceFetcher<{ exists: boolean; validationText: string | undefined }>();
   const definitionFetcher = useDebounceFetcher<string | null>();
 
@@ -106,6 +123,8 @@ function TermInput({ defaultValue }: { defaultValue: string | undefined }) {
     existsFetcher.submit(formData, { method: 'post', action: '/api/termliste/finnes', debounceTimeout: 200 });
     definitionFetcher.submit(formData, { method: 'post', action: '/api/definisjon', debounceTimeout: 300 });
   }
+
+  const definitions = definitionFetcher.data !== undefined ? definitionFetcher.data : loaderDefinition;
 
   return (
     <>
@@ -119,7 +138,7 @@ function TermInput({ defaultValue }: { defaultValue: string | undefined }) {
         onChange={handleChange}
       />
       <div className="invalid-feedback bright-feedback-text">{existsFetcher.data?.validationText}</div>
-      <Definitions definitions={definitionFetcher.data} />
+      <Definitions definitions={definitions} />
     </>
   );
 }
