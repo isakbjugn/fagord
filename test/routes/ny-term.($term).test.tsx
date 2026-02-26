@@ -78,31 +78,7 @@ describe('Tester innsending på Ny term-siden', () => {
     expect(formData).toHaveProperty('en', termFromUrl);
   });
 
-  test('Dagens oppførsel: Viser IKKE definisjon ved sidelast selv om term er i URL', async () => {
-    const termFromUrl = 'letter';
-    const definition = '<p>a written message</p>';
-
-    const Stub = createRoutesStub([
-      {
-        path: `/ny-term/:term`,
-        Component: NyTerm,
-        loader: () => ({
-          subjects: createValidSubjects(),
-        }),
-      },
-      {
-        path: '/api/definisjon',
-        action: () => definition,
-      },
-    ]);
-
-    render(<Stub initialEntries={[`/ny-term/${termFromUrl}`]} />);
-
-    await waitFor(() => screen.findByText('Engelsk term'));
-    expect(screen.queryByText('Definisjon')).toBeNull();
-  });
-
-  test('Ønsket oppførsel: Viser definisjon ved sidelast når loader returnerer den', async () => {
+  test('Viser definisjon ved sidelast når term er i URL', async () => {
     const termFromUrl = 'letter';
     const definition = '<p>a written message</p>';
 
