@@ -4,11 +4,11 @@ Dette dokumentet forklarer sikkerhetstiltakene som er implementert for å beskyt
 
 ## Implementerte tiltak
 
-### 1. **Deaktivering av npm/pnpm scripts** ✅
-- **Fil**: `.npmrc`
-- **Tiltak**: `ignore-scripts=true`
+### 1. **Eksplisitt godkjenning av build-scripts** ✅
+- **Fil**: `pnpm-workspace.yaml`
+- **Tiltak**: `allowBuilds` med eksplisitt liste over pakker som får kjøre install-scripts
 - **Beskyttelse mot**: Ondsinnede postinstall/preinstall scripts fra kompromitterte pakker
-- **Impact**: Forhindrer automatisk kjøring av kode fra tredjepartspakker under installasjon
+- **Impact**: pnpm v10 blokkerer build-scripts som standard – kun pakker oppført i `allowBuilds` får kjøre (p.t. `@swc/core` og `esbuild`)
 
 ### 2. **HTTPS registry** ✅
 - **Fil**: `.npmrc`
@@ -71,7 +71,7 @@ Dette dokumentet forklarer sikkerhetstiltakene som er implementert for å beskyt
    ↓
 4. Setup Node med cache
    ↓
-5. Install dependencies (UTEN scripts, frozen lockfile, HTTPS)
+5. Install dependencies (kun godkjente build-scripts, frozen lockfile, HTTPS)
    ↓
 6. Security audit (blokkerer ved high/critical sårbarheter)
    ↓
