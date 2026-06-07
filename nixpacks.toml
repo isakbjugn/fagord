@@ -1,0 +1,11 @@
+# Overstyrer install-fasen til Railway/Nixpacks.
+#
+# Nixpacks tvinger som standard inn corepack@0.24.1, som ikke klarer å
+# laste pnpm 11 på Node 24 (ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING).
+# Vi henter derfor en nyere corepack før vi installerer avhengigheter.
+# pnpm-versjonen styres fortsatt av "packageManager" i package.json.
+[phases.install]
+cmds = [
+  "npm install -g corepack@latest && corepack enable",
+  "pnpm i --frozen-lockfile",
+]
