@@ -4,6 +4,7 @@
   "sideEffects": false,
   "version": "0.2.0",
   "type": "module",
+  "packageManager": "pnpm@11.5.2",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
@@ -47,6 +48,6 @@
     "vitest": "4.1.6"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   }
 }
