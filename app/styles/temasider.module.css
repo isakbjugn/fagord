@@ -1,0 +1,30 @@
+.editor.editor {
+  min-height: 320px;
+  font-family: ui-monospace, "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.scrollBackground {
+  border-radius: var(--bs-border-radius, 0.375rem);
+  background-color: var(--bs-body-bg, white);
+}
+
+.hint {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.preview {
+  min-height: 320px;
+  padding: 16px 20px;
+  background-color: var(--color-paper);
+  color: black;
+  border-radius: 8px;
+  overflow-wrap: break-word;
+}
+
+.preview > :global(*:first-child) {
+  margin-top: 0;
+}
