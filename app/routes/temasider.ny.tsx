@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { MetaFunction } from 'react-router';
 import Markdown from 'react-markdown';
 
-import style from '~/styles/tema.module.css';
+import style from '~/styles/temasider.module.css';
 
 export const meta: MetaFunction = () => [{ title: 'Ny temaside – Fagord' }];
 
