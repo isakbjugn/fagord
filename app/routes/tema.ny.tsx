@@ -49,13 +49,15 @@ export default function NyTemaside() {
             <label className="form-label" htmlFor="innhold">
               Innhold (Markdown)
             </label>
-            <textarea
-              id="innhold"
-              name="innhold"
-              className={`form-control ${style.editor}`}
-              value={innhold}
-              onChange={(event) => setInnhold(event.target.value)}
-            />
+            <div className={style.scrollBackground}>
+              <textarea
+                id="innhold"
+                name="innhold"
+                className={`form-control ${style.editor}`}
+                value={innhold}
+                onChange={(event) => setInnhold(event.target.value)}
+              />
+            </div>
             <p className={style.hint}>💡 Tom linje gir nytt avsnitt. Ett enkelt linjeskift slår teksten sammen.</p>
           </div>
 

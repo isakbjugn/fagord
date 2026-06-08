@@ -5,6 +5,11 @@
   resize: vertical;
 }
 
+.scrollBackground {
+  border-radius: var(--bs-border-radius, 0.375rem);
+  background-color: var(--bs-body-bg, white);
+}
+
 .hint {
   margin-top: 6px;
   font-size: 0.85rem;
