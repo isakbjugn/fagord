@@ -1,3 +1,8 @@
 allowBuilds:
   '@swc/core': true
   esbuild: true
+
+# Supply chain-beskyttelse: vent 3 dager (4320 min) etter at en versjon er
+# publisert før den kan installeres. Gjør pnpm v11-defaulten (1 dag) eksplisitt
+# og synlig, slik at kompromitterte utgivelser rekker å bli oppdaget og trukket.
+minimumReleaseAge: 4320
