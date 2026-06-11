@@ -6,6 +6,10 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    # Vent litt over pnpm sin minimumReleaseAge (3 dager) før PR-er åpnes,
+    # slik at Dependabot ikke foreslår versjoner som CI-bygget vil underkjenne.
+    cooldown:
+      default-days: 4
     groups:
       # Group all patch and minor updates together
       minor-and-patch:
