@@ -17,7 +17,7 @@ export const navLinks: NavItem[] = [
     text: 'Ny term',
   },
   {
-    address: '/temasider/ny',
+    address: '/temasider',
     icon: 'fa-graduation-cap',
     text: 'Temasider',
   },
