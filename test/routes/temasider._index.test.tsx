@@ -1,5 +1,5 @@
 import { createRoutesStub } from 'react-router';
-import Temasider from '~/routes/temasider';
+import Temasider from '~/routes/temasider._index';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, test } from 'vitest';
 import { createValidArticleSummaries } from '../test-data/article';

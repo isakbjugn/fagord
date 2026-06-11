@@ -1,7 +1,7 @@
 import { createRoutesStub } from 'react-router';
 import Temaside, { ErrorBoundary } from '~/routes/temasider.$slug';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
-import { afterEach, describe, test } from 'vitest';
+import { afterEach, describe, expect, test } from 'vitest';
 import { createValidArticle } from '../test-data/article';
 
 afterEach(cleanup);
