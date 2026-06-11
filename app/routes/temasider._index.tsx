@@ -49,6 +49,12 @@ export default function Temasider() {
             ))}
           </ul>
         )}
+
+        <div className="mt-3">
+          <Link className="btn btn-outline-light" to="ny">
+            Skriv ny temaside
+          </Link>
+        </div>
       </div>
     </main>
   );

@@ -16,6 +16,8 @@ describe('Tester innhold på og navigasjon fra Temasider-listen', () => {
           return summaries;
         },
       },
+      // Mål for «ny»-inngangen – mer spesifikk path først, så den vinner over :slug.
+      { path: '/temasider/ny', Component: () => <div>Ny temaside-editor</div> },
       // Mål for lenkene – så vi kan verifisere at hver temaside lenker riktig.
       { path: '/temasider/:slug', Component: () => <div>Temaside-visning</div> },
     ]);
@@ -47,5 +49,17 @@ describe('Tester innhold på og navigasjon fra Temasider-listen', () => {
   test('Tom liste viser en beskjed om at det ikke finnes temasider', async () => {
     renderListe([]);
     await waitFor(() => screen.getByText(/ingen temasider/i));
+  });
+
+  test('Har en inngang som lenker til editoren for ny temaside', async () => {
+    renderListe();
+    const lenke = await screen.findByRole('link', { name: /ny temaside/i });
+    expect(lenke.getAttribute('href')).toBe('/temasider/ny');
+  });
+
+  test('Inngangen til ny temaside vises også når lista er tom', async () => {
+    renderListe([]);
+    const lenke = await screen.findByRole('link', { name: /ny temaside/i });
+    expect(lenke.getAttribute('href')).toBe('/temasider/ny');
   });
 });
