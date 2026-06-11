@@ -46,6 +46,12 @@ describe('Tester innhold på og navigasjon fra Temasider-listen', () => {
     expect(lenke.getAttribute('href')).toBe('/temasider/vin');
   });
 
+  test('Tittellenken strekkes over hele kortet (stretched-link)', async () => {
+    renderListe();
+    const lenke = await screen.findByRole('link', { name: /Vin/ });
+    expect(lenke.classList.contains('stretched-link')).toBe(true);
+  });
+
   test('Tom liste viser en beskjed om at det ikke finnes temasider', async () => {
     renderListe([]);
     await waitFor(() => screen.getByText(/ingen temasider/i));

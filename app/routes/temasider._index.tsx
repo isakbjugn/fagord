@@ -40,8 +40,10 @@ export default function Temasider() {
         ) : (
           <ul className="list-group">
             {articles.map((article) => (
-              <li key={article.slug} className="list-group-item">
-                <Link to={article.slug}>{article.title}</Link>
+              <li key={article.slug} className="list-group-item list-group-item-action position-relative">
+                <Link className="stretched-link" to={article.slug}>
+                  {article.title}
+                </Link>
                 <div className="text-muted">
                   av <span>{article.author}</span>
                 </div>
