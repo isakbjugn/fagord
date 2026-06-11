@@ -5,8 +5,8 @@ import type { Route } from './+types/temasider.$slug';
 import style from '~/styles/temasider.module.css';
 import type { Article } from '~/types/article';
 
-export const meta = ({ data }: Route.MetaArgs) => [
-  { title: data ? `${data.title} – Fagord` : 'Temaside – Fagord' },
+export const meta = ({ loaderData }: Route.MetaArgs) => [
+  { title: loaderData ? `${loaderData.title} – Fagord` : 'Temaside – Fagord' },
 ];
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
