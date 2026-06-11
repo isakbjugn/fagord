@@ -2,15 +2,25 @@ import { createRoutesStub } from 'react-router';
 import NyTemaside from '~/routes/temasider.ny';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { afterEach, describe, test } from 'vitest';
+import { afterEach, describe, expect, test } from 'vitest';
 
 afterEach(cleanup);
 
 describe('Tester redigeringsverktøy for ny temaside', () => {
   function renderSide() {
-    const Stub = createRoutesStub([{ path: '/temasider/ny', Component: NyTemaside }]);
+    const Stub = createRoutesStub([
+      { path: '/temasider/ny', Component: NyTemaside },
+      // Mål for breadcrumb-lenken tilbake til lista.
+      { path: '/temasider', Component: () => <div>Temaside-lista</div> },
+    ]);
     render(<Stub initialEntries={['/temasider/ny']} />);
   }
+
+  test('Har en breadcrumb-lenke tilbake til temaside-lista', async () => {
+    renderSide();
+    const lenke = await screen.findByRole('link', { name: 'Temasider' });
+    expect(lenke.getAttribute('href')).toBe('/temasider');
+  });
 
   test('Siden viser tittel-felt og innholds-felt', async () => {
     renderSide();

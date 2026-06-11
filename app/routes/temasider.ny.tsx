@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 import type { MetaFunction } from 'react-router';
 import Markdown from 'react-markdown';
 
@@ -23,6 +24,15 @@ export default function NyTemaside() {
   return (
     <main className="container my-3">
       <div className="col-12 col-lg-10 mx-auto" style={{ color: 'white' }}>
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/temasider">Temasider</Link>
+            </li>
+            <li className="breadcrumb-item active">Ny temaside</li>
+          </ol>
+        </nav>
+
         <h1>Ny temaside</h1>
         <p>
           Skriv artikkelen i Markdown til venstre, og se den ferdige temasiden ta form til høyre mens du skriver.
