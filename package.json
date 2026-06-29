@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@react-router/dev": "7.17.0",
-    "@react-router/fs-routes": "7.17.0",
+    "@react-router/fs-routes": "8.0.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "@types/node": "25.9.3",
