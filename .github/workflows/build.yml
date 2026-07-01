@@ -54,4 +54,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Deploy to Railway
-        run: railway up --service=${{ env.SVC_ID }}
+        env:
+          DEPLOY_MESSAGE: ${{ github.event.head_commit.message }}
+        run: railway up --service=$SVC_ID --message="$DEPLOY_MESSAGE"
