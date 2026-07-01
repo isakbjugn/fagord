@@ -16,7 +16,7 @@
   --bs-btn-color: var(--bs-white);
   --bs-btn-bg: var(--color-light-blue);
   --bs-btn-border-color: var(--color-light-blue);
-  --bs-btn-border-radius: .5rem;
+  --bs-btn-border-radius: 0.5rem;
   --bs-btn-hover-color: var(--bs-white);
   --bs-btn-hover-bg: rgba(var(--color-light-blue-rgb), 0.5);
   --bs-btn-hover-border-color: rgba(var(--color-light-blue-rgb), 0.25);
@@ -33,8 +33,9 @@ header {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-dark-blue);

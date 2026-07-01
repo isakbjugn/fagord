@@ -1,26 +1,26 @@
 .paginator {
-    padding: 8px;
-    color: black;
-    display: flex;
-    justify-content: end;
-    gap: 8px;
-    border-radius: 0 0 8px 8px;
-    background-color: var(--color-paper);
-    border-top: 1px solid lightgray;
-    align-items: center;
+  padding: 8px;
+  color: black;
+  display: flex;
+  justify-content: end;
+  gap: 8px;
+  border-radius: 0 0 8px 8px;
+  background-color: var(--color-paper);
+  border-top: 1px solid lightgray;
+  align-items: center;
 }
 
 .paginatorButton {
-    background-color: transparent;
-    border: none;
+  background-color: transparent;
+  border: none;
 }
 
 @media (max-width: 480px) {
-    .pageIndicator {
-        visibility: hidden;
-    }
+  .pageIndicator {
+    visibility: hidden;
+  }
 
-    .paginator {
-        gap: 4px;
-    }
+  .paginator {
+    gap: 4px;
+  }
 }
