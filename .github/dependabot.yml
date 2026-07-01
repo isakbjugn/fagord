@@ -16,6 +16,12 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      react-router:
+        patterns:
+          - "react-router"
+          - "@react-router/*"
+        update-types:
+          - "major"
     # Security updates should always be created
     versioning-strategy: increase
 
