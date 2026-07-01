@@ -10,9 +10,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const q = url.searchParams.get('q');
 
-  const termsResponse = await fetch(
-    `${FAGORD_RUST_API_URL}/terms${q ? `?q=${encodeURIComponent(q)}` : ''}`,
-  );
+  const termsResponse = await fetch(`${FAGORD_RUST_API_URL}/terms${q ? `?q=${encodeURIComponent(q)}` : ''}`);
   if (!termsResponse.ok) {
     throw new Response('Klarte ikke å hente termer', { status: 500 });
   }

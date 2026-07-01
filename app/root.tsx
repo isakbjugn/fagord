@@ -67,9 +67,7 @@ export default function Root() {
       </head>
       <body>
         <Header />
-        <main>
-          {isLoading ? <Loader /> : <Outlet />}
-        </main>
+        <main>{isLoading ? <Loader /> : <Outlet />}</main>
         <Footer />
         <Scripts />
         <script src={bootstrapScriptsHref} />

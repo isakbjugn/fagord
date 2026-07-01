@@ -11,7 +11,8 @@
     "dev:prod-api": "FAGORD_RUST_API_DOMAIN=https://rust-api.fagord.no react-router dev",
     "start": "react-router-serve build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "prettier": "prettier --write \"app/**/*.{ts,tsx,css}\"",
+    "fmt": "oxfmt ./app",
+    "fmt:check": "oxfmt --check ./app",
     "lint": "oxlint ./app",
     "test": "vitest run"
   },
@@ -40,9 +41,9 @@
     "@vitejs/plugin-react-swc": "4.3.1",
     "autoprefixer": "10.5.2",
     "happy-dom": "20.10.6",
+    "oxfmt": "0.56.0",
     "oxlint": "1.71.0",
     "postcss": "8.5.15",
-    "prettier": "3.9.0",
     "typescript": "6.0.3",
     "vite": "8.1.0",
     "vitest": "4.1.9"
