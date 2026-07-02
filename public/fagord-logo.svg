@@ -2,9 +2,9 @@
      fill-rule="evenodd">
     <defs>
         <g id="f-base">
-            <rect x="207" y="12" width="100" height="70" />
+            <rect x="206" y="14" width="100" height="70" />
             <rect x="6" y="222" width="70" height="500" />
-            <g transform="translate(218 224)" clip-path="url(#f-cut)">
+            <g transform="translate(218 226)" clip-path="url(#f-cut)">
                 <circle cx="0" cy="0" r="177" fill="none" stroke="#ffffff" stroke-width="70" />
             </g>
         </g>
