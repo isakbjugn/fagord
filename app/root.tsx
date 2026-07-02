@@ -14,7 +14,7 @@ import appStylesHref from './app.css?url';
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const isUserLoggedIn = await isLoggedIn(request);
-  return { erInnlogget: isUserLoggedIn };
+  return { isLoggedIn: isUserLoggedIn };
 };
 
 export function ErrorBoundary() {

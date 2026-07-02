@@ -11,12 +11,13 @@ export const Header = () => {
   // Header er en delt layout-komponent som også rendres uten root-loaderen (tester,
   // ruter uten data). `useRouteLoaderData` gir `undefined` i de tilfellene i stedet
   // for å kaste, så vi faller trygt tilbake på «ikke innlogget».
-  const rootData = useRouteLoaderData<{ erInnlogget: boolean }>('root');
-  const erInnlogget = rootData?.erInnlogget ?? false;
+  const rootData = useRouteLoaderData<{ isLoggedIn: boolean }>('root');
+  const isLoggedIn = rootData?.isLoggedIn ?? false;
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
 
-  const userProfileLink = erInnlogget ? '/logg-ut' : '/logg-inn';
+  const userProfileLink = isLoggedIn ? '/logg-ut' : '/logg-inn';
+  const userProfileText = isLoggedIn ? 'Logg ut' : 'Logg inn';
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark">
@@ -51,15 +52,15 @@ export const Header = () => {
                 </NavLink>
               </li>
             ))}
+            <li className="nav-item" key="user">
+              <NavLink className="nav-link text-nowrap" to={{ pathname: userProfileLink }}>
+                <span className="fa fa-user" /> {userProfileText}
+              </NavLink>
+            </li>
           </ul>
         </div>
         <div className="collapse navbar-collapse ms-auto" id="søkefelt">
           <Search />
-        </div>
-        <div className="mx-3">
-          <NavLink className="nav-link" to={{ pathname: userProfileLink }}>
-            <span className="fa fa-user" />
-          </NavLink>
         </div>
       </div>
     </nav>
