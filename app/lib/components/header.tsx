@@ -21,7 +21,7 @@ export const Header = () => {
           <span className="navbar-toggler-icon" />
         </a>
         <a className="mr-auto navbar-brand" href="/hjem">
-          <img src="/fagord-logo240.png" height="70" width="150" alt="Fagord" />
+          <img src="/fagord-logo.svg" height="70" alt="Fagord" />
         </a>
         <button
           className={`navbar-toggler ${style.search}`}
