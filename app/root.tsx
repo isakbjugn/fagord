@@ -1,12 +1,11 @@
 import type { LinksFunction, MetaFunction } from 'react-router';
-import { Links, Meta, Outlet, Scripts, useNavigation, useRouteError } from 'react-router';
+import { Links, Meta, Outlet, Scripts, useRouteError } from 'react-router';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import bootstrapScriptsHref from 'bootstrap/dist/js/bootstrap.bundle.min.js?url';
 
 import { ErrorMessage } from '~/lib/components/error-message';
 import { Footer } from '~/lib/components/footer';
 import { Header } from '~/lib/components/header';
-import { Loader } from '~/lib/components/loader';
 import { splashscreens } from '~/links/splashscreens';
 
 import appStylesHref from './app.css?url';
@@ -50,9 +49,6 @@ export const meta: MetaFunction = () => [
 ];
 
 export default function Root() {
-  const navigation = useNavigation();
-  const isLoading = navigation.state === 'loading';
-
   return (
     <html lang="nb">
       <head>
@@ -67,7 +63,9 @@ export default function Root() {
       </head>
       <body>
         <Header />
-        <main>{isLoading ? <Loader /> : <Outlet />}</main>
+        <main>
+          <Outlet />
+        </main>
         <Footer />
         <Scripts />
         <script src={bootstrapScriptsHref} />
