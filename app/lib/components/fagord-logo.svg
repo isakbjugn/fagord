@@ -1,62 +1,62 @@
-<svg height="70" viewBox="0 0 2140 1018" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"
+<svg height="70" viewBox="0 0 1250 600" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"
      fill-rule="evenodd" role="img">
     <title>Fagord</title>
     <defs>
         <g id="f-base">
-            <rect x="206" y="14" width="100" height="70" />
-            <rect x="6" y="222" width="70" height="500" />
-            <g transform="translate(218 226)" clip-path="url(#f-cut)">
-                <circle cx="0" cy="0" r="177" fill="none" stroke="#ffffff" stroke-width="70" />
+            <rect x="118" y="0" width="82" height="40" />
+            <rect x="0" y="118" width="40" height="302" />
+            <g transform="translate(120 120)" clip-path="url(#f-cut)">
+                <circle cx="0" cy="0" r="100" fill="none" stroke="#ffffff" stroke-width="40" />
             </g>
         </g>
         <g id="angle">
-            <rect x="0" y="0" width="70" height="216" />
-            <rect x="-146" y="0" width="216" height="70" />
+            <rect x="0" y="0" width="40" height="140" />
+            <rect x="-100" y="0" width="140" height="40" />
         </g>
         <clipPath id="a-cut">
-            <rect x="-218" y="-518" width="380" height="1036" />
+            <rect x="-120" y="-360" width="220" height="720" />
         </clipPath>
         <clipPath id="f-cut">
-            <rect x="-230" y="-220" width="220" height="220" />
+            <rect x="-120" y="-120" width="120" height="120" />
         </clipPath>
         <clipPath id="r-cut">
-            <rect x="-170" y="-220" width="220" height="150" />
+            <rect x="-90" y="-120" width="120" height="80" />
         </clipPath>
     </defs>
 
-    <g transform="translate(425.06 517.5)" clip-path="url(#a-cut)">
-        <circle cx="0" cy="0" r="177" fill="none" stroke="#ffffff" stroke-width="79.5" />
-        <rect x="93.09" y="-225.5" width="68.85" height="434.86" />
+    <g transform="translate(260 300)" clip-path="url(#a-cut)">
+        <rect x="60" y="-120" width="40" height="240" />
+        <circle cx="0" cy="0" r="100" fill="none" stroke="#ffffff" stroke-width="40" />
     </g>
 
     <g class="spinning">
         <use href="#f-base" />
-        <rect x="70" y="300" width="123" height="70" />
+        <rect x="40" y="180" width="80" height="40" />
 
-        <use href="#angle" transform="translate(924 12)" />
+        <use href="#angle" transform="translate(560 0)" />
 
-        <g transform="translate(830 517.5)" clip-path="url(#a-cut)">
-            <circle cx="0" cy="0" r="177" fill="none" stroke="#ffffff" stroke-width="79.5" />
+        <g transform="translate(500 300)" clip-path="url(#a-cut)">
+            <circle cx="0" cy="0" r="100" fill="none" stroke="#ffffff" stroke-width="40" />
         </g>
 
-        <use href="#f-base" transform="rotate(180 500 512)" />
+        <use href="#f-base" transform="rotate(180 300 300)" />
 
-        <use href="#angle" transform="rotate(180 500 512) translate(924 12)" />
+        <use href="#angle" transform="rotate(180 300 300) translate(560 0)" />
     </g>
 
-    <g transform="translate(1253 517.5)">
-        <circle cx="0" cy="0" r="177" fill="none" stroke="#ffffff" stroke-width="79.5" />
-    </g>
+    <g transform="translate(750 300)">
+        <circle cx="0" cy="0" r="100" fill="none" stroke="#ffffff" stroke-width="40" />
 
-    <g transform="translate(1693 517.5)">
-        <rect x="-176" y="-225.5" width="68.85" height="434.86" />
-        <g clip-path="url(#r-cut)">
-            <circle cx="0" cy="0" r="177" fill="none" stroke="#ffffff" stroke-width="79.5" />
+        <g transform="translate(250 0)">
+            <rect x="-100" y="-120" width="40" height="240" />
+            <g clip-path="url(#r-cut)">
+                <circle cx="0" cy="0" r="100" fill="none" stroke="#ffffff" stroke-width="40" />
+            </g>
         </g>
-    </g>
 
-    <g transform="translate(1950 517.5)" clip-path="url(#a-cut)">
-        <circle cx="0" cy="0" r="177" fill="none" stroke="#ffffff" stroke-width="79.5" />
-        <rect x="93.09" y="-509" width="68.85" height="719" />
+        <g transform="translate(400 0)" clip-path="url(#a-cut)">
+            <rect x="60" y="-300" width="40" height="420" />
+            <circle cx="0" cy="0" r="100" fill="none" stroke="#ffffff" stroke-width="40" />
+        </g>
     </g>
 </svg>
