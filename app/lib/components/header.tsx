@@ -1,4 +1,4 @@
-import { NavLink, useLoaderData, useLocation, useNavigation } from 'react-router';
+import { NavLink, useLocation, useNavigation, useRouteLoaderData } from 'react-router';
 
 import style from '~/styles/header.module.css';
 
@@ -8,7 +8,11 @@ import FagordLogo from './fagord-logo.svg?react';
 
 export const Header = () => {
   const { search } = useLocation();
-  const { erInnlogget } = useLoaderData();
+  // Header er en delt layout-komponent som også rendres uten root-loaderen (tester,
+  // ruter uten data). `useRouteLoaderData` gir `undefined` i de tilfellene i stedet
+  // for å kaste, så vi faller trygt tilbake på «ikke innlogget».
+  const rootData = useRouteLoaderData<{ erInnlogget: boolean }>('root');
+  const erInnlogget = rootData?.erInnlogget ?? false;
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
 
