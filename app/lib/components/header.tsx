@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useNavigation } from 'react-router';
+import { NavLink, useLoaderData, useLocation, useNavigation } from 'react-router';
 
 import style from '~/styles/header.module.css';
 
@@ -8,8 +8,11 @@ import FagordLogo from './fagord-logo.svg?react';
 
 export const Header = () => {
   const { search } = useLocation();
+  const { erInnlogget } = useLoaderData();
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
+
+  const userProfileLink = erInnlogget ? '/logg-ut' : '/logg-inn';
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark">
@@ -50,7 +53,7 @@ export const Header = () => {
           <Search />
         </div>
         <div className="mx-3">
-          <NavLink className="nav-link" to={{ pathname: '/logg-inn' }}>
+          <NavLink className="nav-link" to={{ pathname: userProfileLink }}>
             <span className="fa fa-user" />
           </NavLink>
         </div>
