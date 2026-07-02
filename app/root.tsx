@@ -6,9 +6,16 @@ import bootstrapScriptsHref from 'bootstrap/dist/js/bootstrap.bundle.min.js?url'
 import { ErrorMessage } from '~/lib/components/error-message';
 import { Footer } from '~/lib/components/footer';
 import { Header } from '~/lib/components/header';
+import { isLoggedIn } from '~/lib/session.server';
 import { splashscreens } from '~/links/splashscreens';
 
+import type { Route } from './+types/root';
 import appStylesHref from './app.css?url';
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const isUserLoggedIn = await isLoggedIn(request);
+  return { isLoggedIn: isUserLoggedIn };
+};
 
 export function ErrorBoundary() {
   const error = useRouteError();
