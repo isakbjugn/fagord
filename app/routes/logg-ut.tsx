@@ -1,7 +1,7 @@
 import { redirect } from 'react-router';
 
 import type { Route } from './+types/logg-ut';
-import { hentSesjon, loggUt } from '~/lib/session.server';
+import { getSession, logOut } from '~/lib/session.server';
 
 // Utlogging via loader – kjører på vanlig GET-navigasjon, så header-lenken (en NavLink)
 // treffer den direkte. To ting må skje:
@@ -14,7 +14,7 @@ import { hentSesjon, loggUt } from '~/lib/session.server';
 // til hvis utilsiktet utlogging blir et problem.
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
-  const session = await hentSesjon(request);
+  const session = await getSession(request);
   const token = session.get('token');
 
   // Be Rust invalidere sesjonen. Idempotent og «best effort»: feiler kallet (nettverk,
@@ -31,7 +31,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     }
   }
 
-  const setCookieHeader = await loggUt(request);
+  const setCookieHeader = await logOut(request);
   return redirect('/hjem', {
     headers: { 'Set-Cookie': setCookieHeader },
   });

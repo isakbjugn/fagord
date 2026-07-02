@@ -2,7 +2,7 @@ import { data, Form, redirect, useActionData, useNavigation } from 'react-router
 import type { MetaFunction } from 'react-router';
 
 import type { Route } from './+types/logg-inn';
-import { opprettSesjon } from '~/lib/session.server';
+import { createSession } from '~/lib/session.server';
 
 export const meta: MetaFunction = () => [{ title: 'Logg inn – Fagord' }];
 
@@ -59,7 +59,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
     }
 
     const { session_token, expires_at } = (await respons.json()) as { session_token: string; expires_at: string };
-    const setCookieHeader = await opprettSesjon(request, session_token, expires_at);
+    const setCookieHeader = await createSession(request, session_token, expires_at);
 
     return redirect('/temasider', {
       headers: { 'Set-Cookie': setCookieHeader },
@@ -74,14 +74,14 @@ export default function LoggInn() {
   const navigation = useNavigation();
   const sender = navigation.state === 'submitting';
 
-  const påKodesteg = actionData?.steg === 'kode';
+  const isOnVerifyStep = actionData?.steg === 'kode';
 
   return (
     <main className="container my-3">
       <div className="col-12 col-lg-6 mx-auto" style={{ color: 'white' }}>
         <h1>Logg inn</h1>
 
-        {påKodesteg ? (
+        {isOnVerifyStep ? (
           <>
             <p>
               Vi har sendt en engangskode til <strong>{actionData.epost}</strong>. Skriv den inn her for å logge inn.
