@@ -49,6 +49,11 @@ export const Header = () => {
         <div className="collapse navbar-collapse ms-auto" id="søkefelt">
           <Search />
         </div>
+        <div className="mx-3">
+          <NavLink className="nav-link" to={{ pathname: '/logg-inn' }}>
+            <span className="fa fa-user" />
+          </NavLink>
+        </div>
       </div>
     </nav>
   );
