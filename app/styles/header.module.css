@@ -23,3 +23,32 @@
 .search-field {
   margin: 8px 16px;
 }
+
+svg {
+  overflow: visible;
+}
+
+.loading :global(.spinning) {
+  transform-origin: 500px 512px;
+  transform-box: view-box;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: ease-in-out;
+  }
+  65% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading :global(.spinning) {
+    animation: none;
+  }
+}

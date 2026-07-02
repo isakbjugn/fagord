@@ -1,12 +1,15 @@
-import { NavLink, useLocation } from 'react-router';
+import { NavLink, useLocation, useNavigation } from 'react-router';
 
 import style from '~/styles/header.module.css';
 
 import { navLinks } from '../nav-links';
 import { Search } from './search';
+import FagordLogo from './fagord-logo.svg?react';
 
 export const Header = () => {
   const { search } = useLocation();
+  const navigation = useNavigation();
+  const isLoading = navigation.state === 'loading';
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark">
@@ -21,7 +24,7 @@ export const Header = () => {
           <span className="navbar-toggler-icon" />
         </a>
         <a className="mr-auto navbar-brand" href="/hjem">
-          <img src="/fagord-logo.svg" height="70" alt="Fagord" />
+          <FagordLogo className={isLoading ? style.loading : undefined} />
         </a>
         <button
           className={`navbar-toggler ${style.search}`}
