@@ -1,10 +1,9 @@
 {
   "name": "fagord",
-  "private": true,
-  "sideEffects": false,
   "version": "0.2.0",
+  "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.5.2",
+  "sideEffects": false,
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
@@ -46,9 +45,11 @@
     "postcss": "8.5.15",
     "typescript": "6.0.3",
     "vite": "8.1.0",
+    "vite-plugin-svgr": "5.2.0",
     "vitest": "4.1.9"
   },
   "engines": {
     "node": ">=24.0.0"
-  }
+  },
+  "packageManager": "pnpm@11.5.2"
 }
