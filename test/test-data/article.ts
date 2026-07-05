@@ -17,5 +17,6 @@ export function createValidArticle(): Article {
     updated_by: null,
     created_at: '2026-06-11T11:10:12.077262Z',
     updated_at: '2026-06-11T11:10:12.077262Z',
+    actions: ['edit'],
   };
 }

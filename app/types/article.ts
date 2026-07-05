@@ -18,6 +18,7 @@ export type Article = {
   updated_by: string | null;
   created_at: string;
   updated_at: string;
+  actions: ArticleAction[];
 };
 
 type ArticleAction = 'edit';

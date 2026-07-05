@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Link, redirect, useLoaderData } from 'react-router';
+import { Form, isRouteErrorResponse, Link, redirect, useLoaderData, useRouteError } from 'react-router';
 import Markdown from 'react-markdown';
 
 import type { Route } from './+types/temasider.$slug_.endre';
@@ -24,7 +24,17 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
     throw new Response('Temasiden finnes ikke', { status: 404 });
   }
 
-  return (await response.json()) as Article;
+  const article = (await response.json()) as Article;
+
+  // UX-vakt, ikke en sikkerhetsgrense: API-et regner ut eier/admin og speiler det i
+  // `actions`. Mangler «edit», har brukeren ikke lov til å lagre – da stopper vi før
+  // skjemaet vises, i stedet for å la dem redigere forgjeves. Rust håndhever uansett
+  // det samme på selve PATCH-kallet.
+  if (!article.actions.includes('edit')) {
+    throw new Response('Du har ikke tilgang til å redigere denne temasiden', { status: 403 });
+  }
+
+  return article;
 };
 
 export const action = async ({ request, params }: Route.ActionArgs) => {
@@ -131,5 +141,49 @@ export default function EndreTemaside() {
         </Form>
       </div>
     </main>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error) && error.status === 403) {
+    return (
+      <div className="container my-3">
+        <div className="col-12 col-lg-10 mx-auto" style={{ color: 'white' }}>
+          <h1>Ingen tilgang</h1>
+          <p>Du kan bare endre temasider du selv har skrevet. Ta kontakt hvis du mener dette er feil.</p>
+          <Link to="/temasider">
+            <button className="btn btn-outline-light">Tilbake til temasidene</button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return (
+      <div className="container my-3">
+        <div className="col-12 col-lg-10 mx-auto" style={{ color: 'white' }}>
+          <h1>Ops! Her var det ingenting!</h1>
+          <p>Vi fant ikke temasiden du prøvde å endre. Er du sikker på at den finnes?</p>
+          <Link to="/temasider">
+            <button className="btn btn-outline-light">Tilbake til temasidene</button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container my-3">
+      <div className="col-12 col-lg-10 mx-auto" style={{ color: 'white' }}>
+        <h1>Her gikk noe galt!</h1>
+        <p>Noe gikk feil mens vi lagret endringene. Prøv igjen om litt.</p>
+        <Link to="/temasider">
+          <button className="btn btn-outline-light">Tilbake til temasidene</button>
+        </Link>
+      </div>
+    </div>
   );
 }
