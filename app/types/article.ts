@@ -6,6 +6,7 @@ export type ArticleSummary = {
   slug: string;
   title: string;
   author: string;
+  actions: ArticleAction[];
 };
 
 /** Det /articles/{slug} returnerer for én temaside. */
@@ -17,4 +18,7 @@ export type Article = {
   updated_by: string | null;
   created_at: string;
   updated_at: string;
+  actions: ArticleAction[];
 };
+
+type ArticleAction = 'edit';
