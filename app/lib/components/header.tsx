@@ -20,22 +20,21 @@ declare global {
   }
 }
 
-export const Header = () => {
-  const location = useLocation();
-  const { search } = location;
+const useCloseMenuOnNavigate = (menuId: string) => {
+  const { pathname } = useLocation();
 
-  // Vi bruker IKKE data-bs-toggle på navigasjonslenkene: Bootstrap kaller
-  // preventDefault() på klikk mot <a>-elementer (se collapse.js), noe som ville stoppe
-  // React Routers klientnavigering. I stedet lukker vi mobilmenyen som en effekt av at
-  // ruten faktisk endrer seg. Vi rører den bare når den er åpen (klassen `show`), så på
-  // brede skjermer – der navbar-expand-lg holder menyen åpen uten `show` – gjør vi
-  // ingenting, og unngår collapse-animasjonen som ellers fikk menyen til å blinke.
   useEffect(() => {
-    const meny = document.getElementById('navigasjonsmeny');
+    const meny = document.getElementById(menuId);
     if (meny?.classList.contains('show')) {
       window.bootstrap?.Collapse.getOrCreateInstance(meny).hide();
     }
-  }, [location.pathname]);
+  }, [menuId, pathname]);
+};
+
+export const Header = () => {
+  const { search } = useLocation();
+
+  useCloseMenuOnNavigate('navigasjonsmeny');
 
   // Header er en delt layout-komponent som også rendres uten root-loaderen (tester,
   // ruter uten data). `useRouteLoaderData` gir `undefined` i de tilfellene i stedet
