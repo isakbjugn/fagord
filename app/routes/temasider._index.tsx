@@ -5,7 +5,6 @@ import type { Route } from './+types/temasider._index';
 import { ErrorMessage } from '~/lib/components/error-message';
 import type { ArticleSummary } from '~/types/article';
 import { getSession } from '~/lib/session.server';
-import PencilIcon from '~/lib/components/pencil.svg?react';
 
 export const meta: MetaFunction = () => [{ title: 'Temasider – Fagord' }];
 
@@ -64,7 +63,7 @@ export default function Temasider() {
                     aria-label={`Rediger ${article.title}`}
                     title="Rediger temaside"
                   >
-                    <PencilIcon aria-hidden="true" />
+                    <span className="fa fa-pencil" />
                   </Link>
                 )}
               </li>
