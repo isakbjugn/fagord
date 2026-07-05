@@ -20,3 +20,8 @@ export function createValidArticle(): Article {
     actions: ['edit'],
   };
 }
+
+/** Som en gyldig artikkel, men uten «edit» – dvs. innlogget bruker mangler skrivetilgang. */
+export function createArticleWithoutEditAccess(): Article {
+  return { ...createValidArticle(), actions: [] };
+}
