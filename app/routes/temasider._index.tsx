@@ -59,7 +59,7 @@ export default function Temasider() {
                 </div>
                 {article.actions.includes('edit') && (
                   <Link
-                    className="btn btn-outline-secondary btn-sm position-relative d-flex align-items-center"
+                    className="btn btn-outline-secondary btn-sm position-relative z-2 d-flex align-items-center"
                     to={`${article.slug}/endre`}
                     aria-label={`Rediger ${article.title}`}
                     title="Rediger temaside"
