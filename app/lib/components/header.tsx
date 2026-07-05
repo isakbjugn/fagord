@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { NavLink, useLocation, useNavigation, useRouteLoaderData } from 'react-router';
 
 import style from '~/styles/header.module.css';
@@ -6,8 +7,35 @@ import { navLinks } from '../nav-links';
 import { Search } from './search';
 import FagordLogo from './fagord-logo.svg?react';
 
+// Bootstrap-bundelen (lastet via <script> i root.tsx) legger seg på window.bootstrap.
+// Vi bruker bare Collapse.getOrCreateInstance(...).hide(), så vi typer akkurat det –
+// prosjektet har ikke @types/bootstrap.
+declare global {
+  interface Window {
+    bootstrap?: {
+      Collapse: {
+        getOrCreateInstance: (element: Element) => { hide: () => void };
+      };
+    };
+  }
+}
+
+const useCloseMenuOnNavigate = (menuId: string) => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const meny = document.getElementById(menuId);
+    if (meny?.classList.contains('show')) {
+      window.bootstrap?.Collapse.getOrCreateInstance(meny).hide();
+    }
+  }, [menuId, pathname]);
+};
+
 export const Header = () => {
   const { search } = useLocation();
+
+  useCloseMenuOnNavigate('navigasjonsmeny');
+
   // Header er en delt layout-komponent som også rendres uten root-loaderen (tester,
   // ruter uten data). `useRouteLoaderData` gir `undefined` i de tilfellene i stedet
   // for å kaste, så vi faller trygt tilbake på «ikke innlogget».
