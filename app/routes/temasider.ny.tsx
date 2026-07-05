@@ -6,7 +6,7 @@ import Markdown from 'react-markdown';
 import type { Route } from './+types/temasider.ny';
 import style from '~/styles/temasider.module.css';
 import type { Article } from '~/types/article';
-import { getSession } from '~/lib/session.server';
+import { getSession, isLoggedIn } from '~/lib/session.server';
 
 export const meta: MetaFunction = () => [{ title: 'Ny temaside – Fagord' }];
 
@@ -19,6 +19,16 @@ lenker som [denne](/termliste) og punktlister:
 - Andre punkt
 
 Husk: en tom linje gir et nytt avsnitt.`;
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  // UX-vakt, ikke en sikkerhetsgrense: er du ikke innlogget, kan du uansett ikke lagre.
+  // Da viser vi feilsiden med en gang i stedet for å la brukeren skrive forgjeves.
+  // Rust håndhever det samme på selve POST-kallet.
+  if (!(await isLoggedIn(request))) {
+    throw new Response('Du må være innlogget for å opprette en temaside', { status: 401 });
+  }
+  return null;
+};
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';

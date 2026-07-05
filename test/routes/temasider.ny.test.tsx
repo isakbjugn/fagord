@@ -1,5 +1,6 @@
 import { createRoutesStub } from 'react-router';
-import NyTemaside, { action } from '~/routes/temasider.ny';
+import NyTemaside, { action, ErrorBoundary, loader } from '~/routes/temasider.ny';
+import * as session from '~/lib/session.server';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, describe, expect, test, vi } from 'vitest';
@@ -45,6 +46,26 @@ describe('Tester redigeringsverktøy for ny temaside', () => {
     await userEvent.clear(editor);
     await userEvent.type(editor, '**fet tekst**');
     await waitFor(() => screen.getByText('fet tekst'));
+  });
+
+  test('Viser feilsiden når brukeren ikke er innlogget', async () => {
+    // Ekte loader + ErrorBoundary. Stubbens request har ingen sesjons-cookie,
+    // så isLoggedIn er falsk og loaderen kaster 401 før skjemaet vises.
+    const Stub = createRoutesStub([{ path: '/temasider/ny', Component: NyTemaside, ErrorBoundary, loader }]);
+    render(<Stub initialEntries={['/temasider/ny']} />);
+
+    await waitFor(() => screen.getByRole('heading', { name: /ikke innlogget/i }));
+    expect(screen.queryByLabelText('Tittel')).toBeNull();
+  });
+
+  test('Loaderen slipper gjennom når brukeren er innlogget', async () => {
+    // Vi tester loaderens forgrening, ikke cookie-mekanismen (den er dekket i
+    // session.server). Derfor stubber vi isLoggedIn til å svare true.
+    vi.spyOn(session, 'isLoggedIn').mockResolvedValue(true);
+    const request = new Request('http://localhost/temasider/ny');
+
+    const result = await loader({ request } as Parameters<typeof loader>[0]);
+    expect(result).toBeNull();
   });
 
   test('Innsending kaller POST /articles og redirecter til den nye temasiden', async () => {
