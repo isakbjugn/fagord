@@ -42,14 +42,26 @@ describe('Tester innhold på og navigasjon fra Temasider-listen', () => {
 
   test('Hver temaside lenker til sin egen slug', async () => {
     renderListe();
-    const lenke = await screen.findByRole('link', { name: /Vin/ });
+    const lenke = await screen.findByRole('link', { name: 'Vin' });
     expect(lenke.getAttribute('href')).toBe('/temasider/vin');
   });
 
   test('Tittellenken strekkes over hele kortet (stretched-link)', async () => {
     renderListe();
-    const lenke = await screen.findByRole('link', { name: /Vin/ });
+    const lenke = await screen.findByRole('link', { name: 'Vin' });
     expect(lenke.classList.contains('stretched-link')).toBe(true);
+  });
+
+  test('Viser redigeringslenke når temasiden har «edit»-handling', async () => {
+    renderListe();
+    const lenke = await screen.findByRole('link', { name: /rediger vin/i });
+    expect(lenke.getAttribute('href')).toBe('/temasider/vin/endre');
+  });
+
+  test('Viser ikke redigeringslenke uten «edit»-handling', async () => {
+    renderListe();
+    await screen.findByRole('link', { name: 'Hva er en kompilator?' });
+    expect(screen.queryByRole('link', { name: /rediger hva er en kompilator/i })).toBeNull();
   });
 
   test('Tom liste viser en beskjed om at det ikke finnes temasider', async () => {

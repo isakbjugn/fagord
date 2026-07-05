@@ -2,8 +2,8 @@ import { Article, ArticleSummary } from '~/types/article';
 
 export function createValidArticleSummaries(): ArticleSummary[] {
   return [
-    { slug: 'vin', title: 'Vin', author: 'Isak Kyrre Lichtwarck Bjugn' },
-    { slug: 'kompilator', title: 'Hva er en kompilator?', author: 'Ada L.' },
+    { slug: 'vin', title: 'Vin', author: 'Isak Kyrre Lichtwarck Bjugn', actions: ['edit'] },
+    { slug: 'kompilator', title: 'Hva er en kompilator?', author: 'Ada L.', actions: [] },
   ];
 }
 
