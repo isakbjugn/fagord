@@ -1,4 +1,4 @@
-import { Link, useLoaderData, useNavigate } from 'react-router';
+import { Link, useLoaderData, useNavigate, useRouteLoaderData } from 'react-router';
 import type { MetaFunction } from 'react-router';
 
 import type { Route } from './+types/temasider._index';
@@ -30,6 +30,10 @@ export function headers(_: Route.HeadersArgs) {
 
 export default function Temasider() {
   const articles = useLoaderData<typeof loader>();
+  // Samme mønster som header.tsx: les innloggingsstatus fra root-loaderen. Vi trenger den
+  // bare for å vise/skjule «Skriv ny»-knappen (ren UX – selve opprettelsen håndheves i Rust).
+  const rootData = useRouteLoaderData<{ isLoggedIn: boolean }>('root');
+  const isLoggedIn = rootData?.isLoggedIn ?? false;
 
   return (
     <main className="container my-3">
@@ -71,11 +75,13 @@ export default function Temasider() {
           </ul>
         )}
 
-        <div className="mt-3">
-          <Link className="btn btn-outline-light" to="ny">
-            Skriv ny temaside
-          </Link>
-        </div>
+        {isLoggedIn && (
+          <div className="mt-3">
+            <Link className="btn btn-outline-light" to="ny">
+              Skriv ny temaside
+            </Link>
+          </div>
+        )}
       </div>
     </main>
   );
