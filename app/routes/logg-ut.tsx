@@ -6,15 +6,6 @@ import { getSession, isLoggedIn, logOut } from '~/lib/session.server';
 
 export const meta: MetaFunction = () => [{ title: 'Logg ut – Fagord' }];
 
-// Utlogging er en tilstandsendring, og hører derfor hjemme i en `action` (POST), ikke i
-// en `loader` (GET). GET-navigasjon utløses av prefetch, crawlere og nettleserens
-// spekulative henting – da risikerte vi å logge folk ut ved et uhell. Nå er flyten:
-//   1. Header-lenken navigerer hit (GET) → loaderen viser en bekreftelsesside.
-//   2. Brukeren trykker «Logg ut» → <Form method="post"> treffer actionen, som gjør
-//      den faktiske utloggingen.
-
-// GET: er brukeren i det hele tatt innlogget? Hvis ikke har bekreftelsessiden ingen
-// hensikt, og vi sender dem rett til /hjem.
 export const loader = async ({ request }: Route.LoaderArgs) => {
   if (!(await isLoggedIn(request))) {
     return redirect('/hjem');
@@ -22,16 +13,10 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   return null;
 };
 
-// POST: selve utloggingen. To ting må skje:
-//   1. Rust invaliderer sesjonsraden (POST /auth/logout med Bearer-token), slik at
-//      tokenet blir verdiløst selv om noen skulle ha kopiert det.
-//   2. Vi sletter cookien lokalt og sender brukeren til /hjem.
 export const action = async ({ request }: Route.ActionArgs) => {
   const session = await getSession(request);
   const token = session.get('token');
 
-  // Be Rust invalidere sesjonen. Idempotent og «best effort»: feiler kallet (nettverk,
-  // allerede utløpt), logger vi ut lokalt uansett – brukeren skal aldri bli sittende fast.
   if (token) {
     const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
     try {
@@ -39,9 +24,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
-    } catch {
-      // Ignorer med vilje – den lokale utloggingen under er det som betyr noe for brukeren.
-    }
+    } catch {}
   }
 
   const setCookieHeader = await logOut(request);
