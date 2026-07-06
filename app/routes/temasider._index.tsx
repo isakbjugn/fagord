@@ -1,4 +1,4 @@
-import { Form, Link, useLoaderData, useNavigate, useNavigation, useRouteLoaderData } from 'react-router';
+import { Link, useLoaderData, useNavigate, useRouteLoaderData } from 'react-router';
 import type { MetaFunction } from 'react-router';
 
 import type { Route } from './+types/temasider._index';
@@ -22,29 +22,6 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   return (await response.json()) as ArticleSummary[];
 };
 
-export const action = async ({ request }: Route.ActionArgs) => {
-  const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
-  const session = await getSession(request);
-  const token = session.get('token');
-
-  const formData = await request.formData();
-  const slug = formData.get('slug');
-
-  // Autorisasjonen (eier ELLER admin) håndheves i Rust; her sender vi bare med tokenet.
-  const response = await fetch(`${FAGORD_RUST_API_URL}/articles/${slug}`, {
-    method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  if (!response.ok) {
-    throw new Response('Klarte ikke å slette temasiden', { status: response.status });
-  }
-
-  // Ingen redirect: vi er allerede på listesiden, og React Router laster loaderen
-  // på nytt etter en vellykket action – så den slettede raden forsvinner av seg selv.
-  return null;
-};
-
 export function headers(_: Route.HeadersArgs) {
   return {
     'Cache-Control': 'public, max-age=300, s-maxage=600',
@@ -57,12 +34,6 @@ export default function Temasider() {
   // bare for å vise/skjule «Skriv ny»-knappen (ren UX – selve opprettelsen håndheves i Rust).
   const rootData = useRouteLoaderData<{ isLoggedIn: boolean }>('root');
   const isLoggedIn = rootData?.isLoggedIn ?? false;
-
-  // Mens en sletting pågår vet vi hvilken rad det gjelder via slug-feltet i skjemaet.
-  // Det bruker vi til å deaktivere akkurat den knappen og gi en «Sletter …»-tilstand.
-  const navigation = useNavigation();
-  const slugSomSlettes =
-    navigation.state !== 'idle' ? navigation.formData?.get('slug')?.toString() : undefined;
 
   return (
     <main className="container my-3">
@@ -100,26 +71,14 @@ export default function Temasider() {
                   </Link>
                 )}
                 {article.actions.includes('delete') && (
-                  <Form
-                    method="post"
-                    className="position-relative z-2"
-                    onSubmit={(event) => {
-                      if (!confirm(`Vil du slette «${article.title}»? Dette kan ikke angres.`)) {
-                        event.preventDefault();
-                      }
-                    }}
+                  <Link
+                    className="btn btn-outline-danger btn-sm position-relative z-2 d-flex align-items-center"
+                    to={`${article.slug}/slett`}
+                    aria-label={`Slett ${article.title}`}
+                    title="Slett temaside"
                   >
-                    <input type="hidden" name="slug" value={article.slug} />
-                    <button
-                      className="btn btn-outline-danger btn-sm d-flex align-items-center"
-                      type="submit"
-                      disabled={slugSomSlettes === article.slug}
-                      aria-label={`Slett ${article.title}`}
-                      title="Slett temaside"
-                    >
-                      <span className="fa fa-trash" />
-                    </button>
-                  </Form>
+                    <span className="fa fa-trash" />
+                  </Link>
                 )}
               </li>
             ))}
