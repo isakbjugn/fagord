@@ -28,6 +28,9 @@ describe('Tester innhold på og navigasjon fra Temasider-listen', () => {
           { path: '/temasider/ny', Component: () => <div>Ny temaside-editor</div> },
           // Mål for lenkene – så vi kan verifisere at hver temaside lenker riktig.
           { path: '/temasider/:slug', Component: () => <div>Temaside-visning</div> },
+          // Mål for rediger- og slett-inngangene per rad.
+          { path: '/temasider/:slug/endre', Component: () => <div>Endre-editor</div> },
+          { path: '/temasider/:slug/slett', Component: () => <div>Slett-bekreftelse</div> },
         ],
       },
     ]);
@@ -72,6 +75,18 @@ describe('Tester innhold på og navigasjon fra Temasider-listen', () => {
     renderListe();
     await screen.findByRole('link', { name: 'Hva er en kompilator?' });
     expect(screen.queryByRole('link', { name: /rediger hva er en kompilator/i })).toBeNull();
+  });
+
+  test('Viser slettelenke når temasiden har «delete»-handling', async () => {
+    renderListe();
+    const lenke = await screen.findByRole('link', { name: /slett vin/i });
+    expect(lenke.getAttribute('href')).toBe('/temasider/vin/slett');
+  });
+
+  test('Viser ikke slettelenke uten «delete»-handling', async () => {
+    renderListe();
+    await screen.findByRole('link', { name: 'Hva er en kompilator?' });
+    expect(screen.queryByRole('link', { name: /slett hva er en kompilator/i })).toBeNull();
   });
 
   test('Tom liste viser en beskjed om at det ikke finnes temasider', async () => {

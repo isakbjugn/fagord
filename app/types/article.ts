@@ -21,4 +21,4 @@ export type Article = {
   actions: ArticleAction[];
 };
 
-type ArticleAction = 'edit';
+type ArticleAction = 'edit' | 'delete';

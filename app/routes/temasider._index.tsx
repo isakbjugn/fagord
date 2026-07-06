@@ -70,6 +70,16 @@ export default function Temasider() {
                     <span className="fa fa-pencil" />
                   </Link>
                 )}
+                {article.actions.includes('delete') && (
+                  <Link
+                    className="btn btn-outline-danger btn-sm position-relative z-2 d-flex align-items-center"
+                    to={`${article.slug}/slett`}
+                    aria-label={`Slett ${article.title}`}
+                    title="Slett temaside"
+                  >
+                    <span className="fa fa-trash" />
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
