@@ -67,7 +67,7 @@ export default function Temasider() {
                     aria-label={`Rediger ${article.title}`}
                     title="Rediger temaside"
                   >
-                    <span className="fa fa-pencil" />
+                    <span className="fa-solid fa-pencil" />
                   </Link>
                 )}
                 {article.actions.includes('delete') && (
@@ -77,7 +77,7 @@ export default function Temasider() {
                     aria-label={`Slett ${article.title}`}
                     title="Slett temaside"
                   >
-                    <span className="fa fa-trash" />
+                    <span className="fa-solid fa-trash" />
                   </Link>
                 )}
               </li>
