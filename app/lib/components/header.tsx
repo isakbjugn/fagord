@@ -69,7 +69,7 @@ export const Header = () => {
           data-bs-toggle="collapse"
           data-bs-target="#søkefelt"
         >
-          <span aria-hidden className="fa-solid fa-search" />
+          <span aria-hidden className="fa-solid fa-magnifying-glass" />
         </button>
         <div className="collapse navbar-collapse" id="navigasjonsmeny">
           <ul className="navbar-nav">
