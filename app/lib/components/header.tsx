@@ -69,20 +69,20 @@ export const Header = () => {
           data-bs-toggle="collapse"
           data-bs-target="#søkefelt"
         >
-          <span aria-hidden className="fa fa-search" />
+          <span aria-hidden className="fa-solid fa-magnifying-glass" />
         </button>
         <div className="collapse navbar-collapse" id="navigasjonsmeny">
           <ul className="navbar-nav">
             {navLinks.map((navItem) => (
               <li className="nav-item" key={navItem.address}>
                 <NavLink className="nav-link text-nowrap" to={{ pathname: navItem.address, search: search }}>
-                  <span aria-hidden className={'fa fa-lg ' + navItem.icon + ' ' + style.icon} /> {navItem.text}
+                  <span aria-hidden className={'fa-solid fa-lg ' + navItem.icon + ' ' + style.icon} /> {navItem.text}
                 </NavLink>
               </li>
             ))}
             <li className="nav-item" key="user">
               <NavLink className="nav-link text-nowrap" to={{ pathname: userProfileLink }}>
-                <span className="fa fa-user" /> {userProfileText}
+                <span className="fa-solid fa-user" /> {userProfileText}
               </NavLink>
             </li>
           </ul>
