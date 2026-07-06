@@ -2,7 +2,7 @@ import { Article, ArticleSummary } from '~/types/article';
 
 export function createValidArticleSummaries(): ArticleSummary[] {
   return [
-    { slug: 'vin', title: 'Vin', author: 'Isak Kyrre Lichtwarck Bjugn', actions: ['edit'] },
+    { slug: 'vin', title: 'Vin', author: 'Isak Kyrre Lichtwarck Bjugn', actions: ['edit', 'delete'] },
     { slug: 'kompilator', title: 'Hva er en kompilator?', author: 'Ada L.', actions: [] },
   ];
 }
@@ -24,4 +24,9 @@ export function createValidArticle(): Article {
 /** Som en gyldig artikkel, men uten «edit» – dvs. innlogget bruker mangler skrivetilgang. */
 export function createArticleWithoutEditAccess(): Article {
   return { ...createValidArticle(), actions: [] };
+}
+
+/** Artikkel der brukeren har «delete» – dvs. eier eller admin, og kan slette. */
+export function createArticleWithDeleteAccess(): Article {
+  return { ...createValidArticle(), actions: ['delete'] };
 }
