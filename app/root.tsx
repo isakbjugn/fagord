@@ -2,6 +2,7 @@ import type { LinksFunction, MetaFunction } from 'react-router';
 import { Links, Meta, Outlet, Scripts, useRouteError } from 'react-router';
 import bootstrapStylesHref from 'bootstrap/dist/css/bootstrap.min.css?url';
 import bootstrapScriptsHref from 'bootstrap/dist/js/bootstrap.bundle.min.js?url';
+import fontawesomeStylesHref from '@fortawesome/fontawesome-free/css/all.min.css?url';
 
 import { ErrorMessage } from '~/lib/components/error-message';
 import { Footer } from '~/lib/components/footer';
@@ -37,6 +38,7 @@ export function ErrorBoundary() {
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: bootstrapStylesHref },
+  { rel: 'stylesheet', href: fontawesomeStylesHref },
   { rel: 'stylesheet', href: appStylesHref },
   { rel: 'manifest', href: '/manifest.json' },
   { rel: 'icon', href: '/fagord-favicon.ico' },
@@ -66,7 +68,6 @@ export default function Root() {
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <Meta />
         <Links />
-        <script src="https://kit.fontawesome.com/aff1df517b.js" crossOrigin="anonymous"></script>
       </head>
       <body>
         <Header />
