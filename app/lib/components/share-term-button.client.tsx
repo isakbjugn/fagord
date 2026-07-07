@@ -1,4 +1,4 @@
-import style from '~/styles/term.module.css';
+import styles from './share-term-button.module.css';
 import type { Term } from '~/types/term';
 
 interface Props {
@@ -16,7 +16,7 @@ export const ShareTermButton = ({ term }: Props) => {
 
   return (
     <button
-      className={style.share}
+      className={styles.share}
       onClick={() => {
         try {
           navigator.share(termShareData);

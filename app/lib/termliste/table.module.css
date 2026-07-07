@@ -19,16 +19,16 @@
   font-size: 14px;
 }
 
-th {
+.table th {
   border-bottom: 1px solid lightgray;
   padding: 8px 16px;
 }
 
-tr:not(:last-child) {
+.table tr:not(:last-child) {
   border-bottom: 1px solid lightgray;
 }
 
-td {
+.table td {
   padding: 4px 16px;
 }
 

@@ -11,15 +11,6 @@
   column-gap: 8px;
 }
 
-.share {
-  align-self: end;
-  background-color: transparent;
-
-  &:hover {
-    background-color: var(--color-dark-blue);
-  }
-}
-
 .card {
   background-color: var(--color-dark-blue) !important;
   color: floralwhite !important;
