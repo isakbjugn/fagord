@@ -1,13 +1,13 @@
-dialog {
+.dialog {
   border-radius: 8px;
   border: 0;
 }
 
-dialog::backdrop {
+.dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-button {
+.closeButton {
   border-radius: 0.375rem;
   background-color: #6c757d;
   color: white;
@@ -15,6 +15,6 @@ button {
   border-style: none;
 }
 
-button:hover {
+.closeButton:hover {
   background-color: #5a6268;
 }
