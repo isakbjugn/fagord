@@ -1,0 +1,13 @@
+.share {
+  align-self: end;
+  background-color: transparent;
+  border-radius: 0.375rem;
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-style: none;
+  margin-bottom: 8px;
+
+  &:hover {
+    background-color: var(--color-dark-blue);
+  }
+}
