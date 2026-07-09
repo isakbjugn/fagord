@@ -18,10 +18,6 @@ export interface Variant {
   votes: number;
 }
 
-export interface ChangeDefinition {
-  definition: string;
-}
-
 export interface CreateVariant {
   term: string;
   dialect: 'nb' | 'nn';
