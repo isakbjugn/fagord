@@ -5,9 +5,8 @@ import { Term } from '~/types/term';
 import { Route } from './+types/termliste';
 import { Subject } from '~/types/subject';
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ url }: Route.LoaderArgs) {
   const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
-  const url = new URL(request.url);
   const q = url.searchParams.get('q');
 
   const termsResponse = await fetch(`${FAGORD_RUST_API_URL}/terms${q ? `?q=${encodeURIComponent(q)}` : ''}`);
