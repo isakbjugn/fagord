@@ -22,6 +22,7 @@ import { ToggleButton } from '~/lib/components/toggle-button';
 import { useToggle } from '~/lib/use-toggle';
 import style from '~/styles/term.module.css';
 import type { Term, Variant } from '~/types/term';
+import Markdown from 'react-markdown';
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
   const { termId } = params;
@@ -97,7 +98,13 @@ const Definition = ({ definition }: DefinitionProps) => {
 
   return (
     <div>
-      <p>{definition || <em>Ingen definisjon tilgjengelig.</em>}</p>
+      {definition ? (
+        <Markdown>{definition}</Markdown>
+      ) : (
+        <p>
+          <em>Ingen definisjon tilgjengelig.</em>
+        </p>
+      )}
       <Outlet />
       {!isEditing && (
         <Link to="endre">
