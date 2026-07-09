@@ -29,16 +29,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 }
 
 export default function Endre() {
-  const termData = useRouteLoaderData<Term>('routes/term.$termId');
-
-  if (!termData)
-    return (
-      <Link to="..">
-        <button type="button" className="btn btn-outline-light">
-          Lukk
-        </button>
-      </Link>
-    );
+  const { definition } = useRouteLoaderData<Term>('routes/term.$termId') as Term;
 
   return (
     <Form method="post">
@@ -50,7 +41,7 @@ export default function Endre() {
             id="definition"
             rows={4}
             placeholder="Skriv inn definisjon"
-            defaultValue={termData.definition}
+            defaultValue={definition}
             className="form-control"
             required
           />
