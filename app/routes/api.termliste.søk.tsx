@@ -1,16 +1,14 @@
 import type { Term } from '~/types/term';
 import type { Route } from './+types/api.termliste.søk';
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const { searchParams } = new URL(request.url);
+export async function loader({ url }: Route.LoaderArgs) {
+  if (!url.searchParams.get('q')) return [];
 
-  if (!searchParams.get('q')) return [];
-
-  searchParams.set('limit', '5');
   const apiBase = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
-  const url = new URL('/terms', apiBase);
-  url.search = searchParams.toString();
-  const response = await fetch(url);
+  const rustApiUrl = new URL('/terms', apiBase);
+  rustApiUrl.search = url.search;
+  rustApiUrl.searchParams.set('limit', '5');
+  const response = await fetch(rustApiUrl);
 
   if (!response.ok) {
     throw new Response('Klarte ikke å søke etter termer', { status: 500 });
