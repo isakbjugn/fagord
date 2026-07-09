@@ -47,10 +47,12 @@ export default function Endre() {
           Legg til/endre definisjon
           <textarea
             name="definition"
+            id="definition"
+            rows={4}
             placeholder="Skriv inn definisjon"
             defaultValue={termData.definition}
             className="form-control"
-            required={true}
+            required
           />
         </label>
       </div>
