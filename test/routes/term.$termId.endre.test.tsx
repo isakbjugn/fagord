@@ -11,6 +11,7 @@ afterEach(cleanup);
 describe('Tester innsending på Endre-siden', () => {
   test('Sender inn definisjon når Send inn-knappen trykkes på', async () => {
     const termId = 'cortex_sub';
+    const term = createValidTerms().find((term) => term.slug === termId)!;
     const newDefinition = 'Dette er en mer passende definisjon';
 
     const actionSpy = vi.fn(async ({ request }) => {
@@ -21,24 +22,30 @@ describe('Tester innsending på Endre-siden', () => {
     const Stub = createRoutesStub([
       {
         path: `/term/${termId}`,
+        id: 'routes/term.$termId',
         Component: Term,
         loader() {
-          return {
-            terms: createValidTerms(),
-            term: createValidTerms().find((term) => term.slug === termId),
-          };
+          return term;
         },
-      },
-      {
-        path: `/term/${termId}/endre`,
-        Component: Endre,
-        action: actionSpy,
+        children: [
+          {
+            path: 'endre',
+            Component: Endre,
+            action: actionSpy,
+          },
+        ],
       },
     ]);
 
     render(<Stub initialEntries={[`/term/${termId}/endre`]} />);
 
-    await userEvent.type(screen.getByLabelText('Legg til/endre definisjon'), newDefinition);
+    const definitionField = await screen.findByLabelText<HTMLTextAreaElement>('Legg til/endre definisjon');
+
+    // Feltet skal være forhåndsutfylt med termens nåværende definisjon
+    expect(definitionField.value).toBe(term.definition);
+
+    await userEvent.clear(definitionField);
+    await userEvent.type(definitionField, newDefinition);
     await userEvent.click(screen.getByText('Send inn'));
 
     expect(actionSpy).toHaveBeenCalled();
