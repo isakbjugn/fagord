@@ -1,6 +1,6 @@
-import { Form, Link, redirect } from 'react-router';
+import { Form, Link, redirect, useRouteLoaderData } from 'react-router';
 
-import type { ChangeDefinition } from '~/types/term';
+import type { ChangeDefinition, Term } from '~/types/term';
 import type { Route } from './+types/term.$termId.endre';
 
 export async function action({ request, params }: Route.ActionArgs) {
@@ -29,12 +29,29 @@ export async function action({ request, params }: Route.ActionArgs) {
 }
 
 export default function Endre() {
+  const termData = useRouteLoaderData<Term>('routes/term.$termId');
+
+  if (!termData)
+    return (
+      <Link to="..">
+        <button type="button" className="btn btn-outline-light">
+          Lukk
+        </button>
+      </Link>
+    );
+
   return (
     <Form method="post">
       <div className="row">
         <label className="form-label" htmlFor="definition">
           Legg til/endre definisjon
-          <textarea name="definition" placeholder="Skriv inn definisjon" className="form-control" required={true} />
+          <textarea
+            name="definition"
+            placeholder="Skriv inn definisjon"
+            defaultValue={termData.definition}
+            className="form-control"
+            required={true}
+          />
         </label>
       </div>
       <span className="d-flex gap-2">
