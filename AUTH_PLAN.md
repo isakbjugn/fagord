@@ -40,7 +40,7 @@ ikke her. Dette dokumentet handler om hva **appen** må gjøre for å ta backend
 
 **Frontend (fagord) – gjenstår:**
 
-- ✅ **Lese-visning:** `temasider._index.tsx` (liste) og `temasider.$slug.tsx` (enkeltside).
+- ✅ **Lese-visning:** `temasider._index.ts` (liste) og `temasider.$slug.tsx` (enkeltside).
 - ⬜ **Sesjonslagring i React Router** – `createCookieSessionStorage`.
 - ⬜ **Innloggings-/utloggingsflyt** i UI-et.
 - ⬜ **`krevInnlogget`-hjelper** for loaders/actions.
@@ -81,7 +81,7 @@ Dette er kjernen i det gjenstående arbeidet:
   Router-serveren (Node), ikke nettleseren, som leser den.
 - En **`krevInnlogget`-hjelper** for loaders/actions som leser cookien, henter
   sesjonstokenet og videresender det på skrivekall (`Authorization: Bearer …`).
-- **Innloggings- og utloggingsflyt** i UI-et (kode tastes inn *inne i appen* – se under).
+- **Innloggings- og utloggingsflyt** i UI-et (kode tastes inn _inne i appen_ – se under).
 
 ### Vis innlogget brukers navn/e-post
 
@@ -101,7 +101,7 @@ Et eget `GET /me`-endepunkt utsettes til profilredigering (`avatar_url`) gjør b
 foranderlig – da blir en frisk kilde verdt rundturen. Til da er det YAGNI.
 
 > **Vurdert og forkastet:** å gjøre cookien til et selvstendig JWT/PASETO der payloaden
-> *er* sannheten. Det ville frata oss invaliderbarheten (et signert token er gyldig til
+> _er_ sannheten. Det ville frata oss invaliderbarheten (et signert token er gyldig til
 > utløp uansett utlogging). Den signerte cookien fra `createCookieSessionStorage` med et
 > DB-oppslag i Rust gir samme sikkerhet med mindre maskineri.
 
@@ -111,11 +111,11 @@ foranderlig – da blir en frisk kilde verdt rundturen. Til da er det YAGNI.
 
 Fagord er en installerbar PWA (`display: standalone` i `public/manifest.json`). En
 hjem-skjerm-lagret PWA kjører i sin **egen, isolerte lagringskontekst** (særlig på iOS).
-En magic link åpnet fra e-postappen ville sette sesjons-cookien i *nettleserens* krukke –
+En magic link åpnet fra e-postappen ville sette sesjons-cookien i _nettleserens_ krukke –
 ikke appens – så brukeren forblir utlogget i appen.
 
-**Løsning:** bruk en **engangskode** (f.eks. `ABC-123`) som brukeren skriver inn *inne i
-appen der de allerede står*. Pakk samme kode inn i en klikkbar lenke i samme e-post
+**Løsning:** bruk en **engangskode** (f.eks. `ABC-123`) som brukeren skriver inn _inne i
+appen der de allerede står_. Pakk samme kode inn i en klikkbar lenke i samme e-post
 (praktisk på desktop). Da:
 
 - Sesjonen havner garantert i riktig lagringskontekst (brukeren er allerede i appen).
@@ -149,11 +149,11 @@ kun hash lagret, forsøkssperre (`attempts`), og «ikke lekk om e-post finnes»
 
 Gjenstår i appen / ved deploy:
 
-| Hensyn | Hvorfor |
-|---|---|
-| Cookie: signert, `HttpOnly`, `Secure`, `SameSite=Lax` | Hindrer forfalskning, demper XSS og CSRF. Frontend-ansvar. |
-| HTTPS i produksjon | Cookies over HTTP kan snappes opp. Sikres ved deploy. |
-| Rate limiting (be om / verifisere kode) | Forsøkssperren demper gjetting på én kode, men begrenser ikke volum. Kan legges i API-et eller foran det. |
+| Hensyn                                                | Hvorfor                                                                                                   |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Cookie: signert, `HttpOnly`, `Secure`, `SameSite=Lax` | Hindrer forfalskning, demper XSS og CSRF. Frontend-ansvar.                                                |
+| HTTPS i produksjon                                    | Cookies over HTTP kan snappes opp. Sikres ved deploy.                                                     |
+| Rate limiting (be om / verifisere kode)               | Forsøkssperren demper gjetting på én kode, men begrenser ikke volum. Kan legges i API-et eller foran det. |
 
 ---
 
