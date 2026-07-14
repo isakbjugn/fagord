@@ -159,15 +159,15 @@ function Definition({ definition }: Props) {
     <div className="mt-2">
       <p>Definisjon</p>
       <ul>
-        {definition.definitions.map((def) => (
-          <li key={def.definition}>
+        {definition.definitions.map((def, defIndex) => (
+          <li key={defIndex}>
             <div>
               <strong>{def.definition}</strong>
               {def.translations.length > 0 && <p>{def.translations.concat()}</p>}
               {def.examples.length > 0 && (
                 <ul>
-                  {def.examples.map((example) => (
-                    <li key={example}>{example}</li>
+                  {def.examples.map((example, exampleIndex) => (
+                    <li key={exampleIndex}>{example}</li>
                   ))}
                 </ul>
               )}
