@@ -5,6 +5,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 import Endre from '~/routes/term.$termId.endre';
 import NyTerm from '~/routes/ny-term.($term)';
 import { createValidSubjects } from '../test-data/subjects';
+import { createValidDefinition } from '../test-data/definition';
 
 afterEach(cleanup);
 
@@ -80,7 +81,7 @@ describe('Tester innsending på Ny term-siden', () => {
 
   test('Viser definisjon ved sidelast når term er i URL', async () => {
     const termFromUrl = 'letter';
-    const definition = '<p>a written message</p>';
+    const definition = createValidDefinition();
 
     const Stub = createRoutesStub([
       {
@@ -98,10 +99,15 @@ describe('Tester innsending på Ny term-siden', () => {
     await waitFor(() => screen.findByText('Engelsk term'));
     expect(screen.getByText('Definisjon')).toBeDefined();
     expect(screen.getByText('a written message')).toBeDefined();
+    expect(screen.getByText('brev, skriv')).toBeDefined();
+    expect(screen.getByText('a letter to the editor')).toBeDefined();
+
+    const source = screen.getByRole('link', { name: 'Ordbøkene' });
+    expect(source.getAttribute('href')).toBe('https://ordbokene.no/nno/bm/letter');
   });
 
   test('Viser definisjon etter at brukeren skriver inn en engelsk term', async () => {
-    const definition = '<p>a written message</p>';
+    const definition = createValidDefinition();
 
     const Stub = createRoutesStub([
       {

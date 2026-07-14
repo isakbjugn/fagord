@@ -163,7 +163,7 @@ function Definition({ definition }: Props) {
           <li key={defIndex}>
             <div>
               <strong>{def.definition}</strong>
-              {def.translations.length > 0 && <p>{def.translations.concat()}</p>}
+              {def.translations.length > 0 && <p>{def.translations.join(', ')}</p>}
               {def.examples.length > 0 && (
                 <ul>
                   {def.examples.map((example, exampleIndex) => (
