@@ -143,7 +143,7 @@ function TermInput({
         onChange={handleChange}
       />
       <div className="invalid-feedback bright-feedback-text">{existsFetcher.data?.validationText}</div>
-      <Definitions definition={definition} />
+      <Definition definition={definition} />
     </>
   );
 }
@@ -152,7 +152,7 @@ type Props = {
   definition: DictionaryDefinition | null;
 };
 
-function Definitions({ definition }: Props) {
+function Definition({ definition }: Props) {
   if (!definition) return null;
 
   return (
