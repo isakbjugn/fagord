@@ -138,6 +138,38 @@ describe('Tester innsending på Ny term-siden', () => {
     expect(screen.getByText('a written message')).toBeDefined();
   });
 
+  test('Fjerner definisjon fra sidelast når søket ikke gir treff', async () => {
+    const termFromUrl = 'letter';
+
+    const Stub = createRoutesStub([
+      {
+        path: '/ny-term/:term',
+        Component: NyTerm,
+        loader: () => ({
+          subjects: createValidSubjects(),
+          definition: createValidDefinition(),
+        }),
+      },
+      {
+        path: '/api/definisjon',
+        action: () => null,
+      },
+      {
+        path: '/api/termliste/finnes',
+        action: () => ({ exists: false, validationText: undefined }),
+      },
+    ]);
+
+    render(<Stub initialEntries={[`/ny-term/${termFromUrl}`]} />);
+
+    await waitFor(() => screen.findByText('Engelsk term'));
+    expect(screen.getByText('a written message')).toBeDefined();
+
+    await userEvent.type(screen.getByDisplayValue(termFromUrl), 'x');
+    await waitFor(() => expect(screen.queryByText('a written message')).toBeNull());
+    expect(screen.queryByText('Definisjon')).toBeNull();
+  });
+
   test('Viser valideringstekst når term allerede finnes', async () => {
     const existingTerm = 'existence';
     const validationText = 'Termen finnes allerede i termlista.';
