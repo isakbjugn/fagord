@@ -8,7 +8,7 @@ import { Subject } from '~/types/subject';
 import { ClientOnly } from '~/lib/client-only';
 import { SubjectsCombobox } from '~/lib/components/subjects-combobox';
 import type { Route } from './+types/ny-term.($term)';
-import type { DictionaryDefinition } from '~/routes/api.definisjon';
+import type { DictionaryDefinition } from '~/types/definition';
 
 export async function loader({ params }: Route.LoaderArgs) {
   const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';

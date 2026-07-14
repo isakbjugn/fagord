@@ -1,4 +1,4 @@
-import type { DictionaryDefinition } from '~/routes/api.definisjon';
+import type { DictionaryDefinition } from '~/types/definition';
 
 export function createValidDefinition(): DictionaryDefinition {
   return {

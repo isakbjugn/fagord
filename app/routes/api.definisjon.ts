@@ -1,20 +1,5 @@
 import type { Route } from './+types/api.definisjon';
-
-export type DictionaryDefinition = {
-  definitions: Definition[];
-  source: DictionarySource;
-};
-
-type Definition = {
-  definition: string;
-  translations: string[];
-  examples: string[];
-};
-
-type DictionarySource = {
-  name: string;
-  exactUrl: string;
-};
+import type { DictionaryDefinition } from '~/types/definition';
 
 export async function action({ request }: Route.ActionArgs): Promise<DictionaryDefinition | null> {
   const formData = await request.formData();
