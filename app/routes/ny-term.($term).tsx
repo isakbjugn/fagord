@@ -8,6 +8,7 @@ import { Subject } from '~/types/subject';
 import { ClientOnly } from '~/lib/client-only';
 import { SubjectsCombobox } from '~/lib/components/subjects-combobox';
 import type { Route } from './+types/ny-term.($term)';
+import { DictionaryDefinition } from '~/routes/api.definisjon';
 
 export async function loader({ params }: Route.LoaderArgs) {
   const FAGORD_RUST_API_URL = process.env.FAGORD_RUST_API_DOMAIN || 'http://localhost:8080';
@@ -18,12 +19,16 @@ export async function loader({ params }: Route.LoaderArgs) {
     return res.json() as Promise<Subject[]>;
   });
 
-  let definition: string | null = null;
+  let definition: DictionaryDefinition | null = null;
   if (params.term) {
     const termWithDashes = params.term.replace(/\s+/g, '-');
-    const res = await fetch(`${FAGORD_RUST_API_URL}/definitions/${termWithDashes}`);
+    const res = await fetch(`${FAGORD_RUST_API_URL}/definitions/${termWithDashes}`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
     if (res.ok) {
-      definition = await res.text();
+      definition = await res.json();
     }
   }
 
@@ -111,10 +116,10 @@ function TermInput({
   loaderDefinition,
 }: {
   defaultValue: string | undefined;
-  loaderDefinition: string | null;
+  loaderDefinition: DictionaryDefinition | null;
 }) {
   const existsFetcher = useDebounceFetcher<{ exists: boolean; validationText: string | undefined }>();
-  const definitionFetcher = useDebounceFetcher<string | null>();
+  const definitionFetcher = useDebounceFetcher<DictionaryDefinition | null>();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const formData = new FormData();
@@ -124,7 +129,7 @@ function TermInput({
     definitionFetcher.submit(formData, { method: 'post', action: '/api/definisjon', debounceTimeout: 300 });
   }
 
-  const definitions = definitionFetcher.data !== undefined ? definitionFetcher.data : loaderDefinition;
+  const definition = definitionFetcher.data !== undefined ? definitionFetcher.data : loaderDefinition;
 
   return (
     <>
@@ -138,22 +143,49 @@ function TermInput({
         onChange={handleChange}
       />
       <div className="invalid-feedback bright-feedback-text">{existsFetcher.data?.validationText}</div>
-      <Definitions definitions={definitions} />
+      <Definitions definition={definition} />
     </>
   );
 }
 
 type Props = {
-  definitions: string | null | undefined;
+  definition: DictionaryDefinition | null;
 };
 
-function Definitions({ definitions }: Props) {
-  if (!definitions) return null;
+function Definitions({ definition }: Props) {
+  if (!definition) return null;
 
   return (
     <div className="mt-2">
       <p>Definisjon</p>
-      <div dangerouslySetInnerHTML={{ __html: definitions }} />
+      <ul>
+        {definition.definitions.map((def) => (
+          <li key={def.definition}>
+            <div>
+              <strong>{def.definition}</strong>
+              {def.translations.length > 0 && <p>{def.translations.concat()}</p>}
+              {def.examples.length > 0 && (
+                <ul>
+                  {def.examples.map((example) => (
+                    <li key={example}>{example}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+      <span>
+        Kilde:{' '}
+        <a
+          className={styles.dictionarySource}
+          target="_blank"
+          rel="noopener noreferrer"
+          href={definition.source.exactUrl}
+        >
+          {definition.source.name}
+        </a>
+      </span>
     </div>
   );
 }
