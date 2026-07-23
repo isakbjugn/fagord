@@ -16,6 +16,9 @@ export default function Hjem() {
           Til termliste!
         </Link>
       </Jumbotron>
+      <form method="GET" action="/api/debug" style={{ visibility: 'hidden' }}>
+        <button className="btn btn-success btn-lg">Debug headere</button>
+      </form>
     </section>
   );
 }
